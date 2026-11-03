@@ -1,9 +1,18 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "hero",
       "settings": {
-        "kicker": "Crystal Coast",
+        "kicker": "Crystal Coast of North Carolina",
         "heading": "The coast breaks different.",
         "text": "Factory-sealed wax, spot boards, and live shows. The room is on Whatnot Thursday through Saturday at 9:30 PM ET.",
         "button_label": "Watch the show",
@@ -11,27 +20,91 @@
         "button_2_label": "Claim a spot",
         "button_2_link": "#shopify-section-board",
         "lower": "Whatnot · Thu–Sat 9:30 PM ET",
-        "stage_label": "Live wax"
+        "stage_label": "Live wax",
+        "stage_width": 52,
+        "stage_height": 420,
+        "stage_fit": "contain",
+        "stage_x": "center",
+        "stage_y": "center"
       }
     },
     "rail": {
       "type": "category-rail",
       "blocks": {
-        "hockey": { "type": "cat", "settings": { "title": "Hockey", "style": "ice" } },
-        "football": { "type": "cat", "settings": { "title": "Football", "style": "gold" } },
-        "nascar": { "type": "cat", "settings": { "title": "NASCAR", "style": "crystal" } },
-        "baseball": { "type": "cat", "settings": { "title": "Baseball", "style": "ice" } },
-        "pokemon": { "type": "cat", "settings": { "title": "Pokémon", "style": "crystal" } },
-        "yugioh": { "type": "cat", "settings": { "title": "Yu-Gi-Oh!", "style": "gold" } },
-        "magic": { "type": "cat", "settings": { "title": "Magic", "style": "ice" } }
+        "hockey": {
+          "type": "cat",
+          "settings": {
+            "title": "Hockey",
+            "collection": "",
+            "style": "ice"
+          }
+        },
+        "football": {
+          "type": "cat",
+          "settings": {
+            "title": "Football",
+            "collection": "",
+            "style": "gold"
+          }
+        },
+        "nascar": {
+          "type": "cat",
+          "settings": {
+            "title": "NASCAR",
+            "collection": "",
+            "style": "crystal"
+          }
+        },
+        "baseball": {
+          "type": "cat",
+          "settings": {
+            "title": "Baseball",
+            "collection": "",
+            "style": "ice"
+          }
+        },
+        "pokemon": {
+          "type": "cat",
+          "settings": {
+            "title": "Pokémon",
+            "collection": "",
+            "style": "crystal"
+          }
+        },
+        "yugioh": {
+          "type": "cat",
+          "settings": {
+            "title": "Yu-Gi-Oh!",
+            "collection": "",
+            "style": "gold"
+          }
+        },
+        "magic": {
+          "type": "cat",
+          "settings": {
+            "title": "Magic",
+            "collection": "",
+            "style": "ice"
+          }
+        }
       },
-      "block_order": ["hockey", "football", "nascar", "baseball", "pokemon", "yugioh", "magic"]
+      "block_order": [
+        "hockey",
+        "football",
+        "nascar",
+        "baseball",
+        "pokemon",
+        "yugioh",
+        "magic"
+      ],
+      "settings": {}
     },
     "breaks": {
       "type": "break-list",
       "settings": {
         "kicker": "On the board",
         "heading": "Breaks",
+        "collection": "",
         "limit": 4
       }
     },
@@ -41,6 +114,7 @@
         "kicker": "Random teams",
         "heading": "Spot board",
         "board_title": "Sample board",
+        "product": "",
         "format": "teams",
         "show_prices": false,
         "show_host": false,
@@ -52,6 +126,7 @@
       "settings": {
         "kicker": "Sealed",
         "heading": "Fresh wax",
+        "collection": "",
         "limit": 4
       }
     },
@@ -61,6 +136,9 @@
         "kicker": "On air",
         "heading": "Live",
         "provider": "whatnot",
+        "youtube_url": "",
+        "twitch_channel": "",
+        "whatnot_url": "",
         "lower": "Whatnot · Thu–Sat 9:30 PM ET",
         "note": "Whatnot does not allow the show to play inside another site. The button opens the room.",
         "show_chat": true
@@ -71,16 +149,32 @@
       "settings": {
         "kicker": "Buy now or email a bid",
         "heading": "Auctions",
-        "note": "The price is the current ask. Change it on the product. A countdown appears when the product has metafield custom.ends_at. A theme cannot run a live bidding war by itself. Buy now checks out at that price. Send a bid emails the shop."
+        "note": "The price is the current ask. Change it on the product. A countdown appears when the product has metafield custom.ends_at. A theme cannot run a live bidding war by itself. Buy now checks out at that price. Send a bid emails the shop.",
+        "collection": ""
       }
     },
     "hits": {
       "type": "hits",
       "blocks": {
-        "hit1": { "type": "hit", "settings": { "title": "Sample hit", "detail": "Replace this after the break" } },
-        "hit2": { "type": "hit", "settings": { "title": "Sample hit", "detail": "These are public. The break desk list is not." } }
+        "hit1": {
+          "type": "hit",
+          "settings": {
+            "title": "Sample hit",
+            "detail": "Replace this after the break"
+          }
+        },
+        "hit2": {
+          "type": "hit",
+          "settings": {
+            "title": "Sample hit",
+            "detail": "These are public. The break desk list is not."
+          }
+        }
       },
-      "block_order": ["hit1", "hit2"],
+      "block_order": [
+        "hit1",
+        "hit2"
+      ],
       "settings": {
         "kicker": "Called on stream",
         "heading": "Hits"
@@ -89,17 +183,50 @@
     "whatnot": {
       "type": "whatnot-band",
       "blocks": {
-        "thu": { "type": "slot", "settings": { "day": "Thursday", "time": "9:30 PM ET" } },
-        "fri": { "type": "slot", "settings": { "day": "Friday", "time": "9:30 PM ET" } },
-        "sat": { "type": "slot", "settings": { "day": "Saturday", "time": "9:30 PM ET" } }
+        "thu": {
+          "type": "slot",
+          "settings": {
+            "day": "Thursday",
+            "time": "9:30 PM ET"
+          }
+        },
+        "fri": {
+          "type": "slot",
+          "settings": {
+            "day": "Friday",
+            "time": "9:30 PM ET"
+          }
+        },
+        "sat": {
+          "type": "slot",
+          "settings": {
+            "day": "Saturday",
+            "time": "9:30 PM ET"
+          }
+        }
       },
-      "block_order": ["thu", "fri", "sat"],
+      "block_order": [
+        "thu",
+        "fri",
+        "sat"
+      ],
       "settings": {
         "kicker": "Off-site room",
         "heading": "Whatnot",
-        "text": "Shows run in the Whatnot room. This theme links out. Whatnot does not let another site embed the stream."
+        "text": "Shows run in the Whatnot room. This theme links out. Whatnot does not let another site embed the stream.",
+        "room": ""
       }
     }
   },
-  "order": ["hero", "rail", "breaks", "board", "wax", "live", "auctions", "hits", "whatnot"]
+  "order": [
+    "hero",
+    "rail",
+    "breaks",
+    "board",
+    "wax",
+    "live",
+    "auctions",
+    "hits",
+    "whatnot"
+  ]
 }
