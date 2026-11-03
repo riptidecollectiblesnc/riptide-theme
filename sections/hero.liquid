@@ -2,18 +2,18 @@
   <div class="wrap hero">
     <div class="hero-copy">
       {% if section.settings.kicker != blank %}
-        <p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}"><span class="live-dot"></span> {{ section.settings.kicker }}</p>
+        <p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}"><span class="live-dot"></span> {{ section.settings.kicker }}</p>
       {% endif %}
-      <h1 class="display hero-title" style="{% render 'field-style', font: section.settings.heading_font, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h1>
+      <h1 class="display hero-title" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h1>
       {% if section.settings.text != blank %}
-        <p class="lede" style="{% render 'field-style', font: section.settings.text_font, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</p>
+        <p class="lede" style="{% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</p>
       {% endif %}
       <div class="hero-actions">
         {% if section.settings.button_label != blank %}
-          <a class="btn btn-primary" href="{{ section.settings.button_link }}" style="{% render 'field-style', font: section.settings.button_label_font, color: section.settings.button_label_color, size: section.settings.button_label_size, depth: section.settings.button_label_depth, amount: section.settings.button_label_depth_amount, shadow: section.settings.button_label_depth_color %}">{{ section.settings.button_label }}</a>
+          <a class="btn btn-primary" href="{{ section.settings.button_link }}" style="{% render 'field-style', font: section.settings.button_label_font, bold: section.settings.button_label_bold, italic: section.settings.button_label_italic, align: section.settings.button_label_align, valign: section.settings.button_label_valign, color: section.settings.button_label_color, size: section.settings.button_label_size, depth: section.settings.button_label_depth, amount: section.settings.button_label_depth_amount, shadow: section.settings.button_label_depth_color %}">{{ section.settings.button_label }}</a>
         {% endif %}
         {% if section.settings.button_2_label != blank %}
-          <a class="btn btn-ghost" href="{{ section.settings.button_2_link }}" style="{% render 'field-style', font: section.settings.button_2_label_font, color: section.settings.button_2_label_color, size: section.settings.button_2_label_size, depth: section.settings.button_2_label_depth, amount: section.settings.button_2_label_depth_amount, shadow: section.settings.button_2_label_depth_color %}">{{ section.settings.button_2_label }}</a>
+          <a class="btn btn-ghost" href="{{ section.settings.button_2_link }}" style="{% render 'field-style', font: section.settings.button_2_label_font, bold: section.settings.button_2_label_bold, italic: section.settings.button_2_label_italic, align: section.settings.button_2_label_align, valign: section.settings.button_2_label_valign, color: section.settings.button_2_label_color, size: section.settings.button_2_label_size, depth: section.settings.button_2_label_depth, amount: section.settings.button_2_label_depth_amount, shadow: section.settings.button_2_label_depth_color %}">{{ section.settings.button_2_label }}</a>
         {% endif %}
       </div>
       <ul class="hero-stats">
@@ -30,12 +30,12 @@
       {% if section.settings.stage_image != blank %}
         {{ section.settings.stage_image | image_url: width: 1600 | image_tag: class: 'stage-photo', alt: section.settings.stage_label, widths: '400, 800, 1200, 1600' }}
       {% else %}
-        {% capture stage_label_style %}{% render 'field-style', font: section.settings.stage_label_font, color: section.settings.stage_label_color, size: section.settings.stage_label_size, depth: section.settings.stage_label_depth, amount: section.settings.stage_label_depth_amount, shadow: section.settings.stage_label_depth_color %}{% endcapture %}
+        {% capture stage_label_style %}{% render 'field-style', font: section.settings.stage_label_font, bold: section.settings.stage_label_bold, italic: section.settings.stage_label_italic, align: section.settings.stage_label_align, valign: section.settings.stage_label_valign, color: section.settings.stage_label_color, size: section.settings.stage_label_size, depth: section.settings.stage_label_depth, amount: section.settings.stage_label_depth_amount, shadow: section.settings.stage_label_depth_color %}{% endcapture %}
         {% render 'wax', style: 'crystal', label: section.settings.stage_label, label_style: stage_label_style %}
       {% endif %}
       <div class="stage-lower">
         <span class="live-dot"></span>
-        <span style="{% render 'field-style', font: section.settings.lower_font, color: section.settings.lower_color, size: section.settings.lower_size, depth: section.settings.lower_depth, amount: section.settings.lower_depth_amount, shadow: section.settings.lower_depth_color %}">{{ section.settings.lower }}</span>
+        <span style="{% render 'field-style', font: section.settings.lower_font, bold: section.settings.lower_bold, italic: section.settings.lower_italic, align: section.settings.lower_align, valign: section.settings.lower_valign, color: section.settings.lower_color, size: section.settings.lower_size, depth: section.settings.lower_depth, amount: section.settings.lower_depth_amount, shadow: section.settings.lower_depth_color %}">{{ section.settings.lower }}</span>
       </div>
     </div>
   </div>
@@ -92,6 +92,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "kicker_bold",
+      "label": "Kicker bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "kicker_italic",
+      "label": "Kicker italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "kicker_align",
+      "label": "Kicker horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "kicker_valign",
+      "label": "Kicker vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },
@@ -234,6 +294,66 @@
       ]
     },
     {
+      "type": "checkbox",
+      "id": "heading_bold",
+      "label": "Heading bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_italic",
+      "label": "Heading italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Heading horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_valign",
+      "label": "Heading vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
       "type": "color",
       "id": "heading_color",
       "label": "Heading color",
@@ -372,6 +492,66 @@
       ]
     },
     {
+      "type": "checkbox",
+      "id": "text_bold",
+      "label": "Text bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "text_italic",
+      "label": "Text italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_valign",
+      "label": "Text vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
       "type": "color",
       "id": "text_color",
       "label": "Text color",
@@ -506,6 +686,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "button_label_bold",
+      "label": "Button bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "button_label_italic",
+      "label": "Button italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_label_align",
+      "label": "Button horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_label_valign",
+      "label": "Button vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },
@@ -654,6 +894,66 @@
       ]
     },
     {
+      "type": "checkbox",
+      "id": "button_2_label_bold",
+      "label": "Second button bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "button_2_label_italic",
+      "label": "Second button italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "button_2_label_align",
+      "label": "Second button horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "button_2_label_valign",
+      "label": "Second button vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
       "type": "color",
       "id": "button_2_label_color",
       "label": "Second button color",
@@ -798,6 +1098,66 @@
       ]
     },
     {
+      "type": "checkbox",
+      "id": "lower_bold",
+      "label": "Stage line bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "lower_italic",
+      "label": "Stage line italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "lower_align",
+      "label": "Stage line horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "lower_valign",
+      "label": "Stage line vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
       "type": "color",
       "id": "lower_color",
       "label": "Stage line color",
@@ -932,6 +1292,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "stage_label_bold",
+      "label": "Slab label bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "stage_label_italic",
+      "label": "Slab label italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "stage_label_align",
+      "label": "Slab label horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "stage_label_valign",
+      "label": "Slab label vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },

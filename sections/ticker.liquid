@@ -3,7 +3,7 @@
     <div class="ticker-track">
       {% for pass in (1..2) %}
         {% for block in section.blocks %}
-          <span {{ block.shopify_attributes }}><b style="{% render 'field-style', font: block.settings.title_font, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</b> <span style="{% render 'field-style', font: block.settings.detail_font, color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</span></span>
+          <span {{ block.shopify_attributes }}><b style="{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</b> <span style="{% render 'field-style', font: block.settings.detail_font, bold: block.settings.detail_bold, italic: block.settings.detail_italic, align: block.settings.detail_align, valign: block.settings.detail_valign, color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</span></span>
         {% endfor %}
       {% endfor %}
     </div>
@@ -159,6 +159,66 @@
           ]
         },
         {
+          "type": "checkbox",
+          "id": "title_bold",
+          "label": "Title bold",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "title_italic",
+          "label": "Title italic",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "title_align",
+          "label": "Title horizontal",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "title_valign",
+          "label": "Title vertical",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "middle",
+              "label": "Middle"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            }
+          ]
+        },
+        {
           "type": "color",
           "id": "title_color",
           "label": "Title color",
@@ -293,6 +353,66 @@
             {
               "value": "Inter, sans-serif",
               "label": "Inter"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "detail_bold",
+          "label": "Detail bold",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "detail_italic",
+          "label": "Detail italic",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "detail_align",
+          "label": "Detail horizontal",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "detail_valign",
+          "label": "Detail vertical",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "middle",
+              "label": "Middle"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
             }
           ]
         },

@@ -3,7 +3,7 @@
     <div class="foot-grid">
       <div>
         <p class="display foot-name">{{ shop.name }}</p>
-        <p class="muted" style="margin-top:0.55rem;max-width:28rem;{% render 'field-style', font: section.settings.blurb_font, color: section.settings.blurb_color, size: section.settings.blurb_size, depth: section.settings.blurb_depth, amount: section.settings.blurb_depth_amount, shadow: section.settings.blurb_depth_color %}">{{ section.settings.blurb }}</p>
+        <p class="muted" style="margin-top:0.55rem;max-width:28rem;{% render 'field-style', font: section.settings.blurb_font, bold: section.settings.blurb_bold, italic: section.settings.blurb_italic, align: section.settings.blurb_align, valign: section.settings.blurb_valign, color: section.settings.blurb_color, size: section.settings.blurb_size, depth: section.settings.blurb_depth, amount: section.settings.blurb_depth_amount, shadow: section.settings.blurb_depth_color %}">{{ section.settings.blurb }}</p>
       </div>
       <div>
         <p class="kicker">Shop</p>
@@ -81,6 +81,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "blurb_bold",
+      "label": "Blurb bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "blurb_italic",
+      "label": "Blurb italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "blurb_align",
+      "label": "Blurb horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "blurb_valign",
+      "label": "Blurb vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },

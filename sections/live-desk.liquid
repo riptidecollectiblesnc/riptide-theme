@@ -18,8 +18,8 @@
   <div class="wrap">
     <header class="section-head">
       <div>
-        {% if section.settings.kicker != blank %}<p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>{% endif %}
-        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
+        {% if section.settings.kicker != blank %}<p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>{% endif %}
+        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
       </div>
     </header>
     <div class="live-grid">
@@ -33,7 +33,7 @@
             {% render 'wax', style: 'ice', label: 'Live' %}
             <div class="stage-lower">
               <span class="live-dot"></span>
-              <span style="{% render 'field-style', font: section.settings.lower_font, color: section.settings.lower_color, size: section.settings.lower_size, depth: section.settings.lower_depth, amount: section.settings.lower_depth_amount, shadow: section.settings.lower_depth_color %}">{{ section.settings.lower }}</span>
+              <span style="{% render 'field-style', font: section.settings.lower_font, bold: section.settings.lower_bold, italic: section.settings.lower_italic, align: section.settings.lower_align, valign: section.settings.lower_valign, color: section.settings.lower_color, size: section.settings.lower_size, depth: section.settings.lower_depth, amount: section.settings.lower_depth_amount, shadow: section.settings.lower_depth_color %}">{{ section.settings.lower }}</span>
             </div>
           {% endif %}
         </div>
@@ -41,7 +41,7 @@
           <p class="fine" style="margin-top:0.6rem">Paste a YouTube link in this section. Until then the stage stays on the slab.</p>
         {% endif %}
         {% if provider == 'whatnot' or provider == 'off' %}
-          <p class="muted" style="margin-top:0.7rem;{% render 'field-style', font: section.settings.note_font, color: section.settings.note_color, size: section.settings.note_size, depth: section.settings.note_depth, amount: section.settings.note_depth_amount, shadow: section.settings.note_depth_color %}">{{ section.settings.note }}</p>
+          <p class="muted" style="margin-top:0.7rem;{% render 'field-style', font: section.settings.note_font, bold: section.settings.note_bold, italic: section.settings.note_italic, align: section.settings.note_align, valign: section.settings.note_valign, color: section.settings.note_color, size: section.settings.note_size, depth: section.settings.note_depth, amount: section.settings.note_depth_amount, shadow: section.settings.note_depth_color %}">{{ section.settings.note }}</p>
           {% if whatnot != blank %}
             <a class="btn btn-primary" style="margin-top:0.6rem" href="{{ whatnot }}" target="_blank" rel="noreferrer">Open the Whatnot room</a>
           {% endif %}
@@ -118,6 +118,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "kicker_bold",
+      "label": "Kicker bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "kicker_italic",
+      "label": "Kicker italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "kicker_align",
+      "label": "Kicker horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "kicker_valign",
+      "label": "Kicker vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },
@@ -256,6 +316,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_bold",
+      "label": "Heading bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_italic",
+      "label": "Heading italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Heading horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_valign",
+      "label": "Heading vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },
@@ -439,6 +559,66 @@
       ]
     },
     {
+      "type": "checkbox",
+      "id": "lower_bold",
+      "label": "Stage line bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "lower_italic",
+      "label": "Stage line italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "lower_align",
+      "label": "Stage line horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "lower_valign",
+      "label": "Stage line vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
       "type": "color",
       "id": "lower_color",
       "label": "Stage line color",
@@ -573,6 +753,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "note_bold",
+      "label": "Note bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "note_italic",
+      "label": "Note italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "note_align",
+      "label": "Note horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "note_valign",
+      "label": "Note vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },

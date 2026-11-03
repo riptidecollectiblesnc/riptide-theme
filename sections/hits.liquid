@@ -2,15 +2,15 @@
   <div class="wrap">
     <header class="section-head">
       <div>
-        {% if section.settings.kicker != blank %}<p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>{% endif %}
-        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
+        {% if section.settings.kicker != blank %}<p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>{% endif %}
+        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
       </div>
     </header>
     <ul class="hit-list">
       {% for block in section.blocks %}
         <li class="panel" style="padding:0.8rem 0.9rem" {{ block.shopify_attributes }}>
-          <strong style="{% render 'field-style', font: block.settings.title_font, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</strong>
-          {% if block.settings.detail != blank %}<p class="fine" style="{% render 'field-style', font: block.settings.detail_font, color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</p>{% endif %}
+          <strong style="{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</strong>
+          {% if block.settings.detail != blank %}<p class="fine" style="{% render 'field-style', font: block.settings.detail_font, bold: block.settings.detail_bold, italic: block.settings.detail_italic, align: block.settings.detail_align, valign: block.settings.detail_valign, color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</p>{% endif %}
         </li>
       {% endfor %}
     </ul>
@@ -68,6 +68,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "kicker_bold",
+      "label": "Kicker bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "kicker_italic",
+      "label": "Kicker italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "kicker_align",
+      "label": "Kicker horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "kicker_valign",
+      "label": "Kicker vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },
@@ -206,6 +266,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_bold",
+      "label": "Heading bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_italic",
+      "label": "Heading italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Heading horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_valign",
+      "label": "Heading vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },
@@ -354,6 +474,66 @@
           ]
         },
         {
+          "type": "checkbox",
+          "id": "title_bold",
+          "label": "Hit bold",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "title_italic",
+          "label": "Hit italic",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "title_align",
+          "label": "Hit horizontal",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "title_valign",
+          "label": "Hit vertical",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "middle",
+              "label": "Middle"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            }
+          ]
+        },
+        {
           "type": "color",
           "id": "title_color",
           "label": "Hit color",
@@ -488,6 +668,66 @@
             {
               "value": "Inter, sans-serif",
               "label": "Inter"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "detail_bold",
+          "label": "Detail bold",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "detail_italic",
+          "label": "Detail italic",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "detail_align",
+          "label": "Detail horizontal",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "detail_valign",
+          "label": "Detail vertical",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "middle",
+              "label": "Middle"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
             }
           ]
         },

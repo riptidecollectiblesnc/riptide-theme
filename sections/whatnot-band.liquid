@@ -3,20 +3,20 @@
   <div class="wrap">
     <header class="section-head">
       <div>
-        <p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>
-        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
+        <p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>
+        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
       </div>
       {% if room != blank %}
         <a class="btn btn-primary" href="{{ room }}" target="_blank" rel="noreferrer">Open Whatnot</a>
       {% endif %}
     </header>
-    <p class="lede" style="margin-top:0;{% render 'field-style', font: section.settings.text_font, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</p>
+    <p class="lede" style="margin-top:0;{% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</p>
     {% if section.blocks.size > 0 %}
       <ul class="schedule">
         {% for block in section.blocks %}
           <li class="panel" {{ block.shopify_attributes }}>
-            <strong style="{% render 'field-style', font: block.settings.day_font, color: block.settings.day_color, size: block.settings.day_size, depth: block.settings.day_depth, amount: block.settings.day_depth_amount, shadow: block.settings.day_depth_color %}">{{ block.settings.day }}</strong>
-            <span style="{% render 'field-style', font: block.settings.time_font, color: block.settings.time_color, size: block.settings.time_size, depth: block.settings.time_depth, amount: block.settings.time_depth_amount, shadow: block.settings.time_depth_color %}">{{ block.settings.time }}</span>
+            <strong style="{% render 'field-style', font: block.settings.day_font, bold: block.settings.day_bold, italic: block.settings.day_italic, align: block.settings.day_align, valign: block.settings.day_valign, color: block.settings.day_color, size: block.settings.day_size, depth: block.settings.day_depth, amount: block.settings.day_depth_amount, shadow: block.settings.day_depth_color %}">{{ block.settings.day }}</strong>
+            <span style="{% render 'field-style', font: block.settings.time_font, bold: block.settings.time_bold, italic: block.settings.time_italic, align: block.settings.time_align, valign: block.settings.time_valign, color: block.settings.time_color, size: block.settings.time_size, depth: block.settings.time_depth, amount: block.settings.time_depth_amount, shadow: block.settings.time_depth_color %}">{{ block.settings.time }}</span>
           </li>
         {% endfor %}
       </ul>
@@ -75,6 +75,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "kicker_bold",
+      "label": "Kicker bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "kicker_italic",
+      "label": "Kicker italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "kicker_align",
+      "label": "Kicker horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "kicker_valign",
+      "label": "Kicker vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },
@@ -217,6 +277,66 @@
       ]
     },
     {
+      "type": "checkbox",
+      "id": "heading_bold",
+      "label": "Heading bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "heading_italic",
+      "label": "Heading italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "heading_align",
+      "label": "Heading horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_valign",
+      "label": "Heading vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
       "type": "color",
       "id": "heading_color",
       "label": "Heading color",
@@ -351,6 +471,66 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "text_bold",
+      "label": "Text bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "text_italic",
+      "label": "Text italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "text_valign",
+      "label": "Text vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
         }
       ]
     },
@@ -505,6 +685,66 @@
           ]
         },
         {
+          "type": "checkbox",
+          "id": "day_bold",
+          "label": "Day bold",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "day_italic",
+          "label": "Day italic",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "day_align",
+          "label": "Day horizontal",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "day_valign",
+          "label": "Day vertical",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "middle",
+              "label": "Middle"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            }
+          ]
+        },
+        {
           "type": "color",
           "id": "day_color",
           "label": "Day color",
@@ -639,6 +879,66 @@
             {
               "value": "Inter, sans-serif",
               "label": "Inter"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "time_bold",
+          "label": "Time bold",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "time_italic",
+          "label": "Time italic",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "time_align",
+          "label": "Time horizontal",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "time_valign",
+          "label": "Time vertical",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "middle",
+              "label": "Middle"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
             }
           ]
         },

@@ -7,6 +7,10 @@
   assign glow = shadow | default: paint
 -%}
 {%- if font != blank and font != 'inherit' -%}font-family: {{ font }};{%- if font contains 'Bebas' or font contains 'Anton' -%}font-weight: 400;{%- endif -%}{%- endif -%}
+{%- if bold -%}font-weight: 700;{%- endif -%}
+{%- if italic -%}font-style: italic;{%- endif -%}
+{%- if align == 'left' or align == 'center' or align == 'right' -%}text-align: {{ align }};{%- endif -%}
+{%- if valign == 'top' -%}margin-top: 0; margin-bottom: auto;{%- elsif valign == 'middle' -%}margin-top: auto; margin-bottom: auto;{%- elsif valign == 'bottom' -%}margin-top: auto; margin-bottom: 0;{%- endif -%}
 {%- if paint != blank -%}color: {{ paint }}; -webkit-text-fill-color: {{ paint }}; background-image: none;{%- endif -%}
 {%- if px > 0 -%}font-size: {{ px }}px;{%- endif -%}
 {%- if d == 'soft' and n > 0 -%}text-shadow: 0 {{ n | times: 0.4 }}px {{ n }}px {{ glow }};

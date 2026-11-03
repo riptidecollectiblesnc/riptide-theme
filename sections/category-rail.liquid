@@ -11,7 +11,7 @@
           endif
         %}
         <a class="panel rail-card" href="{{ href }}" {{ block.shopify_attributes }}>
-          {% capture label_style %}{% render 'field-style', font: block.settings.title_font, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}{% endcapture %}
+          {% capture label_style %}{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}{% endcapture %}
           {% render 'wax', style: block.settings.style, label: block.settings.title, label_style: label_style %}
         </a>
       {% endfor %}
@@ -86,6 +86,66 @@
             {
               "value": "Inter, sans-serif",
               "label": "Inter"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "title_bold",
+          "label": "Label bold",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "title_italic",
+          "label": "Label italic",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "title_align",
+          "label": "Label horizontal",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "title_valign",
+          "label": "Label vertical",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "middle",
+              "label": "Middle"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
             }
           ]
         },
