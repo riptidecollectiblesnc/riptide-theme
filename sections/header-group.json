@@ -16,7 +16,16 @@
       "settings": {
         "enabled": true,
         "text": "New website is still under development, bear with us. Your accounts have not been affected by the update",
-        "link": ""
+        "text_color": "#000000",
+        "text_size": 12,
+        "text_depth": "none",
+        "text_depth_amount": 8,
+        "text_depth_color": "#00e5ff",
+        "link": "",
+        "fill": "solid",
+        "fill_color": "#00e5ff",
+        "fill_color_2": "#6d1ecc",
+        "fill_angle": 90
       }
     },
     "ticker": {
@@ -26,21 +35,51 @@
           "type": "hit",
           "settings": {
             "title": "STREAMING SCHEDULE",
-            "detail": ""
+            "title_color": "#e7f6fb",
+            "title_size": 16,
+            "title_depth": "none",
+            "title_depth_amount": 8,
+            "title_depth_color": "#00e5ff",
+            "detail": "",
+            "detail_color": "#8eafbf",
+            "detail_size": 14,
+            "detail_depth": "none",
+            "detail_depth_amount": 8,
+            "detail_depth_color": "#00e5ff"
           }
         },
         "hit_KzU8za": {
           "type": "hit",
           "settings": {
             "title": "Pick-A-Pack & Pack Wars",
-            "detail": "Currently paused until further notice"
+            "title_color": "#e7f6fb",
+            "title_size": 16,
+            "title_depth": "none",
+            "title_depth_amount": 8,
+            "title_depth_color": "#00e5ff",
+            "detail": "Currently paused until further notice",
+            "detail_color": "#8eafbf",
+            "detail_size": 14,
+            "detail_depth": "none",
+            "detail_depth_amount": 8,
+            "detail_depth_color": "#00e5ff"
           }
         },
         "hit-b": {
           "type": "hit",
           "settings": {
             "title": "Whatnot",
-            "detail": "Thu–Sat 9:30 PM ET"
+            "title_color": "#e7f6fb",
+            "title_size": 16,
+            "title_depth": "none",
+            "title_depth_amount": 8,
+            "title_depth_color": "#00e5ff",
+            "detail": "Thu–Sat 9:30 PM ET",
+            "detail_color": "#8eafbf",
+            "detail_size": 14,
+            "detail_depth": "none",
+            "detail_depth_amount": 8,
+            "detail_depth_color": "#00e5ff"
           }
         }
       },
@@ -49,7 +88,13 @@
         "hit_KzU8za",
         "hit-b"
       ],
-      "settings": {}
+      "settings": {
+        "scroll_seconds": 40,
+        "fill": "solid",
+        "fill_color": "#04090e",
+        "fill_color_2": "#00e5ff",
+        "fill_angle": 90
+      }
     },
     "header": {
       "type": "header",
