@@ -14,10 +14,17 @@
       background: var(--color-bg);
     }
   {% endif %}
+  #shopify-section-{{ section.id }} .desk-nav {
+    gap: {{ section.settings.menu_gap }}px;
+  }
+  #shopify-section-{{ section.id }} .sheet .nav-link {
+    margin: {{ section.settings.menu_gap | divided_by: 2 }}px 0;
+  }
   #shopify-section-{{ section.id }} .desk-nav .nav-link,
   #shopify-section-{{ section.id }} .sheet .nav-link {
     border: {{ section.settings.menu_border }}px solid {{ section.settings.menu_border_color }};
     border-radius: 10px;
+    padding: {{ section.settings.menu_pad }}px {{ section.settings.menu_pad | times: 2 }}px;
     {% case section.settings.menu_cell_fill %}
       {% when 'solid' %}background: {{ section.settings.menu_cell_color }};
       {% when 'tide' %}background-image: linear-gradient(90deg, #042028, #00e5ff 42%, #7af6ff 50%, #00e5ff 58%, #042028);
@@ -345,6 +352,26 @@
     {
       "type": "header",
       "content": "Menu cells"
+    },
+    {
+      "type": "range",
+      "id": "menu_gap",
+      "label": "Space between items",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "menu_pad",
+      "label": "Padding inside cell",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
     },
     {
       "type": "range",
