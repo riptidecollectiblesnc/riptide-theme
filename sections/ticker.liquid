@@ -1,5 +1,5 @@
 {% if section.blocks.size > 0 %}
-  <div class="ticker" aria-hidden="true">
+  <div class="ticker" style="--ticker-ms: {{ section.settings.scroll_seconds }}s" aria-hidden="true">
     <div class="ticker-track">
       {% for pass in (1..2) %}
         {% for block in section.blocks %}
@@ -13,7 +13,19 @@
 {% schema %}
 {
   "name": "Hit ticker",
-  "settings": [],
+  "settings": [
+    {
+      "type": "range",
+      "id": "scroll_seconds",
+      "label": "Scroll speed",
+      "min": 8,
+      "max": 80,
+      "step": 2,
+      "unit": "s",
+      "default": 40,
+      "info": "Seconds for one full pass. Lower is faster. The ticker stays full width."
+    }
+  ],
   "blocks": [
     {
       "type": "hit",

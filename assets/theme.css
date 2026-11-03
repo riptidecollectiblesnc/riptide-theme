@@ -86,6 +86,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   max-width: none;
   margin-inline: auto;
 }
+.site-header .wrap { width: 90%; }
 
 .display {
   font-family: var(--font-display);
@@ -188,6 +189,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .announce {
   display: block;
+  width: 100%;
+  box-sizing: border-box;
   background: var(--color-primary);
   color: var(--color-primary-ink);
   text-align: center;
@@ -198,12 +201,16 @@ ul { margin: 0; padding: 0; list-style: none; }
 .announce:hover { filter: brightness(1.05); }
 
 .site-header {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 40;
+  width: 100%;
   border-bottom: 1px solid var(--color-border);
   background: color-mix(in srgb, var(--color-bg) 84%, transparent);
   backdrop-filter: blur(16px);
+}
+.site-header.is-sticky {
+  position: sticky;
+  top: 0;
 }
 .bar {
   display: flex;
@@ -296,6 +303,7 @@ ul { margin: 0; padding: 0; list-style: none; }
 body { padding-bottom: 64px; }
 
 .ticker {
+  width: 100%;
   overflow: hidden;
   border-block: 1px solid var(--color-border);
   background: var(--color-bg-deep);
@@ -305,7 +313,7 @@ body { padding-bottom: 64px; }
   gap: 2rem;
   width: max-content;
   padding: 0.45rem 1rem;
-  animation: ticker 46s linear infinite;
+  animation: ticker var(--ticker-ms, 40s) linear infinite;
 }
 .ticker:hover .ticker-track { animation-play-state: paused; }
 .ticker b { color: var(--color-primary); font-weight: 700; }
