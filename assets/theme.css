@@ -216,11 +216,11 @@ ul { margin: 0; padding: 0; list-style: none; }
   background: color-mix(in srgb, var(--color-bg) 84%, transparent);
   backdrop-filter: blur(16px);
 }
-.site-header.is-sticky { position: relative; }
-.shopify-section-group-header-group:has(.site-header.is-sticky) {
+.shopify-section-group-header-group:has(.site-header.is-sticky),
+#shopify-section-group-header-group:has(.site-header.is-sticky) {
   position: sticky;
   top: 0;
-  z-index: 50;
+  z-index: 80;
   background: var(--color-bg);
 }
 .bar {

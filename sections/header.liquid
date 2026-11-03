@@ -35,18 +35,35 @@
     else
       assign top_v = 'center'
   endcase
+  assign top_is_bold = false
+  assign top_is_italic = false
+  if section.settings.top_bold or section.settings.top_font_style == 'bold' or section.settings.top_font_style == 'bold_italic'
+    assign top_is_bold = true
+  endif
+  if section.settings.top_italic or section.settings.top_font_style == 'italic' or section.settings.top_font_style == 'bold_italic'
+    assign top_is_italic = true
+  endif
 %}
 {% capture menu_style %}{% render 'field-style', font: section.settings.menu_font, bold: section.settings.menu_bold, italic: section.settings.menu_italic, fill: section.settings.menu_fill, fill_2: section.settings.menu_fill_2, color: section.settings.menu_color, size: section.settings.menu_size, depth: section.settings.menu_depth, amount: section.settings.menu_depth_amount, shadow: section.settings.menu_depth_color %}{% endcapture %}
-{% capture top_style %}{% render 'field-style', font: section.settings.top_font, bold: section.settings.top_bold, italic: section.settings.top_italic, fill: section.settings.top_fill, fill_2: section.settings.top_fill_2, color: section.settings.top_color, size: section.settings.top_size, depth: section.settings.top_depth, amount: section.settings.top_depth_amount, shadow: section.settings.top_depth_color %}{% endcapture %}
+{% capture top_style %}{% render 'field-style', font: section.settings.top_font, bold: top_is_bold, italic: top_is_italic, fill: section.settings.top_fill, fill_2: section.settings.top_fill_2, color: section.settings.top_color, size: section.settings.top_size, depth: section.settings.top_depth, amount: section.settings.top_depth_amount, shadow: section.settings.top_depth_color %}{% endcapture %}
 {% style %}
   {% if section.settings.sticky %}
+    #shopify-section-group-header-group,
     .shopify-section-group-header-group:has(#shopify-section-{{ section.id }} .is-sticky) {
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 80;
       background: var(--color-bg);
     }
   {% endif %}
+  #shopify-section-{{ section.id }} .top-menu,
+  #shopify-section-{{ section.id }} .top-menu .nav-link,
+  #shopify-section-{{ section.id }} .nav-link.is-top,
+  #shopify-section-{{ section.id }} .nav-link.is-top > span {
+    {% if section.settings.top_font != blank and section.settings.top_font != 'inherit' %}font-family: {{ section.settings.top_font }} !important;{% endif %}
+    {% if top_is_bold %}font-weight: 700 !important;{% endif %}
+    {% if top_is_italic %}font-style: italic !important;{% endif %}
+  }
   #shopify-section-{{ section.id }} .desk-nav:not(.top-menu) {
     gap: {{ section.settings.menu_gap }}px;
     transform: translate({{ section.settings.menu_x }}px, {{ section.settings.menu_y }}px);
@@ -318,6 +335,52 @@
     <span style="{{ menu_style }}">Cart</span>
   </a>
 </nav>
+
+{% if section.settings.sticky %}
+<script>
+  (function () {
+    var section = document.getElementById('shopify-section-{{ section.id }}');
+    if (!section || section.dataset.stickyBound) return;
+    section.dataset.stickyBound = '1';
+    var group = section.closest('.shopify-section-group-header-group') || section;
+    var spacer = document.createElement('div');
+    spacer.hidden = true;
+    group.after(spacer);
+    var mark = 0;
+    function place() {
+      var y = window.scrollY || document.documentElement.scrollTop || 0;
+      if (!group.dataset.stuck) mark = group.getBoundingClientRect().top + y;
+      if (y > mark + 1) {
+        if (!group.dataset.stuck) {
+          spacer.style.height = group.offsetHeight + 'px';
+          spacer.hidden = false;
+          group.dataset.stuck = '1';
+          group.style.position = 'fixed';
+          group.style.top = '0';
+          group.style.left = '0';
+          group.style.right = '0';
+          group.style.width = '100%';
+          group.style.zIndex = '80';
+          group.style.background = 'var(--color-bg)';
+        }
+      } else if (group.dataset.stuck) {
+        group.dataset.stuck = '';
+        group.style.position = '';
+        group.style.top = '';
+        group.style.left = '';
+        group.style.right = '';
+        group.style.width = '';
+        group.style.zIndex = '';
+        group.style.background = '';
+        spacer.hidden = true;
+      }
+    }
+    document.addEventListener('scroll', place, true);
+    window.addEventListener('resize', place);
+    place();
+  })();
+</script>
+{% endif %}
 
 {% schema %}
 {
@@ -866,7 +929,7 @@
     {
       "type": "select",
       "id": "top_font",
-      "label": "Font",
+      "label": "Top menu font",
       "default": "inherit",
       "options": [
         {
@@ -904,6 +967,30 @@
         {
           "value": "Inter, sans-serif",
           "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "top_font_style",
+      "label": "Font style",
+      "default": "normal",
+      "options": [
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "bold",
+          "label": "Bold"
+        },
+        {
+          "value": "italic",
+          "label": "Italic"
+        },
+        {
+          "value": "bold_italic",
+          "label": "Bold italic"
         }
       ]
     },
