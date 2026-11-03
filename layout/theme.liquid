@@ -37,6 +37,9 @@
       --color-primary: {{ settings.color_primary }};
       --color-primary-ink: {{ settings.color_primary_ink }};
       --radius-card: {% if settings.radius == 'sharp' %}0.3rem{% elsif settings.radius == 'round' %}1.35rem{% else %}0.9rem{% endif %};
+      --image-ratio: {{ settings.image_ratio | default: '4 / 5' }};
+      --image-fit: {{ settings.image_fit | default: 'cover' }};
+      --image-pos: {{ settings.image_pos | default: 'center' }};
     }
   </style>
   {% if settings.custom_css != blank %}

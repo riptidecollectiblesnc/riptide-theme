@@ -22,8 +22,16 @@
         <li><strong>Sealed</strong><span>Wax and spots</span></li>
       </ul>
     </div>
-    <div class="stage" aria-hidden="true">
-      {% render 'wax', style: 'crystal', label: section.settings.stage_label %}
+    <div
+      class="stage stage-fit-{{ section.settings.stage_fit }}"
+      aria-hidden="true"
+      style="--stage-w: {{ section.settings.stage_width }}%; --stage-h: {{ section.settings.stage_height }}px; --stage-fit: {{ section.settings.stage_fit }}; --stage-x: {{ section.settings.stage_x }}; --stage-y: {{ section.settings.stage_y }}; --stage-pos: {% if section.settings.stage_x == 'start' %}left{% elsif section.settings.stage_x == 'end' %}right{% else %}center{% endif %} {% if section.settings.stage_y == 'start' %}top{% elsif section.settings.stage_y == 'end' %}bottom{% else %}center{% endif %};"
+    >
+      {% if section.settings.stage_image != blank %}
+        {{ section.settings.stage_image | image_url: width: 1600 | image_tag: class: 'stage-photo', alt: section.settings.stage_label, widths: '400, 800, 1200, 1600' }}
+      {% else %}
+        {% render 'wax', style: 'crystal', label: section.settings.stage_label %}
+      {% endif %}
       <div class="stage-lower">
         <span class="live-dot"></span>
         <span>{{ section.settings.lower }}</span>
@@ -44,7 +52,43 @@
     { "type": "text", "id": "button_2_label", "label": "Second button", "default": "Claim a spot" },
     { "type": "text", "id": "button_2_link", "label": "Second button link", "default": "#shopify-section-board" },
     { "type": "text", "id": "lower", "label": "Stage line", "default": "Whatnot · Thu–Sat 9:30 PM ET" },
-    { "type": "text", "id": "stage_label", "label": "Slab label", "default": "Live wax" }
+    { "type": "text", "id": "stage_label", "label": "Slab label", "default": "Live wax" },
+    { "type": "header", "content": "Stage image" },
+    { "type": "image_picker", "id": "stage_image", "label": "Image", "info": "Leave empty to keep the wax slab." },
+    { "type": "range", "id": "stage_width", "label": "Image width", "min": 20, "max": 100, "step": 2, "unit": "%", "default": 52 },
+    { "type": "range", "id": "stage_height", "label": "Stage height", "min": 280, "max": 720, "step": 20, "unit": "px", "default": 420 },
+    {
+      "type": "select",
+      "id": "stage_fit",
+      "label": "Fit",
+      "default": "contain",
+      "options": [
+        { "value": "contain", "label": "Fit inside" },
+        { "value": "cover", "label": "Fill and crop" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "stage_x",
+      "label": "Horizontal",
+      "default": "center",
+      "options": [
+        { "value": "start", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "stage_y",
+      "label": "Vertical",
+      "default": "center",
+      "options": [
+        { "value": "start", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "end", "label": "Bottom" }
+      ]
+    }
   ],
   "presets": [{ "name": "Hero" }]
 }

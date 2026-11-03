@@ -14,7 +14,7 @@
       {% if product.media.size > 0 %}
         {% for media in product.media limit: 5 %}
           {% if media.media_type == 'image' %}
-            <div class="panel" style="overflow:hidden;margin-bottom:0.6rem">
+            <div class="panel product-photo">
               {{ media | image_url: width: 1400 | image_tag: loading: 'lazy', alt: media.alt | default: product.title }}
             </div>
           {% endif %}

@@ -57,5 +57,47 @@
       { "type": "url", "id": "whatnot_url", "label": "Whatnot room" },
       { "type": "textarea", "id": "custom_css", "label": "Custom CSS", "info": "Added at the end of the head. Use it for one-off tweaks. The spot board, live stage, and break desk are already styled." }
     ]
+  },
+  {
+    "name": "Images",
+    "settings": [
+      { "type": "header", "content": "Product photos" },
+      { "type": "paragraph", "content": "Used on wax cards and the product page. The header logo and the homepage stage have their own size and position controls on those sections." },
+      {
+        "type": "select",
+        "id": "image_ratio",
+        "label": "Card shape",
+        "default": "4 / 5",
+        "options": [
+          { "value": "1 / 1", "label": "Square" },
+          { "value": "4 / 5", "label": "Portrait" },
+          { "value": "3 / 4", "label": "Tall" },
+          { "value": "16 / 9", "label": "Wide" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "image_fit",
+        "label": "Fit",
+        "default": "cover",
+        "options": [
+          { "value": "cover", "label": "Fill and crop" },
+          { "value": "contain", "label": "Fit inside" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "image_pos",
+        "label": "Crop position",
+        "default": "center",
+        "options": [
+          { "value": "center", "label": "Center" },
+          { "value": "top", "label": "Top" },
+          { "value": "bottom", "label": "Bottom" },
+          { "value": "left", "label": "Left" },
+          { "value": "right", "label": "Right" }
+        ]
+      }
+    ]
   }
 ]
