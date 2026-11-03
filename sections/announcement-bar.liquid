@@ -1,10 +1,12 @@
 {% if section.settings.enabled and section.settings.text != blank %}
   {% capture announce_style %}{% render 'field-style', color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}{% endcapture %}
-  {% if section.settings.link != blank %}
-    <a class="announce" href="{{ section.settings.link }}" style="{{ announce_style }}">{{ section.settings.text }}</a>
-  {% else %}
-    <p class="announce" style="{{ announce_style }}">{{ section.settings.text }}</p>
-  {% endif %}
+  <div class="bar-fill fill-{{ section.settings.fill }}" style="--fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;">
+    {% if section.settings.link != blank %}
+      <a class="announce" href="{{ section.settings.link }}" style="{{ announce_style }}">{{ section.settings.text }}</a>
+    {% else %}
+      <p class="announce" style="{{ announce_style }}">{{ section.settings.text }}</p>
+    {% endif %}
+  </div>
 {% endif %}
 
 {% schema %}
@@ -58,8 +60,40 @@
           "label": "Hard offset"
         },
         {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
           "value": "neon",
           "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
         }
       ]
     },
@@ -85,6 +119,83 @@
       "label": "Link",
       "default": "#shopify-section-whatnot",
       "info": "A full URL or a homepage anchor such as #shopify-section-live."
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "select",
+      "id": "fill",
+      "label": "Background fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "fill_color",
+      "label": "Fill color",
+      "default": "#00e5ff",
+      "info": "Solid, glass, mesh, and custom gradient."
+    },
+    {
+      "type": "color",
+      "id": "fill_color_2",
+      "label": "Second color",
+      "default": "#6d1ecc",
+      "info": "Custom gradient, glass edge, and mesh."
+    },
+    {
+      "type": "range",
+      "id": "fill_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient."
     }
   ]
 }

@@ -1,4 +1,4 @@
-{%- comment -%} color, size, depth (none|soft|hard|neon), amount, shadow {%- endcomment -%}
+{%- comment -%} color, size, depth, amount, shadow {%- endcomment -%}
 {%- liquid
   assign paint = color
   assign px = size | default: 0
@@ -8,4 +8,26 @@
 -%}
 {%- if paint != blank -%}color: {{ paint }}; -webkit-text-fill-color: {{ paint }}; background-image: none;{%- endif -%}
 {%- if px > 0 -%}font-size: {{ px }}px;{%- endif -%}
-{%- if d == 'soft' and n > 0 -%}text-shadow: 0 {{ n | times: 0.4 }}px {{ n }}px {{ glow }};{%- elsif d == 'hard' and n > 0 -%}text-shadow: {{ n | times: 0.35 }}px {{ n | times: 0.35 }}px 0 {{ glow }};{%- elsif d == 'neon' and n > 0 -%}text-shadow: 0 0 {{ n | times: 0.45 }}px {{ glow }}, 0 0 {{ n }}px {{ glow }};{%- endif -%}
+{%- if d == 'soft' and n > 0 -%}text-shadow: 0 {{ n | times: 0.4 }}px {{ n }}px {{ glow }};
+{%- elsif d == 'hard' and n > 0 -%}text-shadow: {{ n | times: 0.35 }}px {{ n | times: 0.35 }}px 0 {{ glow }};
+{%- elsif d == 'neon' and n > 0 -%}text-shadow: 0 0 {{ n | times: 0.45 }}px {{ glow }}, 0 0 {{ n }}px {{ glow }};
+{%- elsif d == 'double' and n > 0 -%}text-shadow: 0 0 {{ n | times: 0.3 }}px {{ glow }}, 0 0 {{ n }}px {{ glow }}, 0 0 {{ n | times: 2 }}px {{ glow }};
+{%- elsif d == 'long' and n > 0 -%}
+  {%- capture chain -%}
+    {%- for i in (1..8) -%}
+      {%- assign step = n | times: i | divided_by: 4 -%}
+      {%- if step < 1 -%}{% assign step = i %}{%- endif -%}
+      {{ step }}px {{ step }}px 0 {{ glow }}{%- unless forloop.last -%}, {%- endunless -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+  text-shadow: {{ chain | strip_newlines }};
+{%- elsif d == 'echo' and n > 0 -%}text-shadow: {{ n }}px {{ n }}px 0 {{ glow }}, {{ n | times: 2 }}px {{ n | times: 2 }}px 0 {{ glow }};
+{%- elsif d == 'lift' and n > 0 -%}text-shadow: 0 1px 0 color-mix(in srgb, {{ glow }} 50%, black), 0 {{ n }}px {{ n | times: 1.6 }}px {{ glow }};
+{%- elsif d == 'press' and n > 0 -%}text-shadow: 0 {{ n }}px 0 color-mix(in srgb, white 75%, transparent), 0 -1px 0 color-mix(in srgb, black 55%, transparent);
+{%- elsif d == 'emboss' and n > 0 -%}text-shadow: 0 -{{ n }}px 0 color-mix(in srgb, white 70%, transparent), 0 {{ n }}px 0 color-mix(in srgb, black 50%, transparent);
+{%- elsif d == 'outline' and n > 0 -%}
+  {%- assign stroke = n | divided_by: 8 -%}
+  {%- if stroke < 1 -%}{% assign stroke = 1 %}{%- endif -%}
+  -webkit-text-stroke: {{ stroke }}px {{ glow }}; paint-order: stroke fill;
+{%- elsif d == 'foil' and n > 0 -%}text-shadow: 0 1px 0 #fff6d0, 0 {{ n }}px 0 #e4c06a, 0 {{ n | times: 2 }}px {{ n }}px #8a6a2f;
+{%- endif -%}

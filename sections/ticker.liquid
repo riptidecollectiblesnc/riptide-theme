@@ -1,5 +1,5 @@
 {% if section.blocks.size > 0 %}
-  <div class="ticker" style="--ticker-ms: {{ section.settings.scroll_seconds }}s" aria-hidden="true">
+  <div class="ticker bar-fill fill-{{ section.settings.fill }}" style="--ticker-ms: {{ section.settings.scroll_seconds }}s; --fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;" aria-hidden="true">
     <div class="ticker-track">
       {% for pass in (1..2) %}
         {% for block in section.blocks %}
@@ -24,6 +24,83 @@
       "unit": "s",
       "default": 40,
       "info": "Seconds for one full pass. Lower is faster. The ticker stays full width."
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "select",
+      "id": "fill",
+      "label": "Background fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "fill_color",
+      "label": "Fill color",
+      "default": "#04090e",
+      "info": "Solid, glass, mesh, and custom gradient."
+    },
+    {
+      "type": "color",
+      "id": "fill_color_2",
+      "label": "Second color",
+      "default": "#00e5ff",
+      "info": "Custom gradient, glass edge, and mesh."
+    },
+    {
+      "type": "range",
+      "id": "fill_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient."
     }
   ],
   "blocks": [
@@ -72,8 +149,40 @@
               "label": "Hard offset"
             },
             {
+              "value": "lift",
+              "label": "Lift"
+            },
+            {
+              "value": "long",
+              "label": "Long shadow"
+            },
+            {
+              "value": "echo",
+              "label": "Echo"
+            },
+            {
+              "value": "press",
+              "label": "Letterpress"
+            },
+            {
+              "value": "emboss",
+              "label": "Emboss"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
               "value": "neon",
               "label": "Neon glow"
+            },
+            {
+              "value": "double",
+              "label": "Double glow"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
             }
           ]
         },
@@ -134,8 +243,40 @@
               "label": "Hard offset"
             },
             {
+              "value": "lift",
+              "label": "Lift"
+            },
+            {
+              "value": "long",
+              "label": "Long shadow"
+            },
+            {
+              "value": "echo",
+              "label": "Echo"
+            },
+            {
+              "value": "press",
+              "label": "Letterpress"
+            },
+            {
+              "value": "emboss",
+              "label": "Emboss"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
               "value": "neon",
               "label": "Neon glow"
+            },
+            {
+              "value": "double",
+              "label": "Double glow"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
             }
           ]
         },
