@@ -54,8 +54,8 @@
   #shopify-section-{{ section.id }} .sheet .nav-link {
     margin: {{ section.settings.menu_gap | divided_by: 2 }}px 0;
   }
-  #shopify-section-{{ section.id }} .desk-nav .nav-link,
-  #shopify-section-{{ section.id }} .sheet .nav-link {
+  #shopify-section-{{ section.id }} .desk-nav:not(.top-menu) .nav-link,
+  #shopify-section-{{ section.id }} .sheet .nav-link:not(.is-top) {
     border: {{ section.settings.menu_border }}px solid {{ section.settings.menu_border_color }};
     border-radius: 10px;
     padding: {{ section.settings.menu_pad_top }}px {{ section.settings.menu_pad_x }}px {{ section.settings.menu_pad_bottom }}px {{ section.settings.menu_pad_x }}px;
@@ -83,45 +83,57 @@
       {% when 'press' %}box-shadow: inset 0 2px 8px {{ section.settings.menu_cell_depth_color }};
     {% endcase %}
   }
-  #shopify-section-{{ section.id }} .desk-nav .nav-link > span,
-  #shopify-section-{{ section.id }} .sheet .nav-link > span {
+  #shopify-section-{{ section.id }} .desk-nav:not(.top-menu) .nav-link > span,
+  #shopify-section-{{ section.id }} .sheet .nav-link:not(.is-top) > span {
     width: 100%;
     text-align: {{ section.settings.menu_align_h }};
   }
   #shopify-section-{{ section.id }} .top-menu {
     gap: {{ section.settings.top_gap }}px;
     margin-bottom: {{ section.settings.top_gap }}px;
-    padding-top: {{ section.settings.top_pad_top }}px;
+    {% if section.settings.top_cells %}padding-top: {{ section.settings.top_pad_top }}px;{% endif %}
     transform: translate({{ section.settings.top_x }}px, {{ section.settings.top_y }}px);
   }
   #shopify-section-{{ section.id }} .top-menu .nav-link,
   #shopify-section-{{ section.id }} .sheet .nav-link.is-top {
-    border: {{ section.settings.top_border }}px solid {{ section.settings.top_border_color }};
-    border-radius: 10px;
-    padding: {{ section.settings.top_pad_top }}px {{ section.settings.top_pad_x }}px {{ section.settings.top_pad_bottom }}px {{ section.settings.top_pad_x }}px;
-    display: inline-flex;
-    justify-content: {{ top_h }};
-    align-items: {{ top_v }};
-    {% if section.settings.top_cell_height > 0 %}min-height: {{ section.settings.top_cell_height }}px;{% endif %}
-    {% if section.settings.top_cell_width > 0 %}width: {{ section.settings.top_cell_width }}px;{% endif %}
-    {% case section.settings.top_cell_fill %}
-      {% when 'solid' %}background: {{ section.settings.top_cell_color }};
-      {% when 'tide' %}background-image: linear-gradient(90deg, #042028, #00e5ff 42%, #7af6ff 50%, #00e5ff 58%, #042028);
-      {% when 'violet' %}background-image: linear-gradient(100deg, #12061f, #6d1ecc 46%, #00e5ff);
-      {% when 'foil' %}background-image: linear-gradient(110deg, #3a2a10, #e4c06a 40%, #fff6d0 50%, #e4c06a 60%, #3a2a10); background-size: 220% 100%;
-      {% when 'sunset' %}background-image: linear-gradient(90deg, #3a1020, #ff5a7a 35%, #e4c06a 68%, #6d1ecc);
-      {% when 'aurora' %}background-image: linear-gradient(100deg, #042028, #00e5ff, #6d1ecc, #00e5ff); background-size: 220% 100%;
-      {% when 'pulse' %}background-image: linear-gradient(90deg, #042028, #00e5ff 50%, #042028); background-size: 220% 100%;
-      {% when 'glass' %}background: color-mix(in srgb, {{ section.settings.top_cell_color }} 28%, transparent);
-      {% when 'custom' %}background-image: linear-gradient(90deg, {{ section.settings.top_cell_color }}, {{ section.settings.top_cell_color_2 }});
-    {% endcase %}
-    {% case section.settings.top_cell_depth %}
-      {% when 'soft' %}box-shadow: 0 {{ section.settings.top_cell_depth_amount }}px {{ section.settings.top_cell_depth_amount | times: 2 }}px {{ section.settings.top_cell_depth_color }};
-      {% when 'hard' %}box-shadow: {{ section.settings.top_cell_depth_amount | divided_by: 2 }}px {{ section.settings.top_cell_depth_amount | divided_by: 2 }}px 0 {{ section.settings.top_cell_depth_color }};
-      {% when 'lift' %}box-shadow: 0 {{ section.settings.top_cell_depth_amount }}px {{ section.settings.top_cell_depth_amount | times: 2 }}px {{ section.settings.top_cell_depth_color }};
-      {% when 'neon' %}box-shadow: 0 0 {{ section.settings.top_cell_depth_amount }}px {{ section.settings.top_cell_depth_color }};
-      {% when 'press' %}box-shadow: inset 0 2px 8px {{ section.settings.top_cell_depth_color }};
-    {% endcase %}
+    {% if section.settings.top_cells %}
+      border: {{ section.settings.top_border }}px solid {{ section.settings.top_border_color }};
+      border-radius: 10px;
+      padding: {{ section.settings.top_pad_top }}px {{ section.settings.top_pad_x }}px {{ section.settings.top_pad_bottom }}px {{ section.settings.top_pad_x }}px;
+      display: inline-flex;
+      justify-content: {{ top_h }};
+      align-items: {{ top_v }};
+      min-height: {{ section.settings.top_cell_height }}px;
+      {% if section.settings.top_cell_width > 0 %}width: {{ section.settings.top_cell_width }}px;{% endif %}
+      {% case section.settings.top_cell_fill %}
+        {% when 'solid' %}background: {{ section.settings.top_cell_color }};
+        {% when 'tide' %}background-image: linear-gradient(90deg, #042028, #00e5ff 42%, #7af6ff 50%, #00e5ff 58%, #042028);
+        {% when 'violet' %}background-image: linear-gradient(100deg, #12061f, #6d1ecc 46%, #00e5ff);
+        {% when 'foil' %}background-image: linear-gradient(110deg, #3a2a10, #e4c06a 40%, #fff6d0 50%, #e4c06a 60%, #3a2a10); background-size: 220% 100%;
+        {% when 'sunset' %}background-image: linear-gradient(90deg, #3a1020, #ff5a7a 35%, #e4c06a 68%, #6d1ecc);
+        {% when 'aurora' %}background-image: linear-gradient(100deg, #042028, #00e5ff, #6d1ecc, #00e5ff); background-size: 220% 100%;
+        {% when 'pulse' %}background-image: linear-gradient(90deg, #042028, #00e5ff 50%, #042028); background-size: 220% 100%;
+        {% when 'glass' %}background: color-mix(in srgb, {{ section.settings.top_cell_color }} 28%, transparent);
+        {% when 'custom' %}background-image: linear-gradient(90deg, {{ section.settings.top_cell_color }}, {{ section.settings.top_cell_color_2 }});
+        {% else %}background: none;
+      {% endcase %}
+      {% case section.settings.top_cell_depth %}
+        {% when 'soft' %}box-shadow: 0 {{ section.settings.top_cell_depth_amount }}px {{ section.settings.top_cell_depth_amount | times: 2 }}px {{ section.settings.top_cell_depth_color }};
+        {% when 'hard' %}box-shadow: {{ section.settings.top_cell_depth_amount | divided_by: 2 }}px {{ section.settings.top_cell_depth_amount | divided_by: 2 }}px 0 {{ section.settings.top_cell_depth_color }};
+        {% when 'lift' %}box-shadow: 0 {{ section.settings.top_cell_depth_amount }}px {{ section.settings.top_cell_depth_amount | times: 2 }}px {{ section.settings.top_cell_depth_color }};
+        {% when 'neon' %}box-shadow: 0 0 {{ section.settings.top_cell_depth_amount }}px {{ section.settings.top_cell_depth_color }};
+        {% when 'press' %}box-shadow: inset 0 2px 8px {{ section.settings.top_cell_depth_color }};
+        {% else %}box-shadow: none;
+      {% endcase %}
+    {% else %}
+      border: 0;
+      background: none;
+      box-shadow: none;
+      padding: 0;
+      min-height: 0;
+      width: auto;
+      border-radius: 0;
+    {% endif %}
   }
   #shopify-section-{{ section.id }} .top-menu .nav-link > span,
   #shopify-section-{{ section.id }} .sheet .nav-link.is-top > span {
@@ -1045,6 +1057,13 @@
     {
       "type": "header",
       "content": "Top menu cells"
+    },
+    {
+      "type": "checkbox",
+      "id": "top_cells",
+      "label": "Use cell styles",
+      "default": false,
+      "info": "Off leaves the top row as plain text. On uses the border, fill, padding, and depth below. None and 0 stay off."
     },
     {
       "type": "range",
