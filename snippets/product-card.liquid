@@ -1,0 +1,28 @@
+<a class="card panel lift" href="{{ product.url }}">
+  <div class="media">
+    {% if product.featured_image %}
+      {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: product.featured_image.alt | default: product.title }}
+    {% else %}
+      {% render 'wax', style: 'ice', label: product.type | default: 'Wax' %}
+    {% endif %}
+  </div>
+  <div class="meta">
+    <h3>{{ product.title }}</h3>
+    <p class="price">
+      {% if product.price_varies %}From {% endif %}
+      {{ product.price | money }}
+      {% if product.compare_at_price > product.price %}
+        <s>{{ product.compare_at_price | money }}</s>
+      {% endif %}
+    </p>
+    {% if product.tags contains 'break' or product.tags contains 'pack-wars' %}
+      <p class="fine">
+        {% assign open_spots = 0 %}
+        {% for variant in product.variants %}
+          {% if variant.available %}{% assign open_spots = open_spots | plus: 1 %}{% endif %}
+        {% endfor %}
+        {{ open_spots }} open / {{ product.variants.size }}
+      </p>
+    {% endif %}
+  </div>
+</a>

@@ -1,0 +1,48 @@
+<section class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <div>
+        {% if section.settings.kicker != blank %}<p class="kicker">{{ section.settings.kicker }}</p>{% endif %}
+        <h2 class="display">{{ section.settings.heading }}</h2>
+      </div>
+    </header>
+    <ul class="hit-list">
+      {% for block in section.blocks %}
+        <li class="panel" style="padding:0.8rem 0.9rem" {{ block.shopify_attributes }}>
+          <strong>{{ block.settings.title }}</strong>
+          {% if block.settings.detail != blank %}<p class="fine">{{ block.settings.detail }}</p>{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hits",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Called on stream" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Hits" }
+  ],
+  "blocks": [
+    {
+      "type": "hit",
+      "name": "Hit",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Hit", "default": "Team — player" },
+        { "type": "text", "id": "detail", "label": "Detail", "default": "Parallel / numbered" }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [
+    {
+      "name": "Hits",
+      "blocks": [
+        { "type": "hit", "settings": { "title": "Sample hit", "detail": "Replace this after the break" } },
+        { "type": "hit", "settings": { "title": "Sample hit", "detail": "These are public. The break desk list is not." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

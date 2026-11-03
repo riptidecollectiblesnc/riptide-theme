@@ -1,0 +1,28 @@
+<section class="section">
+  <div class="wrap" style="max-width:760px">
+    <p class="kicker"><a href="{{ routes.account_url }}">Account</a></p>
+    <h1 class="display">{{ order.name }}</h1>
+    <p class="fine">{{ order.created_at | date: '%b %d, %Y' }} · {{ order.financial_status_label }} · {{ order.fulfillment_status_label }}</p>
+    {% for item in order.line_items %}
+      <div class="cart-line">
+        <div></div>
+        <div>
+          <strong>{{ item.title }}</strong>
+          <p class="fine">Qty {{ item.quantity }}</p>
+        </div>
+        <p class="price">{{ item.final_line_price | money }}</p>
+      </div>
+    {% endfor %}
+    <div class="totals">
+      <span>Total</span>
+      <strong>{{ order.total_price | money }}</strong>
+    </div>
+    {% if order.shipping_address %}
+      <div class="panel" style="padding:0.9rem">{{ order.shipping_address | format_address }}</div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Order", "settings": [] }
+{% endschema %}

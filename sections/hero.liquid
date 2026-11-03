@@ -1,0 +1,46 @@
+<section class="section" style="padding-top:1.25rem">
+  <div class="wrap hero">
+    <div>
+      {% if section.settings.kicker != blank %}
+        <p class="kicker">{{ section.settings.kicker }}</p>
+      {% endif %}
+      <h1 class="display">{{ section.settings.heading }}</h1>
+      {% if section.settings.text != blank %}
+        <p class="lede">{{ section.settings.text }}</p>
+      {% endif %}
+      <div class="hero-actions">
+        {% if section.settings.button_label != blank %}
+          <a class="btn btn-primary" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
+        {% endif %}
+        {% if section.settings.button_2_label != blank %}
+          <a class="btn btn-ghost" href="{{ section.settings.button_2_link }}">{{ section.settings.button_2_label }}</a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="stage" aria-hidden="true">
+      {% render 'wax', style: 'crystal', label: section.settings.stage_label %}
+      <div class="stage-lower">
+        <span class="live-dot"></span>
+        <span>{{ section.settings.lower }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Crystal Coast" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "The coast breaks different." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Factory-sealed wax, spot boards, and live shows. The room is on Whatnot Thursday through Saturday at 9:30 PM ET." },
+    { "type": "text", "id": "button_label", "label": "Button", "default": "Watch the show" },
+    { "type": "text", "id": "button_link", "label": "Button link", "default": "#shopify-section-live" },
+    { "type": "text", "id": "button_2_label", "label": "Second button", "default": "Claim a spot" },
+    { "type": "text", "id": "button_2_link", "label": "Second button link", "default": "#shopify-section-board" },
+    { "type": "text", "id": "lower", "label": "Stage line", "default": "Whatnot · Thu–Sat 9:30 PM ET" },
+    { "type": "text", "id": "stage_label", "label": "Slab label", "default": "Live wax" }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

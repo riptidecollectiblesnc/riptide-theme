@@ -1,0 +1,38 @@
+{% liquid
+  if section.settings.collection != blank
+    assign wax = section.settings.collection
+  else
+    assign wax = collections.all
+  endif
+%}
+<section class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <div>
+        {% if section.settings.kicker != blank %}<p class="kicker">{{ section.settings.kicker }}</p>{% endif %}
+        <h2 class="display">{{ section.settings.heading }}</h2>
+      </div>
+      <a class="nav-link" href="{{ wax.url }}">Shop all</a>
+    </header>
+    <div class="grid-cards">
+      {% for product in wax.products limit: section.settings.limit %}
+        {% render 'product-card', product: product %}
+      {% else %}
+        <p class="muted">Wax shows up here as soon as products are published.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured wax",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Sealed" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Fresh wax" },
+    { "type": "collection", "id": "collection", "label": "Collection", "info": "Leave empty to use all products." },
+    { "type": "range", "id": "limit", "label": "Products", "min": 4, "max": 12, "step": 4, "default": 4 }
+  ],
+  "presets": [{ "name": "Featured wax" }]
+}
+{% endschema %}

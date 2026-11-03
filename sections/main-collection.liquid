@@ -1,0 +1,65 @@
+<section class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <div>
+        <p class="kicker">Collection</p>
+        <h1 class="display">{{ collection.title }}</h1>
+        {% if collection.description != blank %}
+          <div class="rte" style="margin-top:0.5rem">{{ collection.description }}</div>
+        {% endif %}
+      </div>
+    </header>
+    {% paginate collection.products by section.settings.per_page %}
+      <div class="shop-grid">
+        {% if collection.filters.size > 0 %}
+          <form class="filters" method="get" action="{{ collection.url }}">
+            {% for filter in collection.filters %}
+              <details {% if forloop.first %}open{% endif %}>
+                <summary>{{ filter.label }}</summary>
+                {% if filter.type == 'price_range' %}
+                  <label>Min
+                    <input class="field" type="number" name="{{ filter.min_value.param_name }}" {% if filter.min_value.value %}value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"{% endif %}>
+                  </label>
+                  <label>Max
+                    <input class="field" type="number" name="{{ filter.max_value.param_name }}" {% if filter.max_value.value %}value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"{% endif %}>
+                  </label>
+                {% else %}
+                  {% for value in filter.values %}
+                    <label>
+                      <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %}>
+                      {{ value.label }} ({{ value.count }})
+                    </label>
+                  {% endfor %}
+                {% endif %}
+              </details>
+            {% endfor %}
+            <button class="btn btn-ghost" type="submit">Apply</button>
+          </form>
+        {% endif %}
+        <div class="grid-cards">
+          {% for product in collection.products %}
+            {% render 'product-card', product: product %}
+          {% else %}
+            <p class="muted">Nothing in this collection yet.</p>
+          {% endfor %}
+        </div>
+      </div>
+      {% if paginate.pages > 1 %}
+        <nav class="pager" aria-label="Pagination">
+          {% if paginate.previous %}<a class="btn btn-ghost" href="{{ paginate.previous.url }}">Previous</a>{% endif %}
+          <span class="fine">{{ paginate.current_page }} / {{ paginate.pages }}</span>
+          {% if paginate.next %}<a class="btn btn-ghost" href="{{ paginate.next.url }}">Next</a>{% endif %}
+        </nav>
+      {% endif %}
+    {% endpaginate %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collection",
+  "settings": [
+    { "type": "range", "id": "per_page", "label": "Products per page", "min": 8, "max": 24, "step": 4, "default": 12 }
+  ]
+}
+{% endschema %}

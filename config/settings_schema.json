@@ -1,0 +1,61 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Riptide",
+    "theme_version": "1.0.0",
+    "theme_author": "Riptide Collectibles",
+    "theme_documentation_url": "https://riptidecollectibles.com",
+    "theme_support_url": "https://riptidecollectibles.com"
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      { "type": "header", "content": "Coast neon" },
+      { "type": "paragraph", "content": "Sold spots stay violet and the board frame stays cyan unless you change those two. That is the purchased-spots look." },
+      { "type": "color", "id": "color_bg", "label": "Background", "default": "#071018" },
+      { "type": "color", "id": "color_bg_deep", "label": "Deep background", "default": "#04090e" },
+      { "type": "color", "id": "color_surface", "label": "Surface", "default": "#0e1c28" },
+      { "type": "color", "id": "color_surface_2", "label": "Surface 2", "default": "#143044" },
+      { "type": "color", "id": "color_fg", "label": "Text", "default": "#e7f6fb" },
+      { "type": "color", "id": "color_muted", "label": "Muted text", "default": "#8eafbf" },
+      { "type": "color", "id": "color_border", "label": "Border", "default": "#1e3a4c" },
+      { "type": "color", "id": "color_primary", "label": "Buttons", "default": "#00e5ff" },
+      { "type": "color", "id": "color_primary_ink", "label": "Button text", "default": "#042028" },
+      { "type": "color", "id": "color_neon", "label": "Board glow", "default": "#00e5ff" },
+      { "type": "color", "id": "color_teal", "label": "Board header", "default": "#42bdbb" },
+      { "type": "color", "id": "color_violet", "label": "Sold spots", "default": "#6d1ecc" },
+      { "type": "color", "id": "color_foil", "label": "Foil", "default": "#e4c06a" },
+      { "type": "color", "id": "color_ink", "label": "Ink", "default": "#04201f" },
+      {
+        "type": "select",
+        "id": "accent",
+        "label": "Accent",
+        "default": "cyan",
+        "options": [
+          { "value": "cyan", "label": "Cyan" },
+          { "value": "teal", "label": "Teal" },
+          { "value": "violet", "label": "Violet" }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "radius",
+        "label": "Corners",
+        "default": "soft",
+        "options": [
+          { "value": "sharp", "label": "Sharp" },
+          { "value": "soft", "label": "Soft" },
+          { "value": "round", "label": "Round" }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Brand",
+    "settings": [
+      { "type": "image_picker", "id": "favicon", "label": "Favicon" },
+      { "type": "url", "id": "whatnot_url", "label": "Whatnot room" },
+      { "type": "textarea", "id": "custom_css", "label": "Custom CSS", "info": "Added at the end of the head. Use it for one-off tweaks. The spot board, live stage, and break desk are already styled." }
+    ]
+  }
+]

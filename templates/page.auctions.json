@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "auctions": { "type": "auction-lots", "settings": { "heading": "Auctions" } }
+  },
+  "order": ["auctions"]
+}

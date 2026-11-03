@@ -1,0 +1,15 @@
+{
+  "sections": {
+    "whatnot": {
+      "type": "whatnot-band",
+      "blocks": {
+        "thu": { "type": "slot", "settings": { "day": "Thursday", "time": "9:30 PM ET" } },
+        "fri": { "type": "slot", "settings": { "day": "Friday", "time": "9:30 PM ET" } },
+        "sat": { "type": "slot", "settings": { "day": "Saturday", "time": "9:30 PM ET" } }
+      },
+      "block_order": ["thu", "fri", "sat"],
+      "settings": { "heading": "Whatnot" }
+    }
+  },
+  "order": ["whatnot"]
+}

@@ -1,0 +1,48 @@
+<section class="section">
+  <div class="wrap" style="max-width:640px">
+    <header class="section-head">
+      <h1 class="display">Addresses</h1>
+      <a class="nav-link" href="{{ routes.account_url }}">Account</a>
+    </header>
+    {% for address in customer.addresses %}
+      <div class="panel" style="padding:0.9rem;margin-bottom:0.7rem">
+        {{ address | format_address }}
+        {% form 'customer_address', address %}
+          <div class="buy" style="margin-top:0.6rem">
+            {{ form.errors | default_errors }}
+            <input class="field" name="address[first_name]" value="{{ form.first_name }}" aria-label="First name">
+            <input class="field" name="address[last_name]" value="{{ form.last_name }}" aria-label="Last name">
+            <input class="field" name="address[address1]" value="{{ form.address1 }}" aria-label="Address">
+            <input class="field" name="address[address2]" value="{{ form.address2 }}" aria-label="Apartment">
+            <input class="field" name="address[city]" value="{{ form.city }}" aria-label="City">
+            <input class="field" name="address[zip]" value="{{ form.zip }}" aria-label="ZIP">
+            <input class="field" name="address[phone]" value="{{ form.phone }}" aria-label="Phone">
+            <select class="field" name="address[country]" aria-label="Country" data-default="{{ form.country }}">{{ all_country_option_tags }}</select>
+            <button class="btn btn-primary" type="submit">Save</button>
+          </div>
+        {% endform %}
+        <form method="post" action="{{ routes.account_addresses_url }}/{{ address.id }}" style="margin-top:0.4rem">
+          <input type="hidden" name="_method" value="delete">
+          <button class="btn btn-ghost" type="submit">Delete</button>
+        </form>
+      </div>
+    {% endfor %}
+    <h2 class="display" style="font-size:1.8rem;margin-top:1rem">New address</h2>
+    {% form 'customer_address', customer.new_address %}
+      <div class="buy">
+        {{ form.errors | default_errors }}
+        <input class="field" name="address[first_name]" placeholder="First name" aria-label="First name">
+        <input class="field" name="address[last_name]" placeholder="Last name" aria-label="Last name">
+        <input class="field" name="address[address1]" placeholder="Address" aria-label="Address">
+        <input class="field" name="address[city]" placeholder="City" aria-label="City">
+        <input class="field" name="address[zip]" placeholder="ZIP" aria-label="ZIP">
+        <select class="field" name="address[country]" aria-label="Country">{{ all_country_option_tags }}</select>
+        <button class="btn btn-primary" type="submit">Add address</button>
+      </div>
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Addresses", "settings": [] }
+{% endschema %}

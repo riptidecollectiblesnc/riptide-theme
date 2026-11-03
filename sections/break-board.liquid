@@ -1,0 +1,91 @@
+<section class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <div>
+        {% if section.settings.kicker != blank %}<p class="kicker">{{ section.settings.kicker }}</p>{% endif %}
+        <h2 class="display">{{ section.settings.heading }}</h2>
+      </div>
+      {% if section.settings.product != blank %}
+        <a class="nav-link" href="{{ section.settings.product.url }}">Open break</a>
+      {% endif %}
+    </header>
+
+    {% if section.settings.product != blank %}
+      {% render 'spot-board',
+        product: section.settings.product,
+        title: section.settings.board_title,
+        format: section.settings.format,
+        show_prices: section.settings.show_prices,
+        show_host: section.settings.show_host
+      %}
+    {% elsif section.settings.show_demo %}
+      <div class="spot-board" data-wheel>
+        <div class="spot-head">
+          <span>{{ section.settings.board_title | default: 'Sample board' }}</span>
+          <span>3 / 16 filled</span>
+        </div>
+        <div class="fillbar" aria-hidden="true"><span style="width:19%"></span></div>
+        <div class="spot-grid">
+          {% for i in (1..16) %}
+            {% assign num = i %}
+            {% if i < 10 %}{% assign num = i | prepend: '0' %}{% endif %}
+            {% if i == 3 or i == 8 or i == 12 %}
+              <div class="spot-cell is-sold"><strong>#{{ num }} Spot</strong><em>Sold</em></div>
+            {% else %}
+              <div class="spot-cell is-open"><strong>#{{ num }} Spot</strong><em>Empty</em></div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <p class="spot-note">
+          {% if request.design_mode %}
+            Sample board. Not for sale. Choose a break product in this section. Each variant is a spot, inventory 1, variant name is the team or slot. Tag the product break so its product page uses the same board.
+          {% else %}
+            Sample board. These spots are not for sale.
+          {% endif %}
+        </p>
+        <div class="desk" data-desk {% unless section.settings.show_host %}hidden{% endunless %}>
+          <p class="kicker">Break desk · this screen only</p>
+          <div class="desk-row">
+            <button class="btn btn-primary" type="button" data-spin>Spin open spots</button>
+            <p class="muted" data-spin-result aria-live="polite"></p>
+          </div>
+          <form data-hit-form class="desk-row">
+            <label class="fine" style="flex:1;min-width:12rem">
+              Call a hit
+              <input class="field" name="hit" placeholder="Team — player, parallel" autocomplete="off">
+            </label>
+            <button class="btn btn-ghost" type="submit">Show on this screen</button>
+          </form>
+          <ul class="hit-list" data-hit-list></ul>
+          <p class="fine">Add <code>?desk=1</code> to the page URL in OBS. Shoppers do not see this desk.</p>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Spot board",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Random teams" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Spot board" },
+    { "type": "text", "id": "board_title", "label": "Board title", "default": "Sample board" },
+    { "type": "product", "id": "product", "label": "Break product", "info": "One variant per spot. Inventory 1. Optional variant metafield custom.spot_owner shows the buyer after it sells." },
+    {
+      "type": "select",
+      "id": "format",
+      "label": "Grid",
+      "default": "teams",
+      "options": [
+        { "value": "teams", "label": "Teams" },
+        { "value": "packs", "label": "Packs" }
+      ]
+    },
+    { "type": "checkbox", "id": "show_prices", "label": "Show each spot’s price", "default": false },
+    { "type": "checkbox", "id": "show_host", "label": "Show the break desk to everyone", "default": false, "info": "Leave off. In OBS, open this page with ?desk=1 to spin spots and call hits. That stays on your screen." },
+    { "type": "checkbox", "id": "show_demo", "label": "Show a sample board until a product is chosen", "default": true }
+  ],
+  "presets": [{ "name": "Spot board" }]
+}
+{% endschema %}

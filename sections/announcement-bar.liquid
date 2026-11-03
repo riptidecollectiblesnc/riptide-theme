@@ -1,0 +1,18 @@
+{% if section.settings.enabled and section.settings.text != blank %}
+  {% if section.settings.link != blank %}
+    <a class="announce" href="{{ section.settings.link }}">{{ section.settings.text }}</a>
+  {% else %}
+    <p class="announce">{{ section.settings.text }}</p>
+  {% endif %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Announcement",
+  "settings": [
+    { "type": "checkbox", "id": "enabled", "label": "Show announcement", "default": true },
+    { "type": "text", "id": "text", "label": "Text", "default": "Thursday through Saturday, 9:30 PM ET on Whatnot. In-house live is paused." },
+    { "type": "text", "id": "link", "label": "Link", "default": "#shopify-section-whatnot", "info": "A full URL or a homepage anchor such as #shopify-section-live." }
+  ]
+}
+{% endschema %}

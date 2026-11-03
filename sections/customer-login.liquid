@@ -1,0 +1,32 @@
+<section class="section">
+  <div class="wrap" style="max-width:440px">
+    <h1 class="display">Login</h1>
+    {% form 'customer_login' %}
+      <div class="buy">
+        {{ form.errors | default_errors }}
+        <label class="fine" for="CustomerEmail">Email</label>
+        <input class="field" type="email" name="customer[email]" id="CustomerEmail" autocomplete="email" required>
+        <label class="fine" for="CustomerPassword">Password</label>
+        <input class="field" type="password" name="customer[password]" id="CustomerPassword" autocomplete="current-password">
+        <button class="btn btn-primary" type="submit">Sign in</button>
+        <a class="nav-link" href="{{ routes.account_register_url }}">Create account</a>
+        <a class="nav-link" href="#recover">Forgot password</a>
+      </div>
+    {% endform %}
+    <div id="recover" style="margin-top:1.5rem">
+      <h2 class="display" style="font-size:1.8rem">Reset password</h2>
+      {% form 'recover_customer_password' %}
+        <div class="buy">
+          {{ form.errors | default_errors }}
+          {% if form.posted_successfully? %}<p>Check your email for a reset link.</p>{% endif %}
+          <input class="field" type="email" name="email" aria-label="Email" autocomplete="email" required>
+          <button class="btn btn-ghost" type="submit">Email reset link</button>
+        </div>
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Login", "settings": [] }
+{% endschema %}

@@ -1,0 +1,47 @@
+<section class="section">
+  <div class="wrap" style="max-width:760px">
+    <h1 class="display">Cart</h1>
+    {% if cart.item_count == 0 %}
+      <p class="muted" style="margin-top:0.7rem">The cart is empty.</p>
+      <a class="btn btn-primary" style="margin-top:1rem" href="{{ routes.all_products_collection_url }}">Shop wax</a>
+    {% else %}
+      <form action="{{ routes.cart_url }}" method="post">
+        {% for item in cart.items %}
+          <div class="cart-line">
+            <a href="{{ item.url }}">
+              {% if item.image %}
+                {{ item.image | image_url: width: 160 | image_tag: alt: item.title }}
+              {% else %}
+                {% render 'wax', style: 'ice', label: '' %}
+              {% endif %}
+            </a>
+            <div>
+              <a href="{{ item.url }}"><strong>{{ item.product.title }}</strong></a>
+              {% unless item.variant.title == 'Default Title' %}
+                <p class="fine">{{ item.variant.title }}</p>
+              {% endunless %}
+              <a class="fine" href="{{ item.url_to_remove }}">Remove</a>
+            </div>
+            <div>
+              <input class="field" style="width:4.5rem" type="number" name="updates[]" value="{{ item.quantity }}" min="0" aria-label="Quantity for {{ item.title }}">
+              <p class="price">{{ item.line_price | money }}</p>
+            </div>
+          </div>
+        {% endfor %}
+        <div class="totals">
+          <span>Subtotal</span>
+          <strong class="price">{{ cart.total_price | money }}</strong>
+        </div>
+        <p class="fine">Shipping and tax are calculated at checkout.</p>
+        <div class="hero-actions">
+          <button class="btn btn-ghost" type="submit" name="update">Update</button>
+          <button class="btn btn-primary" type="submit" name="checkout">Checkout</button>
+        </div>
+      </form>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Cart", "settings": [] }
+{% endschema %}

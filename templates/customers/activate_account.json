@@ -1,0 +1,4 @@
+{
+  "sections": { "main": { "type": "customer-activate", "settings": {} } },
+  "order": ["main"]
+}

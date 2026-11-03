@@ -1,0 +1,22 @@
+{
+  "current": {
+    "color_bg": "#071018",
+    "color_bg_deep": "#04090e",
+    "color_surface": "#0e1c28",
+    "color_surface_2": "#143044",
+    "color_fg": "#e7f6fb",
+    "color_muted": "#8eafbf",
+    "color_border": "#1e3a4c",
+    "color_primary": "#00e5ff",
+    "color_primary_ink": "#042028",
+    "color_neon": "#00e5ff",
+    "color_teal": "#42bdbb",
+    "color_violet": "#6d1ecc",
+    "color_foil": "#e4c06a",
+    "color_ink": "#04201f",
+    "accent": "cyan",
+    "radius": "soft",
+    "whatnot_url": "https://www.whatnot.com/user/riptide_collectibles",
+    "custom_css": ""
+  }
+}

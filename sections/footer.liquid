@@ -1,0 +1,39 @@
+<footer class="site-footer">
+  <div class="wrap foot-grid">
+    <div>
+      <p class="display" style="font-size:1.6rem">{{ shop.name }}</p>
+      <p class="muted" style="margin-top:0.4rem">{{ section.settings.blurb }}</p>
+    </div>
+    <div>
+      <p class="kicker">Shop</p>
+      {% if section.settings.menu != blank %}
+        {% for link in section.settings.menu.links %}
+          <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+      {% else %}
+        <a class="nav-link" href="{{ routes.all_products_collection_url }}">All wax</a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-breaks">Breaks</a>
+        <a class="nav-link" href="{{ routes.cart_url }}">Cart</a>
+      {% endif %}
+    </div>
+    <div>
+      <p class="kicker">Shows</p>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-live">Live stage</a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-auctions">Auctions</a>
+      {% if settings.whatnot_url != blank %}
+        <a class="btn btn-ghost" style="margin-top:0.4rem" href="{{ settings.whatnot_url }}" target="_blank" rel="noreferrer">Whatnot room</a>
+      {% endif %}
+    </div>
+  </div>
+  <p class="fine" style="text-align:center;margin-top:1.5rem">&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}</p>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "textarea", "id": "blurb", "label": "Blurb", "default": "Online-only from the Crystal Coast. Sealed wax, breaks, and live shows." },
+    { "type": "link_list", "id": "menu", "label": "Menu" }
+  ]
+}
+{% endschema %}

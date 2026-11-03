@@ -1,0 +1,24 @@
+<section class="section">
+  <div class="wrap">
+    <h1 class="display">Search</h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" style="margin:1rem 0">
+      <input class="field" type="search" name="q" value="{{ search.terms | escape }}" placeholder="Search wax and breaks" aria-label="Search">
+      <input type="hidden" name="type" value="product">
+    </form>
+    {% if search.performed %}
+      <div class="grid-cards">
+        {% for product in search.results %}
+          {% if product.object_type == 'product' or product.price %}
+            {% render 'product-card', product: product %}
+          {% endif %}
+        {% else %}
+          <p class="muted">No products for “{{ search.terms | escape }}”.</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Search", "settings": [] }
+{% endschema %}

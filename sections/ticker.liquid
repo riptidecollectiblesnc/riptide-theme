@@ -1,0 +1,36 @@
+{% if section.blocks.size > 0 %}
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      {% for pass in (1..2) %}
+        {% for block in section.blocks %}
+          <span {{ block.shopify_attributes }}><b>{{ block.settings.title }}</b> {{ block.settings.detail }}</span>
+        {% endfor %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Hit ticker",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "hit",
+      "name": "Hit",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Hit" },
+        { "type": "text", "id": "detail", "label": "Detail", "default": "Replace this" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hit ticker",
+      "blocks": [
+        { "type": "hit", "settings": { "title": "Sample", "detail": "Replace ticker hits in the theme editor" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

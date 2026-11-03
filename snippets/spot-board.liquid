@@ -1,0 +1,89 @@
+{%- comment -%}
+  Purchasable spot board. Each variant is a spot.
+  Accepts: product, title, format (teams|packs), show_prices, show_host
+{%- endcomment -%}
+{%- liquid
+  assign taken = 0
+  assign cart_ids = '|'
+  for item in cart.items
+    assign cart_ids = cart_ids | append: item.variant_id | append: '|'
+  endfor
+  for variant in product.variants
+    unless variant.available
+      assign taken = taken | plus: 1
+    endunless
+  endfor
+  assign pct = 0
+  if product.variants.size > 0
+    assign pct = taken | times: 100 | divided_by: product.variants.size
+  endif
+-%}
+<div class="spot-board" data-wheel>
+  <div class="spot-head">
+    <span>{{ title | default: product.title }}</span>
+    <span>{{ taken }} / {{ product.variants.size }} filled</span>
+  </div>
+  <div class="fillbar" aria-hidden="true"><span style="width: {{ pct }}%"></span></div>
+  <div class="spot-grid{% if format == 'packs' %} is-packs{% endif %}">
+    {% for variant in product.variants %}
+      {%- liquid
+        assign idx = forloop.index
+        if idx < 10
+          assign num = idx | prepend: '0'
+        else
+          assign num = idx
+        endif
+        assign needle = '|' | append: variant.id | append: '|'
+        assign in_cart = false
+        if cart_ids contains needle
+          assign in_cart = true
+        endif
+        assign owner = variant.metafields.custom.spot_owner.value
+        assign label = variant.title
+        if label == 'Default Title'
+          assign label = 'Spot'
+        endif
+        assign form_id = 'spot-form-' | append: variant.id
+      -%}
+      {% if variant.available and in_cart == false %}
+        {% form 'product', product, id: form_id, class: 'js-cart' %}
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          <input type="hidden" name="quantity" value="1">
+          <button class="spot-cell is-open" type="submit">
+            <strong>#{{ num }} {{ label }}</strong>
+            <em>Empty</em>
+            {% if show_prices %}<span class="fine">{{ variant.price | money }}</span>{% endif %}
+          </button>
+        {% endform %}
+      {% else %}
+        <div class="spot-cell {% if in_cart %}is-mine{% else %}is-sold{% endif %}">
+          <strong>#{{ num }} {{ label }}</strong>
+          {% if in_cart %}
+            <em>In your cart</em>
+          {% elsif owner != blank %}
+            <em>{{ owner }}</em>
+          {% else %}
+            <em>Sold</em>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  <p class="spot-note">An empty spot adds that team or slot to the cart. Give each variant an inventory of 1 so it can sell once. A sold cell can show a name from the variant metafield <code>custom.spot_owner</code>.</p>
+  <div class="desk" data-desk {% unless show_host %}hidden{% endunless %}>
+    <p class="kicker">Break desk · this screen only</p>
+    <div class="desk-row">
+      <button class="btn btn-primary" type="button" data-spin>Spin open spots</button>
+      <p class="muted" data-spin-result aria-live="polite"></p>
+    </div>
+    <form data-hit-form class="desk-row">
+      <label class="fine" style="flex:1; min-width: 12rem;">
+        Call a hit
+        <input class="field" name="hit" placeholder="Team — player, parallel" autocomplete="off">
+      </label>
+      <button class="btn btn-ghost" type="submit">Show on this screen</button>
+    </form>
+    <ul class="hit-list" data-hit-list></ul>
+    <p class="fine">Wheel and hits stay in this browser. Other shoppers do not see them. OBS URL: add ?desk=1</p>
+  </div>
+</div>

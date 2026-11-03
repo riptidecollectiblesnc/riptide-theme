@@ -1,0 +1,40 @@
+{
+  "type": "header",
+  "name": "Header",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "settings": {
+        "enabled": true,
+        "text": "Thursday through Saturday, 9:30 PM ET on Whatnot. In-house live is paused.",
+        "link": "/#shopify-section-whatnot"
+      }
+    },
+    "ticker": {
+      "type": "ticker",
+      "blocks": {
+        "hit-a": {
+          "type": "hit",
+          "settings": {
+            "title": "Sample",
+            "detail": "Replace ticker hits in the theme editor"
+          }
+        },
+        "hit-b": {
+          "type": "hit",
+          "settings": {
+            "title": "Whatnot",
+            "detail": "Thu–Sat 9:30 PM ET"
+          }
+        }
+      },
+      "block_order": ["hit-a", "hit-b"],
+      "settings": {}
+    },
+    "header": {
+      "type": "header",
+      "settings": {}
+    }
+  },
+  "order": ["announcement", "ticker", "header"]
+}

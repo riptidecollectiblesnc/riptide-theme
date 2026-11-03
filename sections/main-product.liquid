@@ -1,0 +1,77 @@
+{% liquid
+  assign is_break = false
+  if product.tags contains 'break' or product.tags contains 'pack-wars'
+    assign is_break = true
+  endif
+  assign format = 'teams'
+  if product.tags contains 'pack-wars'
+    assign format = 'packs'
+  endif
+%}
+<section class="section">
+  <div class="wrap product-layout">
+    <div>
+      {% if product.media.size > 0 %}
+        {% for media in product.media limit: 5 %}
+          {% if media.media_type == 'image' %}
+            <div class="panel" style="overflow:hidden;margin-bottom:0.6rem">
+              {{ media | image_url: width: 1400 | image_tag: loading: 'lazy', alt: media.alt | default: product.title }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <div class="panel">{% render 'wax', style: 'ice', label: product.type | default: 'Wax' %}</div>
+      {% endif %}
+    </div>
+    <div>
+      {% if product.type != blank %}<p class="kicker">{{ product.type }}</p>{% endif %}
+      <h1 class="display">{{ product.title }}</h1>
+      <p class="price" style="margin-top:0.45rem">
+        {% if product.price_varies %}From {% endif %}{{ product.price | money }}
+      </p>
+      {% if is_break %}
+        <div style="margin-top:1rem">
+          {% render 'spot-board', product: product, title: product.title, format: format, show_prices: section.settings.show_prices, show_host: section.settings.show_host %}
+        </div>
+      {% else %}
+        {% form 'product', product, class: 'js-cart' %}
+          <div class="buy">
+            {% if product.variants.size > 1 %}
+              <label class="fine" for="Variant-{{ section.id }}">Option</label>
+              <select class="field" id="Variant-{{ section.id }}" name="id">
+                {% for variant in product.variants %}
+                  <option value="{{ variant.id }}" {% unless variant.available %}disabled{% endunless %}>
+                    {{ variant.title }} — {{ variant.price | money }}{% unless variant.available %} (Sold out){% endunless %}
+                  </option>
+                {% endfor %}
+              </select>
+            {% else %}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+            {% endif %}
+            <div class="qty">
+              <input class="field" type="number" name="quantity" value="1" min="1" aria-label="Quantity">
+              <button class="btn btn-primary" type="submit" {% unless product.available %}disabled{% endunless %}>
+                {% if product.available %}Add to cart{% else %}Sold out{% endif %}
+              </button>
+            </div>
+            <p class="fine" data-form-note></p>
+            {{ form | payment_button }}
+          </div>
+        {% endform %}
+      {% endif %}
+      {% if product.description != blank %}
+        <div class="rte" style="margin-top:1.2rem">{{ product.description }}</div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    { "type": "checkbox", "id": "show_prices", "label": "Show a price on each break spot", "default": false },
+    { "type": "checkbox", "id": "show_host", "label": "Show the break desk to everyone", "default": false, "info": "Leave off. Add ?desk=1 in OBS to spin and call hits on a product tagged break or pack-wars." }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,57 @@
+{% assign room = section.settings.room | default: settings.whatnot_url %}
+<section class="section">
+  <div class="wrap" style="display:grid;gap:1rem">
+    <header class="section-head">
+      <div>
+        <p class="kicker">{{ section.settings.kicker }}</p>
+        <h2 class="display">{{ section.settings.heading }}</h2>
+      </div>
+      {% if room != blank %}
+        <a class="btn btn-primary" href="{{ room }}" target="_blank" rel="noreferrer">Open Whatnot</a>
+      {% endif %}
+    </header>
+    <p class="muted">{{ section.settings.text }}</p>
+    {% if section.blocks.size > 0 %}
+      <ul class="schedule">
+        {% for block in section.blocks %}
+          <li class="panel" {{ block.shopify_attributes }}>
+            <strong>{{ block.settings.day }}</strong>
+            <span class="muted">{{ block.settings.time }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Whatnot",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "Off-site room" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Whatnot" },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Shows run in the Whatnot room. This theme links out. Whatnot does not let another site embed the stream." },
+    { "type": "url", "id": "room", "label": "Room URL", "info": "Leave empty to use the theme Whatnot link." }
+  ],
+  "blocks": [
+    {
+      "type": "slot",
+      "name": "Show time",
+      "settings": [
+        { "type": "text", "id": "day", "label": "Day", "default": "Thursday" },
+        { "type": "text", "id": "time", "label": "Time", "default": "9:30 PM ET" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Whatnot",
+      "blocks": [
+        { "type": "slot", "settings": { "day": "Thursday", "time": "9:30 PM ET" } },
+        { "type": "slot", "settings": { "day": "Friday", "time": "9:30 PM ET" } },
+        { "type": "slot", "settings": { "day": "Saturday", "time": "9:30 PM ET" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

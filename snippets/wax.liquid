@@ -1,0 +1,12 @@
+{%- comment -%} CSS wax slab. style: ice | gold | crystal. label: short string. {%- endcomment -%}
+<div class="wax wax-{{ style | default: 'ice' }}">
+  <div class="wax-slab">
+    <span class="wax-gem" aria-hidden="true"></span>
+    <svg class="wax-wave" viewBox="0 0 120 28" aria-hidden="true">
+      <path d="M0 16 Q15 4 30 16 T60 16 T90 16 T120 16 V28 H0 Z" fill="currentColor" opacity="0.85"></path>
+    </svg>
+    {% if label != blank %}
+      <span class="wax-label">{{ label }}</span>
+    {% endif %}
+  </div>
+</div>

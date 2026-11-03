@@ -1,0 +1,18 @@
+<section class="section">
+  <div class="wrap" style="max-width:440px">
+    <h1 class="display">Activate account</h1>
+    {% form 'activate_customer_password' %}
+      <div class="buy">
+        {{ form.errors | default_errors }}
+        <input class="field" type="password" name="customer[password]" placeholder="Password" aria-label="Password" autocomplete="new-password" required>
+        <input class="field" type="password" name="customer[password_confirmation]" placeholder="Confirm password" aria-label="Confirm password" required>
+        <button class="btn btn-primary" type="submit">Activate</button>
+        <button class="btn btn-ghost" type="submit" name="decline">Decline</button>
+      </div>
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Activate account", "settings": [] }
+{% endschema %}

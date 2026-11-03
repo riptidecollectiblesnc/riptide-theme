@@ -1,0 +1,17 @@
+<section class="section">
+  <div class="wrap" style="max-width:440px">
+    <h1 class="display">New password</h1>
+    {% form 'reset_customer_password' %}
+      <div class="buy">
+        {{ form.errors | default_errors }}
+        <input class="field" type="password" name="customer[password]" placeholder="Password" aria-label="Password" autocomplete="new-password" required>
+        <input class="field" type="password" name="customer[password_confirmation]" placeholder="Confirm password" aria-label="Confirm password" autocomplete="new-password" required>
+        <button class="btn btn-primary" type="submit">Save</button>
+      </div>
+    {% endform %}
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Reset password", "settings": [] }
+{% endschema %}

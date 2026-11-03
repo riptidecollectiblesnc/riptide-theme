@@ -1,0 +1,6 @@
+{
+  "sections": {
+    "main": { "type": "main-product", "settings": { "show_prices": false, "show_host": false } }
+  },
+  "order": ["main"]
+}

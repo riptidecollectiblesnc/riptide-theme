@@ -1,0 +1,60 @@
+<section class="section" style="padding-top:0">
+  <div class="wrap">
+    <div class="rail">
+      {% for block in section.blocks %}
+        {% liquid
+          if block.settings.collection != blank
+            assign href = block.settings.collection.url
+          else
+            assign q = block.settings.title | url_encode
+            assign href = routes.search_url | append: '?type=product&q=' | append: q
+          endif
+        %}
+        <a class="panel" href="{{ href }}" {{ block.shopify_attributes }}>
+          {% render 'wax', style: block.settings.style, label: block.settings.title %}
+        </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Category rail",
+  "blocks": [
+    {
+      "type": "cat",
+      "name": "Category",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Label", "default": "Hockey" },
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        {
+          "type": "select",
+          "id": "style",
+          "label": "Wax style",
+          "default": "ice",
+          "options": [
+            { "value": "ice", "label": "Ice" },
+            { "value": "gold", "label": "Gold" },
+            { "value": "crystal", "label": "Crystal" }
+          ]
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Category rail",
+      "blocks": [
+        { "type": "cat", "settings": { "title": "Hockey", "style": "ice" } },
+        { "type": "cat", "settings": { "title": "Football", "style": "gold" } },
+        { "type": "cat", "settings": { "title": "NASCAR", "style": "crystal" } },
+        { "type": "cat", "settings": { "title": "Baseball", "style": "ice" } },
+        { "type": "cat", "settings": { "title": "Pokémon", "style": "crystal" } },
+        { "type": "cat", "settings": { "title": "Yu-Gi-Oh!", "style": "gold" } },
+        { "type": "cat", "settings": { "title": "Magic", "style": "ice" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

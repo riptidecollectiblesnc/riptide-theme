@@ -1,0 +1,26 @@
+<article class="card panel">
+  <a href="{{ product.url }}">
+    <div class="media">
+      {% if product.featured_image %}
+        {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: product.title }}
+      {% else %}
+        {% render 'wax', style: 'gold', label: 'Lot' %}
+      {% endif %}
+    </div>
+  </a>
+  <div class="meta">
+    <h3><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    <p class="price">{{ product.price | money }}</p>
+    {% if product.metafields.custom.ends_at.value != blank %}
+      <p class="fine">Closes <span data-ends="{{ product.metafields.custom.ends_at.value | date: '%Y-%m-%dT%H:%M:%S%z' }}">{{ product.metafields.custom.ends_at.value | date: '%b %d' }}</span></p>
+    {% endif %}
+    {% form 'product', product, class: 'js-cart' %}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <input type="hidden" name="quantity" value="1">
+      <button class="btn btn-primary" type="submit" {% unless product.available %}disabled{% endunless %} style="margin-top:0.45rem">
+        {% if product.available %}Buy now{% else %}Sold{% endif %}
+      </button>
+      <p class="fine" data-form-note></p>
+    {% endform %}
+  </div>
+</article>

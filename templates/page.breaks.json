@@ -1,0 +1,7 @@
+{
+  "sections": {
+    "breaks": { "type": "break-list", "settings": { "heading": "Breaks", "limit": 8 } },
+    "board": { "type": "break-board", "settings": { "heading": "Spot board", "show_demo": true, "show_host": false } }
+  },
+  "order": ["breaks", "board"]
+}

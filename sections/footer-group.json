@@ -1,0 +1,13 @@
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "blurb": "Online-only from the Crystal Coast. Sealed wax, breaks, and live shows."
+      }
+    }
+  },
+  "order": ["footer"]
+}

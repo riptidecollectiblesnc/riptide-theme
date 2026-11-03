@@ -1,0 +1,23 @@
+<section class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <h1 class="display">{{ customer.first_name | default: customer.email }}</h1>
+      <a class="nav-link" href="{{ routes.account_logout_url }}">Log out</a>
+    </header>
+    <p><a class="nav-link" href="{{ routes.account_addresses_url }}">Addresses</a></p>
+    <div class="hit-list" style="margin-top:1rem">
+      {% for order in customer.orders %}
+        <a class="panel" style="padding:0.8rem 0.9rem" href="{{ order.customer_url }}">
+          <strong>{{ order.name }}</strong>
+          <p class="fine">{{ order.created_at | date: '%b %d, %Y' }} · {{ order.financial_status_label }} · {{ order.total_price | money }}</p>
+        </a>
+      {% else %}
+        <p class="muted">No orders yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Account", "settings": [] }
+{% endschema %}

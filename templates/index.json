@@ -1,0 +1,105 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "kicker": "Crystal Coast",
+        "heading": "The coast breaks different.",
+        "text": "Factory-sealed wax, spot boards, and live shows. The room is on Whatnot Thursday through Saturday at 9:30 PM ET.",
+        "button_label": "Watch the show",
+        "button_link": "#shopify-section-live",
+        "button_2_label": "Claim a spot",
+        "button_2_link": "#shopify-section-board",
+        "lower": "Whatnot · Thu–Sat 9:30 PM ET",
+        "stage_label": "Live wax"
+      }
+    },
+    "rail": {
+      "type": "category-rail",
+      "blocks": {
+        "hockey": { "type": "cat", "settings": { "title": "Hockey", "style": "ice" } },
+        "football": { "type": "cat", "settings": { "title": "Football", "style": "gold" } },
+        "nascar": { "type": "cat", "settings": { "title": "NASCAR", "style": "crystal" } },
+        "baseball": { "type": "cat", "settings": { "title": "Baseball", "style": "ice" } },
+        "pokemon": { "type": "cat", "settings": { "title": "Pokémon", "style": "crystal" } },
+        "yugioh": { "type": "cat", "settings": { "title": "Yu-Gi-Oh!", "style": "gold" } },
+        "magic": { "type": "cat", "settings": { "title": "Magic", "style": "ice" } }
+      },
+      "block_order": ["hockey", "football", "nascar", "baseball", "pokemon", "yugioh", "magic"]
+    },
+    "breaks": {
+      "type": "break-list",
+      "settings": {
+        "kicker": "On the board",
+        "heading": "Breaks",
+        "limit": 4
+      }
+    },
+    "board": {
+      "type": "break-board",
+      "settings": {
+        "kicker": "Random teams",
+        "heading": "Spot board",
+        "board_title": "Sample board",
+        "format": "teams",
+        "show_prices": false,
+        "show_host": false,
+        "show_demo": true
+      }
+    },
+    "wax": {
+      "type": "featured-collection",
+      "settings": {
+        "kicker": "Sealed",
+        "heading": "Fresh wax",
+        "limit": 4
+      }
+    },
+    "live": {
+      "type": "live-desk",
+      "settings": {
+        "kicker": "On air",
+        "heading": "Live",
+        "provider": "whatnot",
+        "lower": "Whatnot · Thu–Sat 9:30 PM ET",
+        "note": "Whatnot does not allow the show to play inside another site. The button opens the room.",
+        "show_chat": true
+      }
+    },
+    "auctions": {
+      "type": "auction-lots",
+      "settings": {
+        "kicker": "Buy now or email a bid",
+        "heading": "Auctions",
+        "note": "The price is the current ask. Change it on the product. A countdown appears when the product has metafield custom.ends_at. A theme cannot run a live bidding war by itself. Buy now checks out at that price. Send a bid emails the shop."
+      }
+    },
+    "hits": {
+      "type": "hits",
+      "blocks": {
+        "hit1": { "type": "hit", "settings": { "title": "Sample hit", "detail": "Replace this after the break" } },
+        "hit2": { "type": "hit", "settings": { "title": "Sample hit", "detail": "These are public. The break desk list is not." } }
+      },
+      "block_order": ["hit1", "hit2"],
+      "settings": {
+        "kicker": "Called on stream",
+        "heading": "Hits"
+      }
+    },
+    "whatnot": {
+      "type": "whatnot-band",
+      "blocks": {
+        "thu": { "type": "slot", "settings": { "day": "Thursday", "time": "9:30 PM ET" } },
+        "fri": { "type": "slot", "settings": { "day": "Friday", "time": "9:30 PM ET" } },
+        "sat": { "type": "slot", "settings": { "day": "Saturday", "time": "9:30 PM ET" } }
+      },
+      "block_order": ["thu", "fri", "sat"],
+      "settings": {
+        "kicker": "Off-site room",
+        "heading": "Whatnot",
+        "text": "Shows run in the Whatnot room. This theme links out. Whatnot does not let another site embed the stream."
+      }
+    }
+  },
+  "order": ["hero", "rail", "breaks", "board", "wax", "live", "auctions", "hits", "whatnot"]
+}

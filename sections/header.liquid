@@ -1,0 +1,103 @@
+<header class="site-header">
+  <div class="wrap bar">
+    <button class="icon-btn menu-btn" type="button" data-menu-open aria-label="Open menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <a class="brand" href="{{ routes.root_url }}">
+      {% if section.settings.logo != blank %}
+        {{ section.settings.logo | image_url: width: 80 | image_tag: alt: shop.name, width: 36, height: 36 }}
+      {% else %}
+        <span class="mark" aria-hidden="true"></span>
+      {% endif %}
+      <span>{{ shop.name }}</span>
+    </a>
+    <nav class="desk-nav" aria-label="Primary">
+      {% if section.settings.menu != blank %}
+        {% for link in section.settings.menu.links %}
+          <a class="nav-link{% if link.current %} is-on{% endif %}" href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+      {% else %}
+        <a class="nav-link" href="{{ routes.all_products_collection_url }}">Shop</a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-breaks">Breaks</a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-live">Live</a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-auctions">Auctions</a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-hits">Hits</a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-whatnot">Whatnot</a>
+      {% endif %}
+    </nav>
+    <form class="search" action="{{ routes.search_url }}" method="get" role="search">
+      <input class="field" type="search" name="q" placeholder="Search wax" aria-label="Search">
+      <input type="hidden" name="type" value="product">
+    </form>
+    {% if shop.customer_accounts_enabled %}
+      <a class="icon-btn" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" aria-label="Account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 19c1.4-3 3.8-4.5 7-4.5S17.6 16 19 19"/></svg>
+      </a>
+    {% endif %}
+    <a class="icon-btn cart-link" href="{{ routes.cart_url }}" aria-label="Cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+      <span class="count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+    </a>
+  </div>
+</header>
+
+<div class="mobile-menu" data-menu hidden>
+  <div class="sheet panel">
+    <div class="sheet-top">
+      <p class="display" style="font-size:1.8rem">Menu</p>
+      <button class="icon-btn" type="button" data-menu-close aria-label="Close menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <form action="{{ routes.search_url }}" method="get" role="search">
+      <input class="field" type="search" name="q" placeholder="Search wax and breaks" aria-label="Search">
+      <input type="hidden" name="type" value="product">
+    </form>
+    {% if section.settings.menu != blank %}
+      {% for link in section.settings.menu.links %}
+        <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
+      {% endfor %}
+    {% else %}
+      <a class="nav-link" href="{{ routes.all_products_collection_url }}">Shop</a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-breaks">Breaks</a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-live">Live</a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-auctions">Auctions</a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-hits">Hits</a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-whatnot">Whatnot</a>
+    {% endif %}
+    <a class="nav-link" href="{{ routes.cart_url }}">Cart</a>
+  </div>
+</div>
+
+<nav class="bottom-nav" aria-label="Mobile">
+  <a href="{{ routes.all_products_collection_url }}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16v12H4z"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></svg>
+    Shop
+  </a>
+  <a href="{{ routes.root_url }}#shopify-section-breaks">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="4" y="4" width="6" height="6"/><rect x="14" y="4" width="6" height="6"/><rect x="4" y="14" width="6" height="6"/><rect x="14" y="14" width="6" height="6"/></svg>
+    Breaks
+  </a>
+  <a href="{{ routes.root_url }}#shopify-section-live">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M6 12a6 6 0 0 1 0-1M18 12a6 6 0 0 0 0-1"/></svg>
+    Live
+  </a>
+  <a href="{{ routes.root_url }}#shopify-section-auctions">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 14l6-6 4 4 6-7"/><path d="M14 5h6v6"/></svg>
+    Bids
+  </a>
+  <a href="{{ routes.cart_url }}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+    Cart
+  </a>
+</nav>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "link_list", "id": "menu", "label": "Menu", "info": "Leave empty to use Shop, Breaks, Live, Auctions, Hits, and Whatnot." }
+  ]
+}
+{% endschema %}

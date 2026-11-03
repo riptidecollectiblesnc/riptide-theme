@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "hits": {
+      "type": "hits",
+      "blocks": {
+        "hit1": { "type": "hit", "settings": { "title": "Sample hit", "detail": "Replace this after the break" } }
+      },
+      "block_order": ["hit1"],
+      "settings": { "heading": "Hits" }
+    }
+  },
+  "order": ["hits"]
+}

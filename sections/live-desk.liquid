@@ -1,0 +1,97 @@
+{% liquid
+  assign raw = section.settings.youtube_url
+  assign yid = ''
+  if raw contains 'watch?v='
+    assign yid = raw | split: 'watch?v=' | last | split: '&' | first
+  elsif raw contains 'youtu.be/'
+    assign yid = raw | split: 'youtu.be/' | last | split: '?' | first
+  elsif raw contains '/live/'
+    assign yid = raw | split: '/live/' | last | split: '?' | first
+  elsif raw contains '/embed/'
+    assign yid = raw | split: '/embed/' | last | split: '?' | first
+  endif
+  assign channel = section.settings.twitch_channel | replace: 'https://www.twitch.tv/', '' | replace: 'http://www.twitch.tv/', '' | replace: '@', '' | split: '/' | first | split: '?' | first
+  assign whatnot = section.settings.whatnot_url | default: settings.whatnot_url
+  assign provider = section.settings.provider
+%}
+<section class="section">
+  <div class="wrap">
+    <header class="section-head">
+      <div>
+        {% if section.settings.kicker != blank %}<p class="kicker">{{ section.settings.kicker }}</p>{% endif %}
+        <h2 class="display">{{ section.settings.heading }}</h2>
+      </div>
+    </header>
+    <div class="live-grid">
+      <div>
+        <div class="stage">
+          {% if provider == 'youtube' and yid != blank %}
+            <iframe src="https://www.youtube.com/embed/{{ yid | escape }}?rel=0" title="Live show" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+          {% elsif provider == 'twitch' and channel != blank %}
+            <iframe src="https://player.twitch.tv/?channel={{ channel | url_encode }}&parent={{ request.host }}" title="Live show" allowfullscreen></iframe>
+          {% else %}
+            {% render 'wax', style: 'ice', label: 'Live' %}
+            <div class="stage-lower">
+              <span class="live-dot"></span>
+              <span>{{ section.settings.lower }}</span>
+            </div>
+          {% endif %}
+        </div>
+        {% if provider == 'youtube' and yid == blank %}
+          <p class="fine" style="margin-top:0.6rem">Paste a YouTube link in this section. Until then the stage stays on the slab.</p>
+        {% endif %}
+        {% if provider == 'whatnot' or provider == 'off' %}
+          <p class="muted" style="margin-top:0.7rem">{{ section.settings.note }}</p>
+          {% if whatnot != blank %}
+            <a class="btn btn-primary" style="margin-top:0.6rem" href="{{ whatnot }}" target="_blank" rel="noreferrer">Open the Whatnot room</a>
+          {% endif %}
+        {% endif %}
+      </div>
+      <div>
+        {% if section.settings.show_chat and provider == 'youtube' and yid != blank %}
+          <div class="chat-frame">
+            <iframe src="https://www.youtube.com/live_chat?v={{ yid | escape }}&embed_domain={{ request.host }}" title="Live chat"></iframe>
+          </div>
+        {% elsif section.settings.show_chat and provider == 'twitch' and channel != blank %}
+          <div class="chat-frame">
+            <iframe src="https://www.twitch.tv/embed/{{ channel | url_encode }}/chat?parent={{ request.host }}" title="Live chat"></iframe>
+          </div>
+        {% else %}
+          <div class="panel" style="padding:1rem">
+            <p class="kicker">Chat</p>
+            <p class="muted" style="margin-top:0.35rem">YouTube and Twitch chat sit here when that provider is selected. Whatnot chat stays in the Whatnot app.</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Live desk",
+  "settings": [
+    { "type": "text", "id": "kicker", "label": "Kicker", "default": "On air" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Live" },
+    {
+      "type": "select",
+      "id": "provider",
+      "label": "Stream",
+      "default": "whatnot",
+      "options": [
+        { "value": "whatnot", "label": "Whatnot" },
+        { "value": "youtube", "label": "YouTube" },
+        { "value": "twitch", "label": "Twitch" },
+        { "value": "off", "label": "Stage only" }
+      ]
+    },
+    { "type": "text", "id": "youtube_url", "label": "YouTube URL", "info": "Watch, youtu.be, or live link." },
+    { "type": "text", "id": "twitch_channel", "label": "Twitch channel" },
+    { "type": "url", "id": "whatnot_url", "label": "Whatnot URL", "info": "Falls back to the theme Whatnot link. Whatnot does not allow the show to be embedded." },
+    { "type": "text", "id": "lower", "label": "Stage line", "default": "Whatnot · Thu–Sat 9:30 PM ET" },
+    { "type": "textarea", "id": "note", "label": "Note", "default": "Whatnot does not allow the show to play inside another site. The button opens the room." },
+    { "type": "checkbox", "id": "show_chat", "label": "Show YouTube or Twitch chat", "default": true }
+  ],
+  "presets": [{ "name": "Live desk" }]
+}
+{% endschema %}

@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "live": {
+      "type": "live-desk",
+      "settings": { "heading": "Live", "provider": "whatnot", "show_chat": true }
+    },
+    "board": {
+      "type": "break-board",
+      "settings": {
+        "heading": "Spot board",
+        "show_demo": true,
+        "show_host": false
+      }
+    }
+  },
+  "order": ["live", "board"]
+}
