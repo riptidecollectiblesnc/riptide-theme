@@ -1,0 +1,25 @@
+{%- comment -%}
+  Keeps spaces typed at the start of a text field.
+  A leading ^ also counts as one space, because the theme editor sometimes deletes real spaces on save.
+  {% render 'keep-space', text: section.settings.eyebrow %}
+{%- endcomment -%}
+{%- liquid
+  assign raw = text | append: ''
+  assign n = 0
+  assign rest = raw
+  for _i in (1..80)
+    assign ch = rest | slice: 0, 1
+    if ch == ' ' or ch == '^'
+      assign n = n | plus: 1
+      assign len = rest.size | minus: 1
+      if len < 1
+        assign rest = ''
+      else
+        assign rest = rest | slice: 1, len
+      endif
+    else
+      break
+    endif
+  endfor
+-%}
+{%- if n > 0 -%}{%- for _j in (1..n) -%}&nbsp;{%- endfor -%}{%- endif -%}{{- rest -}}

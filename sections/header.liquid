@@ -201,18 +201,6 @@
     font-size: 0.92em;
   }
   #shopify-section-{{ section.id }} .sheet .nav-link.is-child { padding-left: 1.4rem; }
-  #shopify-section-{{ section.id }} .site-header,
-  #shopify-section-{{ section.id }} .bar { overflow: visible; }
-  #shopify-section-{{ section.id }} .brand {
-    position: relative;
-    z-index: 3;
-    transform: translate({{ section.settings.logo_x }}px, {{ section.settings.logo_y }}px);
-  }
-  @media (min-width: 800px) {
-    #shopify-section-{{ section.id }} .bar.is-center .brand {
-      transform: translate(calc(-50% + {{ section.settings.logo_x }}px), calc(-50% + {{ section.settings.logo_y }}px));
-    }
-  }
 {% endstyle %}
 <header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px;">
   {% if section.settings.menu_top != blank %}
@@ -931,28 +919,6 @@
       ]
     },
     {
-      "type": "range",
-      "id": "logo_x",
-      "label": "Logo position X",
-      "min": -400,
-      "max": 800,
-      "step": 12,
-      "unit": "px",
-      "default": 0,
-      "info": "Negative moves left. Positive moves right, up to 800."
-    },
-    {
-      "type": "range",
-      "id": "logo_y",
-      "label": "Logo position Y",
-      "min": -200,
-      "max": 200,
-      "step": 4,
-      "unit": "px",
-      "default": 0,
-      "info": "Negative moves up. Positive moves down."
-    },
-    {
       "type": "checkbox",
       "id": "show_name",
       "label": "Show shop name next to the logo",
@@ -1203,11 +1169,11 @@
       "id": "top_x",
       "label": "Top menu position X",
       "min": -120,
-      "max": 1000,
-      "step": 14,
+      "max": 800,
+      "step": 10,
       "unit": "px",
       "default": 0,
-      "info": "Negative moves left. Positive moves right, up to 1000."
+      "info": "Negative moves left. Positive moves right, up to 800."
     },
     {
       "type": "range",
