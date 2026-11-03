@@ -74,7 +74,7 @@
         "lower_bold": false,
         "lower_italic": false,
         "lower_align": "default",
-        "lower_valign": "default",
+        "lower_valign": "middle",
         "lower_color": "#e7f6fb",
         "lower_size": 14,
         "lower_depth": "none",
