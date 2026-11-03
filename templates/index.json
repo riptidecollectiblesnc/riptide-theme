@@ -107,7 +107,7 @@
         "stage_label_depth_color": "#00e5ff",
         "stage_image": "shopify://shop_images/7ad358c5-020b-400e-a762-99876149335a.png",
         "stage_width": 100,
-        "stage_height": 400,
+        "stage_height": 340,
         "stage_fit": "contain",
         "stage_x": "center",
         "stage_y": "start"
