@@ -142,7 +142,7 @@
         "logo_width_mobile": 40,
         "logo_height_mobile": 40,
         "logo_align": "left",
-        "show_name": true,
+        "show_name": false,
         "menu": "main-menu"
       }
     }
