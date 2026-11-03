@@ -60,7 +60,9 @@
   #shopify-section-{{ section.id }} .top-menu .nav-link,
   #shopify-section-{{ section.id }} .nav-link.is-top,
   #shopify-section-{{ section.id }} .nav-link.is-top > span {
-    {% if section.settings.top_font != blank and section.settings.top_font != 'inherit' %}font-family: {{ section.settings.top_font }} !important;{% endif %}
+    {% if section.settings.top_font != blank and section.settings.top_font != 'inherit' %}font-family: {{ section.settings.top_font | replace: '"', "'" }} !important;{% endif %}
+    {% if section.settings.top_size > 0 %}font-size: {{ section.settings.top_size }}px !important;{% endif %}
+    line-height: 1 !important;
     {% if top_is_bold %}font-weight: 700 !important;{% endif %}
     {% if top_is_italic %}font-style: italic !important;{% endif %}
   }
@@ -1011,7 +1013,7 @@
       "id": "top_size",
       "label": "Size",
       "min": 10,
-      "max": 32,
+      "max": 96,
       "step": 1,
       "unit": "px",
       "default": 14

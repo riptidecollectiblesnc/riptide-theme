@@ -7,7 +7,7 @@
   assign glow = shadow | default: settings.color_neon | default: paint
   assign fill_2 = fill_2 | default: settings.color_neon
 -%}
-{%- if font != blank and font != 'inherit' -%}font-family: {{ font }};{%- if font contains 'Bebas' or font contains 'Anton' -%}font-weight: 400;{%- endif -%}{%- endif -%}
+{%- if font != blank and font != 'inherit' -%}{%- assign safe_font = font | replace: '"', "'" -%}font-family: {{ safe_font }};{%- if font contains 'Bebas' or font contains 'Anton' -%}font-weight: 400;{%- endif -%}{%- endif -%}
 {%- if bold -%}font-weight: 700;{%- endif -%}
 {%- if italic -%}font-style: italic;{%- endif -%}
 {%- if align == 'left' or align == 'center' or align == 'right' -%}text-align: {{ align }};{%- endif -%}
