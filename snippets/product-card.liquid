@@ -5,6 +5,11 @@
     {% else %}
       {% render 'wax', style: 'ice', label: product.type | default: 'Wax' %}
     {% endif %}
+    {% if product.tags contains 'break' or product.tags contains 'pack-wars' %}
+      <span class="badge">Break</span>
+    {% elsif product.compare_at_price > product.price %}
+      <span class="badge badge-foil">Drop</span>
+    {% endif %}
   </div>
   <div class="meta">
     <h3>{{ product.title }}</h3>

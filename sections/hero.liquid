@@ -1,10 +1,10 @@
-<section class="section" style="padding-top:1.25rem">
+<section class="hero-section">
   <div class="wrap hero">
-    <div>
+    <div class="hero-copy">
       {% if section.settings.kicker != blank %}
-        <p class="kicker">{{ section.settings.kicker }}</p>
+        <p class="kicker"><span class="live-dot"></span> {{ section.settings.kicker }}</p>
       {% endif %}
-      <h1 class="display">{{ section.settings.heading }}</h1>
+      <h1 class="display hero-title">{{ section.settings.heading }}</h1>
       {% if section.settings.text != blank %}
         <p class="lede">{{ section.settings.text }}</p>
       {% endif %}
@@ -13,9 +13,14 @@
           <a class="btn btn-primary" href="{{ section.settings.button_link }}">{{ section.settings.button_label }}</a>
         {% endif %}
         {% if section.settings.button_2_label != blank %}
-          <a class="btn btn-ghost" href="{{ section.settings.button_2_link }}">{{ section.settings.button_2_label }}</a>
+          <a class="btn btn-ghost" href="{{ section.settings.button_2_link }}">{{ section.settings.button_2_link }}</a>
         {% endif %}
       </div>
+      <ul class="hero-stats">
+        <li><strong>Thu–Sat</strong><span>Show nights</span></li>
+        <li><strong>9:30</strong><span>PM Eastern</span></li>
+        <li><strong>Sealed</strong><span>Wax and spots</span></li>
+      </ul>
     </div>
     <div class="stage" aria-hidden="true">
       {% render 'wax', style: 'crystal', label: section.settings.stage_label %}

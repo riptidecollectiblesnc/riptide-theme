@@ -10,7 +10,7 @@
             assign href = routes.search_url | append: '?type=product&q=' | append: q
           endif
         %}
-        <a class="panel" href="{{ href }}" {{ block.shopify_attributes }}>
+        <a class="panel rail-card" href="{{ href }}" {{ block.shopify_attributes }}>
           {% render 'wax', style: block.settings.style, label: block.settings.title %}
         </a>
       {% endfor %}

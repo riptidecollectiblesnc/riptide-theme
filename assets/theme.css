@@ -618,3 +618,223 @@ body { padding-bottom: 64px; }
   .live-dot, .ticker-track, .wax-slab::after { animation: none; }
   .lift:hover { transform: none; }
 }
+
+/* Premium finish. Same components, heavier atmosphere. */
+:root {
+  --font-display: "Unbounded", "Arial Narrow", sans-serif;
+  --font-board: "Barlow Condensed", "Arial Narrow", sans-serif;
+}
+
+body {
+  background:
+    radial-gradient(980px 520px at 0% -8%, color-mix(in srgb, var(--color-neon) 18%, transparent), transparent 58%),
+    radial-gradient(760px 460px at 100% 0%, color-mix(in srgb, var(--color-violet) 28%, transparent), transparent 52%),
+    radial-gradient(640px 360px at 80% 110%, color-mix(in srgb, var(--color-foil) 10%, transparent), transparent 50%),
+    var(--color-bg);
+  letter-spacing: 0.01em;
+}
+
+.shopify-section { scroll-margin-top: 5.5rem; }
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  text-transform: none;
+  line-height: 0.96;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--color-neon);
+  letter-spacing: 0.18em;
+}
+
+.section { padding: 3.25rem 0; }
+.section-head { margin-bottom: 1.25rem; }
+.section-head h2 { font-size: clamp(2rem, 4vw, 3.15rem); }
+
+.panel {
+  background:
+    linear-gradient(180deg, color-mix(in srgb, white 6%, transparent), transparent 42%),
+    var(--color-surface);
+  border-color: color-mix(in srgb, var(--color-foil) 28%, var(--color-border));
+  box-shadow: 0 18px 40px color-mix(in srgb, black 35%, transparent);
+}
+
+.lift:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-neon);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-neon) 55%, transparent),
+    0 22px 44px color-mix(in srgb, black 42%, transparent);
+}
+
+.btn {
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.btn-primary {
+  background: linear-gradient(180deg, #7af6ff, var(--color-neon) 45%, #00b7d4);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-neon) 70%, white), 0 8px 24px color-mix(in srgb, var(--color-neon) 28%, transparent);
+}
+.btn-ghost {
+  background: color-mix(in srgb, var(--color-surface) 70%, transparent);
+  border-color: color-mix(in srgb, var(--color-foil) 45%, var(--color-border));
+}
+
+.announce {
+  background: linear-gradient(90deg, #031016 0%, #00e5ff 18%, #00e5ff 82%, #031016 100%);
+  color: #04141c;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.site-header {
+  background: color-mix(in srgb, var(--color-bg) 78%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--color-neon) 28%, var(--color-border));
+  box-shadow: 0 10px 40px color-mix(in srgb, black 28%, transparent);
+}
+.brand {
+  font-family: var(--font-board);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 1.35rem;
+}
+.mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--color-foil) 70%, transparent),
+    0 0 18px color-mix(in srgb, var(--color-neon) 45%, transparent);
+}
+.nav-link { letter-spacing: 0.06em; text-transform: uppercase; font-size: 0.78rem; }
+.field {
+  background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  border-color: color-mix(in srgb, var(--color-foil) 30%, var(--color-border));
+}
+
+.bottom-nav {
+  background: color-mix(in srgb, var(--color-bg) 92%, transparent);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid color-mix(in srgb, var(--color-neon) 35%, var(--color-border));
+}
+
+.hero-section { padding: 1.5rem 0 0.5rem; }
+.hero-title {
+  font-size: clamp(3rem, 7.4vw, 6.1rem);
+  max-width: 11ch;
+  background: linear-gradient(100deg, #fff 10%, var(--color-neon) 42%, var(--color-foil) 78%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero .lede { font-size: 1.12rem; max-width: 36rem; }
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 1.3rem 0 0;
+  max-width: 34rem;
+}
+.hero-stats li {
+  padding: 0.7rem 0.75rem;
+  border-radius: var(--radius-card);
+  background: color-mix(in srgb, var(--color-surface) 80%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-foil) 35%, var(--color-border));
+}
+.hero-stats strong {
+  display: block;
+  font-family: var(--font-board);
+  font-size: 1.35rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.hero-stats span { color: var(--color-muted); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; }
+
+.stage {
+  min-height: 320px;
+  border-color: color-mix(in srgb, var(--color-foil) 50%, var(--color-border));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--color-neon) 25%, transparent),
+    0 30px 70px color-mix(in srgb, black 45%, transparent),
+    inset 0 0 80px color-mix(in srgb, var(--color-violet) 18%, transparent);
+  background:
+    radial-gradient(50% 60% at 50% 42%, color-mix(in srgb, var(--color-neon) 22%, transparent), transparent 70%),
+    radial-gradient(40% 40% at 80% 80%, color-mix(in srgb, var(--color-violet) 30%, transparent), transparent 70%),
+    var(--color-bg-deep);
+}
+.stage .wax { width: min(52%, 220px); filter: drop-shadow(0 18px 24px rgba(0,0,0,.45)); }
+.stage-lower {
+  font-family: var(--font-board);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.rail { gap: 0.85rem; }
+.rail-card { width: 8.4rem; }
+.rail-card .wax-label { color: var(--color-foil); }
+
+.card { position: relative; }
+.card h3 { font-family: var(--font-board); letter-spacing: 0.03em; text-transform: uppercase; font-size: 1.15rem; line-height: 1; }
+.media { position: relative; }
+.badge {
+  position: absolute;
+  top: 0.55rem;
+  left: 0.55rem;
+  z-index: 2;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  background: var(--color-neon);
+  color: var(--color-ink);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.badge-foil { background: var(--color-foil); }
+.price { color: var(--color-foil); font-size: 1.02rem; }
+
+.spot-head, .wax-label { font-family: var(--font-board); }
+.spot-board { box-shadow: 0 0 0 1px var(--color-neon), var(--shadow-neon), 0 24px 50px rgba(0,0,0,.35); }
+
+.schedule {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+.schedule li {
+  display: grid;
+  gap: 0.15rem;
+  padding: 1rem 1.05rem;
+}
+.schedule strong {
+  font-family: var(--font-board);
+  font-size: 1.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.schedule span { color: var(--color-neon); font-weight: 700; }
+
+.site-footer {
+  margin-top: 2rem;
+  padding: 2.5rem 0 1.4rem;
+  background:
+    linear-gradient(180deg, transparent, color-mix(in srgb, var(--color-violet) 12%, transparent) 30%, var(--color-bg-deep));
+  border-top: 1px solid color-mix(in srgb, var(--color-foil) 35%, var(--color-border));
+}
+.foot-name { font-size: clamp(1.6rem, 3vw, 2.2rem); }
+.foot-copy { text-align: center; margin-top: 1.8rem; letter-spacing: 0.12em; text-transform: uppercase; }
+
+@media (min-width: 800px) {
+  .hero { gap: 2.5rem; padding-top: 2rem; }
+  .schedule { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .stage { min-height: 420px; }
+}
