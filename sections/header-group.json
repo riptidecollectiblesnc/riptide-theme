@@ -25,8 +25,8 @@
         "hit-a": {
           "type": "hit",
           "settings": {
-            "title": "Sample",
-            "detail": "Replace ticker hits in the theme editor"
+            "title": "STREAMING SCHEDULE",
+            "detail": ""
           }
         },
         "hit-b": {
