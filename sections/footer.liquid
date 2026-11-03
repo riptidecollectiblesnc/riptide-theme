@@ -3,7 +3,7 @@
     <div class="foot-grid">
       <div>
         <p class="display foot-name">{{ shop.name }}</p>
-        <p class="muted" style="margin-top:0.55rem;max-width:28rem;{% render 'field-style', font: section.settings.blurb_font, bold: section.settings.blurb_bold, italic: section.settings.blurb_italic, align: section.settings.blurb_align, valign: section.settings.blurb_valign, fill: section.settings.blurb_fill, fill_2: section.settings.blurb_fill_2, color: section.settings.blurb_color, size: section.settings.blurb_size, depth: section.settings.blurb_depth, amount: section.settings.blurb_depth_amount, shadow: section.settings.blurb_depth_color %}">{{ section.settings.blurb }}</p>
+        <p class="muted" style="margin-top:0.55rem;max-width:28rem;{% render 'field-style', font: section.settings.blurb_font, bold: section.settings.blurb_bold, italic: section.settings.blurb_italic, align: section.settings.blurb_align, valign: section.settings.blurb_valign, fill: section.settings.blurb_fill, size: section.settings.blurb_size, depth: section.settings.blurb_depth, amount: section.settings.blurb_depth_amount %}">{{ section.settings.blurb }}</p>
       </div>
       <div>
         <p class="kicker">Shop</p>
@@ -145,12 +145,6 @@
       ]
     },
     {
-      "type": "color",
-      "id": "blurb_color",
-      "label": "Blurb color",
-      "default": "#8eafbf"
-    },
-    {
       "type": "select",
       "id": "blurb_fill",
       "label": "Blurb fill",
@@ -190,13 +184,6 @@
         }
       ],
       "info": "Gradient is painted on the letters. Solid uses the color above."
-    },
-    {
-      "type": "color",
-      "id": "blurb_fill_2",
-      "label": "Blurb second color",
-      "default": "#00e5ff",
-      "info": "Second color for Custom gradient."
     },
     {
       "type": "range",
@@ -273,12 +260,6 @@
       "step": 2,
       "unit": "px",
       "default": 8
-    },
-    {
-      "type": "color",
-      "id": "blurb_depth_color",
-      "label": "Blurb depth color",
-      "default": "#00e5ff"
     },
     {
       "type": "link_list",

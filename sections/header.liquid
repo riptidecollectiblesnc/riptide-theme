@@ -4,7 +4,7 @@
   assign logo_w_m = section.settings.logo_width_mobile | default: 120
   assign logo_h_m = section.settings.logo_height_mobile | default: 44
 %}
-{% capture menu_style %}{% render 'field-style', font: section.settings.menu_font, bold: section.settings.menu_bold, italic: section.settings.menu_italic, fill: section.settings.menu_fill, fill_2: section.settings.menu_fill_2, color: section.settings.menu_color, size: section.settings.menu_size, depth: section.settings.menu_depth, amount: section.settings.menu_depth_amount, shadow: section.settings.menu_depth_color %}{% endcapture %}
+{% capture menu_style %}{% render 'field-style', font: section.settings.menu_font, bold: section.settings.menu_bold, italic: section.settings.menu_italic, fill: section.settings.menu_fill, size: section.settings.menu_size, depth: section.settings.menu_depth, amount: section.settings.menu_depth_amount %}{% endcapture %}
 <header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px;">
   <div class="wrap bar{% if section.settings.logo_align == 'center' %} is-center{% endif %}">
     <button class="icon-btn menu-btn" type="button" data-menu-open aria-label="Open menu">
@@ -184,12 +184,6 @@
       "default": 16
     },
     {
-      "type": "color",
-      "id": "menu_color",
-      "label": "Menu color",
-      "default": "#8eafbf"
-    },
-    {
       "type": "select",
       "id": "menu_fill",
       "label": "Menu fill",
@@ -229,13 +223,6 @@
         }
       ],
       "info": "Gradient is painted on the letters. Solid uses the menu color."
-    },
-    {
-      "type": "color",
-      "id": "menu_fill_2",
-      "label": "Menu second color",
-      "default": "#00e5ff",
-      "info": "Second color for Custom gradient."
     },
     {
       "type": "select",
@@ -302,12 +289,6 @@
       "step": 2,
       "unit": "px",
       "default": 8
-    },
-    {
-      "type": "color",
-      "id": "menu_depth_color",
-      "label": "Menu depth color",
-      "default": "#00e5ff"
     },
     {
       "type": "checkbox",

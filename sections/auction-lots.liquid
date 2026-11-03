@@ -2,11 +2,11 @@
   <div class="wrap">
     <header class="section-head">
       <div>
-        {% if section.settings.kicker != blank %}<p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, fill: section.settings.kicker_fill, fill_2: section.settings.kicker_fill_2, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>{% endif %}
-        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, fill_2: section.settings.heading_fill_2, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
+        {% if section.settings.kicker != blank %}<p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, fill: section.settings.kicker_fill, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount %}">{{ section.settings.kicker }}</p>{% endif %}
+        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount %}">{{ section.settings.heading }}</h2>
       </div>
     </header>
-    <p class="muted" style="margin-bottom:1rem;{% render 'field-style', font: section.settings.note_font, bold: section.settings.note_bold, italic: section.settings.note_italic, align: section.settings.note_align, valign: section.settings.note_valign, fill: section.settings.note_fill, fill_2: section.settings.note_fill_2, color: section.settings.note_color, size: section.settings.note_size, depth: section.settings.note_depth, amount: section.settings.note_depth_amount, shadow: section.settings.note_depth_color %}">{{ section.settings.note }}</p>
+    <p class="muted" style="margin-bottom:1rem;{% render 'field-style', font: section.settings.note_font, bold: section.settings.note_bold, italic: section.settings.note_italic, align: section.settings.note_align, valign: section.settings.note_valign, fill: section.settings.note_fill, size: section.settings.note_size, depth: section.settings.note_depth, amount: section.settings.note_depth_amount %}">{{ section.settings.note }}</p>
     <div class="grid-cards">
       {% if section.settings.collection != blank %}
         {% for product in section.settings.collection.products limit: 8 %}
@@ -161,12 +161,6 @@
       ]
     },
     {
-      "type": "color",
-      "id": "kicker_color",
-      "label": "Kicker color",
-      "default": "#00e5ff"
-    },
-    {
       "type": "select",
       "id": "kicker_fill",
       "label": "Kicker fill",
@@ -206,13 +200,6 @@
         }
       ],
       "info": "Gradient is painted on the letters. Solid uses the color above."
-    },
-    {
-      "type": "color",
-      "id": "kicker_fill_2",
-      "label": "Kicker second color",
-      "default": "#00e5ff",
-      "info": "Second color for Custom gradient."
     },
     {
       "type": "range",
@@ -289,12 +276,6 @@
       "step": 2,
       "unit": "px",
       "default": 8
-    },
-    {
-      "type": "color",
-      "id": "kicker_depth_color",
-      "label": "Kicker depth color",
-      "default": "#00e5ff"
     },
     {
       "type": "text",
@@ -407,12 +388,6 @@
       ]
     },
     {
-      "type": "color",
-      "id": "heading_color",
-      "label": "Heading color",
-      "default": "#f4fbff"
-    },
-    {
       "type": "select",
       "id": "heading_fill",
       "label": "Heading fill",
@@ -452,13 +427,6 @@
         }
       ],
       "info": "Gradient is painted on the letters. Solid uses the color above."
-    },
-    {
-      "type": "color",
-      "id": "heading_fill_2",
-      "label": "Heading second color",
-      "default": "#00e5ff",
-      "info": "Second color for Custom gradient."
     },
     {
       "type": "range",
@@ -535,12 +503,6 @@
       "step": 2,
       "unit": "px",
       "default": 8
-    },
-    {
-      "type": "color",
-      "id": "heading_depth_color",
-      "label": "Heading depth color",
-      "default": "#00e5ff"
     },
     {
       "type": "textarea",
@@ -653,12 +615,6 @@
       ]
     },
     {
-      "type": "color",
-      "id": "note_color",
-      "label": "Note color",
-      "default": "#8eafbf"
-    },
-    {
       "type": "select",
       "id": "note_fill",
       "label": "Note fill",
@@ -698,13 +654,6 @@
         }
       ],
       "info": "Gradient is painted on the letters. Solid uses the color above."
-    },
-    {
-      "type": "color",
-      "id": "note_fill_2",
-      "label": "Note second color",
-      "default": "#00e5ff",
-      "info": "Second color for Custom gradient."
     },
     {
       "type": "range",
@@ -781,12 +730,6 @@
       "step": 2,
       "unit": "px",
       "default": 8
-    },
-    {
-      "type": "color",
-      "id": "note_depth_color",
-      "label": "Note depth color",
-      "default": "#00e5ff"
     },
     {
       "type": "collection",

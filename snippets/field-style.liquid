@@ -1,10 +1,11 @@
 {%- comment -%} color, size, depth, amount, shadow {%- endcomment -%}
 {%- liquid
-  assign paint = color
+  assign paint = color | default: settings.color_fg
   assign px = size | default: 0
   assign d = depth | default: 'none'
   assign n = amount | default: 0
-  assign glow = shadow | default: paint
+  assign glow = shadow | default: settings.color_neon | default: paint
+  assign fill_2 = fill_2 | default: settings.color_neon
 -%}
 {%- if font != blank and font != 'inherit' -%}font-family: {{ font }};{%- if font contains 'Bebas' or font contains 'Anton' -%}font-weight: 400;{%- endif -%}{%- endif -%}
 {%- if bold -%}font-weight: 700;{%- endif -%}
