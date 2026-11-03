@@ -89,7 +89,7 @@
         "hit-b"
       ],
       "settings": {
-        "scroll_seconds": 40,
+        "scroll_seconds": 24,
         "fill": "solid",
         "fill_color": "#04090e",
         "fill_color_2": "#00e5ff",
