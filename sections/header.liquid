@@ -47,8 +47,9 @@
       background: var(--color-bg);
     }
   {% endif %}
-  #shopify-section-{{ section.id }} .desk-nav {
+  #shopify-section-{{ section.id }} .desk-nav:not(.top-menu) {
     gap: {{ section.settings.menu_gap }}px;
+    transform: translate({{ section.settings.menu_x }}px, {{ section.settings.menu_y }}px);
   }
   #shopify-section-{{ section.id }} .sheet .nav-link {
     margin: {{ section.settings.menu_gap | divided_by: 2 }}px 0;
@@ -91,6 +92,7 @@
     gap: {{ section.settings.top_gap }}px;
     margin-bottom: {{ section.settings.top_gap }}px;
     padding-top: {{ section.settings.top_pad_top }}px;
+    transform: translate({{ section.settings.top_x }}px, {{ section.settings.top_y }}px);
   }
   #shopify-section-{{ section.id }} .top-menu .nav-link,
   #shopify-section-{{ section.id }} .sheet .nav-link.is-top {
@@ -518,6 +520,28 @@
       "step": 2,
       "unit": "px",
       "default": 10
+    },
+    {
+      "type": "range",
+      "id": "menu_x",
+      "label": "Menu position X",
+      "min": -120,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Negative moves left. Positive moves right."
+    },
+    {
+      "type": "range",
+      "id": "menu_y",
+      "label": "Menu position Y",
+      "min": -40,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 12,
+      "info": "Positive moves the main menu down, toward the bottom of the header."
     },
     {
       "type": "range",
@@ -1031,6 +1055,28 @@
       "step": 2,
       "unit": "px",
       "default": 10
+    },
+    {
+      "type": "range",
+      "id": "top_x",
+      "label": "Top menu position X",
+      "min": -120,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Negative moves left. Positive moves right."
+    },
+    {
+      "type": "range",
+      "id": "top_y",
+      "label": "Top menu position Y",
+      "min": -40,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "info": "Positive moves the top menu down."
     },
     {
       "type": "range",
