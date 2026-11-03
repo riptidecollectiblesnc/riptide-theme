@@ -40,6 +40,22 @@
       --image-ratio: {{ settings.image_ratio | default: '4 / 5' }};
       --image-fit: {{ settings.image_fit | default: 'cover' }};
       --image-pos: {{ settings.image_pos | default: 'center' }};
+      --text-size: {{ settings.text_size | default: 16 }}px;
+      --heading-scale: {{ settings.heading_scale | default: 100 | divided_by: 100.0 }};
+      --text-color: {{ settings.text_color | default: settings.color_fg }};
+      --heading-color: {{ settings.heading_color | default: settings.color_fg }};
+      --depth-amount: {{ settings.text_depth_amount | default: 8 }}px;
+      --depth-color: {{ settings.text_depth_color | default: '#00e5ff' }};
+      {% case settings.text_depth %}
+        {% when 'soft' %}
+          --text-shadow: 0 calc(var(--depth-amount) * 0.35) var(--depth-amount) color-mix(in srgb, var(--depth-color) 55%, transparent);
+        {% when 'hard' %}
+          --text-shadow: calc(var(--depth-amount) * 0.2) calc(var(--depth-amount) * 0.2) 0 var(--depth-color), calc(var(--depth-amount) * 0.55) calc(var(--depth-amount) * 0.55) 0 var(--depth-color);
+        {% when 'neon' %}
+          --text-shadow: 0 0 calc(var(--depth-amount) * 0.4) var(--depth-color), 0 0 var(--depth-amount) var(--depth-color);
+        {% else %}
+          --text-shadow: none;
+      {% endcase %}
     }
   </style>
   {% if settings.custom_css != blank %}

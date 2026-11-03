@@ -82,7 +82,8 @@ ul { margin: 0; padding: 0; list-style: none; }
 .shopify-section { scroll-margin-top: 5.5rem; }
 
 .wrap {
-  width: min(1120px, calc(100% - 2rem));
+  width: 80%;
+  max-width: none;
   margin-inline: auto;
 }
 
@@ -877,6 +878,30 @@ body {
   display: block;
   object-fit: contain;
   object-position: left center;
+}
+
+main,
+.site-footer {
+  font-size: var(--text-size, 16px);
+  color: var(--text-color, var(--color-fg));
+}
+main :is(h1, h2, h3, .display),
+.site-footer :is(h1, h2, h3, .display) {
+  color: var(--heading-color, var(--color-fg));
+  font-size: calc(var(--heading-base, 1em) * var(--heading-scale, 1));
+}
+main .hero-title { --heading-base: clamp(3rem, 7.4vw, 6.1rem); }
+main .section-head .display,
+main h2.display { --heading-base: clamp(2rem, 4vw, 3.15rem); }
+main .product-layout h1,
+main h1.display { --heading-base: clamp(2rem, 5vw, 3.2rem); }
+main :is(p, li, .lede, .fine, .muted, .price, label, summary, h3),
+.site-footer :is(p, li, a, .fine, .muted) {
+  text-shadow: var(--text-shadow, none);
+}
+main :is(h1, h2, .display, .kicker),
+.site-footer :is(h2, .display, .kicker) {
+  text-shadow: var(--text-shadow, none);
 }
 .media { aspect-ratio: var(--image-ratio, 4 / 5); }
 .media img,
