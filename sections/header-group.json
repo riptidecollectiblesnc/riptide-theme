@@ -15,6 +15,7 @@
       "type": "announcement-bar",
       "settings": {
         "enabled": true,
+        "bar_height": 28,
         "text": "New website is still under development, bear with us. Your accounts have not been affected by the update",
         "text_font": "inherit",
         "text_bold": false,
@@ -25,7 +26,7 @@
         "text_size": 14,
         "text_depth": "soft",
         "text_depth_amount": 6,
-        "text_depth_color": "#E484FF",
+        "text_depth_color": "#e484ff",
         "link": "",
         "fill": "solid",
         "fill_color": "#00e5ff",
@@ -125,6 +126,7 @@
       ],
       "settings": {
         "scroll_seconds": 24,
+        "bar_height": 40,
         "fill": "solid",
         "fill_color": "#04090e",
         "fill_color_2": "#00e5ff",
