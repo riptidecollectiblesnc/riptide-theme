@@ -11,7 +11,7 @@
           endif
         %}
         <a class="panel rail-card" href="{{ href }}" {{ block.shopify_attributes }}>
-          {% capture label_style %}{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}{% endcapture %}
+          {% capture label_style %}{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, fill: block.settings.title_fill, fill_2: block.settings.title_fill_2, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}{% endcapture %}
           {% render 'wax', style: block.settings.style, label: block.settings.title, label_style: label_style %}
         </a>
       {% endfor %}
@@ -154,6 +154,54 @@
           "id": "title_color",
           "label": "Label color",
           "default": "#e7f6fb"
+        },
+        {
+          "type": "select",
+          "id": "title_fill",
+          "label": "Label fill",
+          "default": "solid",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "tide",
+              "label": "Tide"
+            },
+            {
+              "value": "violet",
+              "label": "Violet"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
+            },
+            {
+              "value": "sunset",
+              "label": "Sunset"
+            },
+            {
+              "value": "aurora",
+              "label": "Aurora"
+            },
+            {
+              "value": "pulse",
+              "label": "Neon pulse"
+            },
+            {
+              "value": "custom",
+              "label": "Custom gradient"
+            }
+          ],
+          "info": "Gradient is painted on the letters. Solid uses the color above."
+        },
+        {
+          "type": "color",
+          "id": "title_fill_2",
+          "label": "Label second color",
+          "default": "#00e5ff",
+          "info": "Second color for Custom gradient."
         },
         {
           "type": "range",

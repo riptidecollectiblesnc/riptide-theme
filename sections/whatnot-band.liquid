@@ -3,20 +3,20 @@
   <div class="wrap">
     <header class="section-head">
       <div>
-        <p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>
-        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
+        <p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, fill: section.settings.kicker_fill, fill_2: section.settings.kicker_fill_2, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>
+        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, fill_2: section.settings.heading_fill_2, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
       </div>
       {% if room != blank %}
         <a class="btn btn-primary" href="{{ room }}" target="_blank" rel="noreferrer">Open Whatnot</a>
       {% endif %}
     </header>
-    <p class="lede" style="margin-top:0;{% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</p>
+    <p class="lede" style="margin-top:0;{% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, fill: section.settings.text_fill, fill_2: section.settings.text_fill_2, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</p>
     {% if section.blocks.size > 0 %}
       <ul class="schedule">
         {% for block in section.blocks %}
           <li class="panel" {{ block.shopify_attributes }}>
-            <strong style="{% render 'field-style', font: block.settings.day_font, bold: block.settings.day_bold, italic: block.settings.day_italic, align: block.settings.day_align, valign: block.settings.day_valign, color: block.settings.day_color, size: block.settings.day_size, depth: block.settings.day_depth, amount: block.settings.day_depth_amount, shadow: block.settings.day_depth_color %}">{{ block.settings.day }}</strong>
-            <span style="{% render 'field-style', font: block.settings.time_font, bold: block.settings.time_bold, italic: block.settings.time_italic, align: block.settings.time_align, valign: block.settings.time_valign, color: block.settings.time_color, size: block.settings.time_size, depth: block.settings.time_depth, amount: block.settings.time_depth_amount, shadow: block.settings.time_depth_color %}">{{ block.settings.time }}</span>
+            <strong style="{% render 'field-style', font: block.settings.day_font, bold: block.settings.day_bold, italic: block.settings.day_italic, align: block.settings.day_align, valign: block.settings.day_valign, fill: block.settings.day_fill, fill_2: block.settings.day_fill_2, color: block.settings.day_color, size: block.settings.day_size, depth: block.settings.day_depth, amount: block.settings.day_depth_amount, shadow: block.settings.day_depth_color %}">{{ block.settings.day }}</strong>
+            <span style="{% render 'field-style', font: block.settings.time_font, bold: block.settings.time_bold, italic: block.settings.time_italic, align: block.settings.time_align, valign: block.settings.time_valign, fill: block.settings.time_fill, fill_2: block.settings.time_fill_2, color: block.settings.time_color, size: block.settings.time_size, depth: block.settings.time_depth, amount: block.settings.time_depth_amount, shadow: block.settings.time_depth_color %}">{{ block.settings.time }}</span>
           </li>
         {% endfor %}
       </ul>
@@ -143,6 +143,54 @@
       "id": "kicker_color",
       "label": "Kicker color",
       "default": "#00e5ff"
+    },
+    {
+      "type": "select",
+      "id": "kicker_fill",
+      "label": "Kicker fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "Gradient is painted on the letters. Solid uses the color above."
+    },
+    {
+      "type": "color",
+      "id": "kicker_fill_2",
+      "label": "Kicker second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient."
     },
     {
       "type": "range",
@@ -343,6 +391,54 @@
       "default": "#f4fbff"
     },
     {
+      "type": "select",
+      "id": "heading_fill",
+      "label": "Heading fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "Gradient is painted on the letters. Solid uses the color above."
+    },
+    {
+      "type": "color",
+      "id": "heading_fill_2",
+      "label": "Heading second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient."
+    },
+    {
       "type": "range",
       "id": "heading_size",
       "label": "Heading size",
@@ -539,6 +635,54 @@
       "id": "text_color",
       "label": "Text color",
       "default": "#d5e6ee"
+    },
+    {
+      "type": "select",
+      "id": "text_fill",
+      "label": "Text fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "Gradient is painted on the letters. Solid uses the color above."
+    },
+    {
+      "type": "color",
+      "id": "text_fill_2",
+      "label": "Text second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient."
     },
     {
       "type": "range",
@@ -751,6 +895,54 @@
           "default": "#e7f6fb"
         },
         {
+          "type": "select",
+          "id": "day_fill",
+          "label": "Day fill",
+          "default": "solid",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "tide",
+              "label": "Tide"
+            },
+            {
+              "value": "violet",
+              "label": "Violet"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
+            },
+            {
+              "value": "sunset",
+              "label": "Sunset"
+            },
+            {
+              "value": "aurora",
+              "label": "Aurora"
+            },
+            {
+              "value": "pulse",
+              "label": "Neon pulse"
+            },
+            {
+              "value": "custom",
+              "label": "Custom gradient"
+            }
+          ],
+          "info": "Gradient is painted on the letters. Solid uses the color above."
+        },
+        {
+          "type": "color",
+          "id": "day_fill_2",
+          "label": "Day second color",
+          "default": "#00e5ff",
+          "info": "Second color for Custom gradient."
+        },
+        {
           "type": "range",
           "id": "day_size",
           "label": "Day size",
@@ -947,6 +1139,54 @@
           "id": "time_color",
           "label": "Time color",
           "default": "#9ec3d1"
+        },
+        {
+          "type": "select",
+          "id": "time_fill",
+          "label": "Time fill",
+          "default": "solid",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "tide",
+              "label": "Tide"
+            },
+            {
+              "value": "violet",
+              "label": "Violet"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
+            },
+            {
+              "value": "sunset",
+              "label": "Sunset"
+            },
+            {
+              "value": "aurora",
+              "label": "Aurora"
+            },
+            {
+              "value": "pulse",
+              "label": "Neon pulse"
+            },
+            {
+              "value": "custom",
+              "label": "Custom gradient"
+            }
+          ],
+          "info": "Gradient is painted on the letters. Solid uses the color above."
+        },
+        {
+          "type": "color",
+          "id": "time_fill_2",
+          "label": "Time second color",
+          "default": "#00e5ff",
+          "info": "Second color for Custom gradient."
         },
         {
           "type": "range",

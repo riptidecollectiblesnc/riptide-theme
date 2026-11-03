@@ -1,5 +1,5 @@
 {% if section.settings.enabled and section.settings.text != blank %}
-  {% capture announce_style %}{% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}{% endcapture %}
+  {% capture announce_style %}{% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, fill: section.settings.text_fill, fill_2: section.settings.text_fill_2, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}{% endcapture %}
   <div class="bar-fill fill-{{ section.settings.fill }}" style="--bar-h: {{ section.settings.bar_height }}px; --fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;">
     {% if section.settings.link != blank %}
       <a class="announce" href="{{ section.settings.link }}" style="{{ announce_style }}">{{ section.settings.text }}</a>
@@ -144,6 +144,54 @@
       "id": "text_color",
       "label": "Text color",
       "default": "#d5e6ee"
+    },
+    {
+      "type": "select",
+      "id": "text_fill",
+      "label": "Text fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "Gradient is painted on the letters. Solid uses the color above."
+    },
+    {
+      "type": "color",
+      "id": "text_fill_2",
+      "label": "Text second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient."
     },
     {
       "type": "range",

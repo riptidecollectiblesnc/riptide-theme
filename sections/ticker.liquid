@@ -3,7 +3,7 @@
     <div class="ticker-track">
       <div class="ticker-set">
         {% for block in section.blocks %}
-          <span class="ticker-item" {{ block.shopify_attributes }}><b style="{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</b> <span style="{% render 'field-style', font: block.settings.detail_font, bold: block.settings.detail_bold, italic: block.settings.detail_italic, align: block.settings.detail_align, valign: block.settings.detail_valign, color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</span></span>
+          <span class="ticker-item" {{ block.shopify_attributes }}><b style="{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, fill: block.settings.title_fill, fill_2: block.settings.title_fill_2, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</b> <span style="{% render 'field-style', font: block.settings.detail_font, bold: block.settings.detail_bold, italic: block.settings.detail_italic, align: block.settings.detail_align, valign: block.settings.detail_valign, fill: block.settings.detail_fill, fill_2: block.settings.detail_fill_2, color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</span></span>
         {% endfor %}
       </div>
     </div>
@@ -262,6 +262,54 @@
           "default": "#e7f6fb"
         },
         {
+          "type": "select",
+          "id": "title_fill",
+          "label": "Title fill",
+          "default": "solid",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "tide",
+              "label": "Tide"
+            },
+            {
+              "value": "violet",
+              "label": "Violet"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
+            },
+            {
+              "value": "sunset",
+              "label": "Sunset"
+            },
+            {
+              "value": "aurora",
+              "label": "Aurora"
+            },
+            {
+              "value": "pulse",
+              "label": "Neon pulse"
+            },
+            {
+              "value": "custom",
+              "label": "Custom gradient"
+            }
+          ],
+          "info": "Gradient is painted on the letters. Solid uses the color above."
+        },
+        {
+          "type": "color",
+          "id": "title_fill_2",
+          "label": "Title second color",
+          "default": "#00e5ff",
+          "info": "Second color for Custom gradient."
+        },
+        {
           "type": "range",
           "id": "title_size",
           "label": "Title size",
@@ -458,6 +506,54 @@
           "id": "detail_color",
           "label": "Detail color",
           "default": "#8eafbf"
+        },
+        {
+          "type": "select",
+          "id": "detail_fill",
+          "label": "Detail fill",
+          "default": "solid",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "tide",
+              "label": "Tide"
+            },
+            {
+              "value": "violet",
+              "label": "Violet"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
+            },
+            {
+              "value": "sunset",
+              "label": "Sunset"
+            },
+            {
+              "value": "aurora",
+              "label": "Aurora"
+            },
+            {
+              "value": "pulse",
+              "label": "Neon pulse"
+            },
+            {
+              "value": "custom",
+              "label": "Custom gradient"
+            }
+          ],
+          "info": "Gradient is painted on the letters. Solid uses the color above."
+        },
+        {
+          "type": "color",
+          "id": "detail_fill_2",
+          "label": "Detail second color",
+          "default": "#00e5ff",
+          "info": "Second color for Custom gradient."
         },
         {
           "type": "range",

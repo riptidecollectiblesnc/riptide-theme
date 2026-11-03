@@ -11,7 +11,18 @@
 {%- if italic -%}font-style: italic;{%- endif -%}
 {%- if align == 'left' or align == 'center' or align == 'right' -%}text-align: {{ align }};{%- endif -%}
 {%- if valign == 'top' -%}margin-top: 0; margin-bottom: auto;{%- elsif valign == 'middle' -%}margin-top: auto; margin-bottom: auto;{%- elsif valign == 'bottom' -%}margin-top: auto; margin-bottom: 0;{%- endif -%}
-{%- if paint != blank -%}color: {{ paint }}; -webkit-text-fill-color: {{ paint }}; background-image: none;{%- endif -%}
+{%- if fill != blank and fill != 'solid' -%}
+  {%- if fill == 'tide' -%}background-image: linear-gradient(90deg, #7af6ff, #ffffff 45%, #00e5ff);
+  {%- elsif fill == 'violet' -%}background-image: linear-gradient(100deg, #e4d4ff, #9b6dff 46%, #00e5ff);
+  {%- elsif fill == 'foil' -%}background-image: linear-gradient(105deg, #8a6a2f, #fff6d0 42%, #e4c06a 70%, #fff); background-size: 220% 100%; animation: fill-pan 9s linear infinite;
+  {%- elsif fill == 'sunset' -%}background-image: linear-gradient(90deg, #ff8fa3, #ffe08a 55%, #fff);
+  {%- elsif fill == 'aurora' -%}background-image: linear-gradient(100deg, #7af6ff, #d7c4ff 50%, #00e5ff); background-size: 220% 100%; animation: fill-pan 12s linear infinite;
+  {%- elsif fill == 'pulse' -%}background-image: linear-gradient(90deg, #00e5ff, #ffffff, #b388ff); background-size: 220% 100%; animation: fill-pan 6s linear infinite;
+  {%- else -%}background-image: linear-gradient(90deg, {{ paint | default: '#f4fbff' }}, {{ fill_2 | default: '#00e5ff' }});
+  {%- endif -%}
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+{%- elsif paint != blank -%}color: {{ paint }}; -webkit-text-fill-color: {{ paint }}; background-image: none;
+{%- endif -%}
 {%- if px > 0 -%}font-size: {{ px }}px;{%- endif -%}
 {%- if d == 'soft' and n > 0 -%}text-shadow: 0 {{ n | times: 0.4 }}px {{ n }}px {{ glow }};
 {%- elsif d == 'hard' and n > 0 -%}text-shadow: {{ n | times: 0.35 }}px {{ n | times: 0.35 }}px 0 {{ glow }};
