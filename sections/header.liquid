@@ -5,6 +5,39 @@
   assign logo_h_m = section.settings.logo_height_mobile | default: 44
 %}
 {% capture menu_style %}{% render 'field-style', font: section.settings.menu_font, bold: section.settings.menu_bold, italic: section.settings.menu_italic, fill: section.settings.menu_fill, fill_2: section.settings.menu_fill_2, color: section.settings.menu_color, size: section.settings.menu_size, depth: section.settings.menu_depth, amount: section.settings.menu_depth_amount, shadow: section.settings.menu_depth_color %}{% endcapture %}
+{% style %}
+  {% if section.settings.sticky %}
+    .shopify-section-group-header-group:has(#shopify-section-{{ section.id }} .is-sticky) {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: var(--color-bg);
+    }
+  {% endif %}
+  #shopify-section-{{ section.id }} .desk-nav .nav-link,
+  #shopify-section-{{ section.id }} .sheet .nav-link {
+    border: {{ section.settings.menu_border }}px solid {{ section.settings.menu_border_color }};
+    border-radius: 10px;
+    {% case section.settings.menu_cell_fill %}
+      {% when 'solid' %}background: {{ section.settings.menu_cell_color }};
+      {% when 'tide' %}background-image: linear-gradient(90deg, #042028, #00e5ff 42%, #7af6ff 50%, #00e5ff 58%, #042028);
+      {% when 'violet' %}background-image: linear-gradient(100deg, #12061f, #6d1ecc 46%, #00e5ff);
+      {% when 'foil' %}background-image: linear-gradient(110deg, #3a2a10, #e4c06a 40%, #fff6d0 50%, #e4c06a 60%, #3a2a10); background-size: 220% 100%;
+      {% when 'sunset' %}background-image: linear-gradient(90deg, #3a1020, #ff5a7a 35%, #e4c06a 68%, #6d1ecc);
+      {% when 'aurora' %}background-image: linear-gradient(100deg, #042028, #00e5ff, #6d1ecc, #00e5ff); background-size: 220% 100%;
+      {% when 'pulse' %}background-image: linear-gradient(90deg, #042028, #00e5ff 50%, #042028); background-size: 220% 100%;
+      {% when 'glass' %}background: color-mix(in srgb, {{ section.settings.menu_cell_color }} 28%, transparent);
+      {% when 'custom' %}background-image: linear-gradient(90deg, {{ section.settings.menu_cell_color }}, {{ section.settings.menu_cell_color_2 }});
+    {% endcase %}
+    {% case section.settings.menu_cell_depth %}
+      {% when 'soft' %}box-shadow: 0 {{ section.settings.menu_cell_depth_amount }}px {{ section.settings.menu_cell_depth_amount | times: 2 }}px {{ section.settings.menu_cell_depth_color }};
+      {% when 'hard' %}box-shadow: {{ section.settings.menu_cell_depth_amount | divided_by: 2 }}px {{ section.settings.menu_cell_depth_amount | divided_by: 2 }}px 0 {{ section.settings.menu_cell_depth_color }};
+      {% when 'lift' %}box-shadow: 0 {{ section.settings.menu_cell_depth_amount }}px {{ section.settings.menu_cell_depth_amount | times: 2 }}px {{ section.settings.menu_cell_depth_color }};
+      {% when 'neon' %}box-shadow: 0 0 {{ section.settings.menu_cell_depth_amount }}px {{ section.settings.menu_cell_depth_color }};
+      {% when 'press' %}box-shadow: inset 0 2px 8px {{ section.settings.menu_cell_depth_color }};
+    {% endcase %}
+  }
+{% endstyle %}
 <header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px;">
   <div class="wrap bar{% if section.settings.logo_align == 'center' %} is-center{% endif %}">
     <button class="icon-btn menu-btn" type="button" data-menu-open aria-label="Open menu">
@@ -31,15 +64,15 @@
     <nav class="desk-nav" aria-label="Primary">
       {% if section.settings.menu != blank %}
         {% for link in section.settings.menu.links %}
-          <a class="nav-link{% if link.current %} is-on{% endif %}" style="{{ menu_style }}" href="{{ link.url }}">{{ link.title }}</a>
+          <a class="nav-link{% if link.current %} is-on{% endif %}" href="{{ link.url }}"><span style="{{ menu_style }}">{{ link.title }}</span></a>
         {% endfor %}
       {% else %}
-        <a class="nav-link" style="{{ menu_style }}" href="{{ routes.all_products_collection_url }}">Shop</a>
-        <a class="nav-link" style="{{ menu_style }}" href="{{ routes.root_url }}#shopify-section-breaks">Breaks</a>
-        <a class="nav-link" style="{{ menu_style }}" href="{{ routes.root_url }}#shopify-section-live">Live</a>
-        <a class="nav-link" style="{{ menu_style }}" href="{{ routes.root_url }}#shopify-section-auctions">Auctions</a>
-        <a class="nav-link" style="{{ menu_style }}" href="{{ routes.root_url }}#shopify-section-hits">Hits</a>
-        <a class="nav-link" style="{{ menu_style }}" href="{{ routes.root_url }}#shopify-section-whatnot">Whatnot</a>
+        <a class="nav-link" href="{{ routes.all_products_collection_url }}"><span style="{{ menu_style }}">Shop</span></a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-breaks"><span style="{{ menu_style }}">Breaks</span></a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-live"><span style="{{ menu_style }}">Live</span></a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-auctions"><span style="{{ menu_style }}">Auctions</span></a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-hits"><span style="{{ menu_style }}">Hits</span></a>
+        <a class="nav-link" href="{{ routes.root_url }}#shopify-section-whatnot"><span style="{{ menu_style }}">Whatnot</span></a>
       {% endif %}
     </nav>
     <form class="search" action="{{ routes.search_url }}" method="get" role="search">
@@ -72,17 +105,17 @@
     </form>
     {% if section.settings.menu != blank %}
       {% for link in section.settings.menu.links %}
-        <a class="nav-link" style="{{ menu_style }}" href="{{ link.url }}">{{ link.title }}</a>
+        <a class="nav-link" href="{{ link.url }}"><span style="{{ menu_style }}">{{ link.title }}</span></a>
       {% endfor %}
     {% else %}
-      <a class="nav-link" href="{{ routes.all_products_collection_url }}">Shop</a>
-      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-breaks">Breaks</a>
-      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-live">Live</a>
-      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-auctions">Auctions</a>
-      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-hits">Hits</a>
-      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-whatnot">Whatnot</a>
+      <a class="nav-link" href="{{ routes.all_products_collection_url }}"><span style="{{ menu_style }}">Shop</span></a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-breaks"><span style="{{ menu_style }}">Breaks</span></a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-live"><span style="{{ menu_style }}">Live</span></a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-auctions"><span style="{{ menu_style }}">Auctions</span></a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-hits"><span style="{{ menu_style }}">Hits</span></a>
+      <a class="nav-link" href="{{ routes.root_url }}#shopify-section-whatnot"><span style="{{ menu_style }}">Whatnot</span></a>
     {% endif %}
-    <a class="nav-link" style="{{ menu_style }}" href="{{ routes.cart_url }}">Cart</a>
+    <a class="nav-link" href="{{ routes.cart_url }}"><span style="{{ menu_style }}">Cart</span></a>
   </div>
 </div>
 
@@ -310,11 +343,92 @@
       "default": "#00e5ff"
     },
     {
+      "type": "header",
+      "content": "Menu cells"
+    },
+    {
+      "type": "range",
+      "id": "menu_border",
+      "label": "Border width",
+      "min": 0,
+      "max": 8,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "menu_border_color",
+      "label": "Border color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "select",
+      "id": "menu_cell_fill",
+      "label": "Cell fill",
+      "default": "none",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "solid", "label": "Solid" },
+        { "value": "tide", "label": "Tide" },
+        { "value": "violet", "label": "Violet" },
+        { "value": "foil", "label": "Foil" },
+        { "value": "sunset", "label": "Sunset" },
+        { "value": "aurora", "label": "Aurora" },
+        { "value": "pulse", "label": "Neon pulse" },
+        { "value": "glass", "label": "Glass" },
+        { "value": "custom", "label": "Custom gradient" }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "menu_cell_color",
+      "label": "Cell color",
+      "default": "#0e1c28"
+    },
+    {
+      "type": "color",
+      "id": "menu_cell_color_2",
+      "label": "Cell second color",
+      "default": "#00e5ff",
+      "info": "Used by Custom gradient."
+    },
+    {
+      "type": "select",
+      "id": "menu_cell_depth",
+      "label": "Cell depth",
+      "default": "none",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "soft", "label": "Soft shadow" },
+        { "value": "hard", "label": "Hard offset" },
+        { "value": "lift", "label": "Lift" },
+        { "value": "neon", "label": "Neon glow" },
+        { "value": "press", "label": "Pressed in" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "menu_cell_depth_amount",
+      "label": "Cell depth amount",
+      "min": 0,
+      "max": 24,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "menu_cell_depth_color",
+      "label": "Cell depth color",
+      "default": "#00e5ff"
+    },
+    {
       "type": "checkbox",
       "id": "sticky",
       "label": "Sticky header",
       "default": true,
-      "info": "The bar stays full width. The logo and menu sit in the center 90%."
+      "info": "Freezes the top of the page while you scroll, the same idea as a frozen row in a sheet."
     },
     {
       "type": "range",
