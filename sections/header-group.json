@@ -126,7 +126,7 @@
       ],
       "settings": {
         "scroll_seconds": 30,
-        "bar_height": 34,
+        "bar_height": 40,
         "fill": "solid",
         "fill_color": "#04090e",
         "fill_color_2": "#00e5ff",
