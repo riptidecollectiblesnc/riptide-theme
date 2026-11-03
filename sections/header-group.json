@@ -29,6 +29,13 @@
             "detail": ""
           }
         },
+        "hit_KzU8za": {
+          "type": "hit",
+          "settings": {
+            "title": "Pick-A-Pack & Pack Wars",
+            "detail": "Currently paused until further notice"
+          }
+        },
         "hit-b": {
           "type": "hit",
           "settings": {
@@ -39,6 +46,7 @@
       },
       "block_order": [
         "hit-a",
+        "hit_KzU8za",
         "hit-b"
       ],
       "settings": {}
