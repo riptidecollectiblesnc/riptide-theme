@@ -1,9 +1,11 @@
 <a class="card panel lift" href="{{ product.url }}">
   <div class="media">
     {% if product.featured_image %}
-      {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: product.featured_image.alt | default: product.title }}
+      {% assign card_alt = product.featured_image.alt | default: product.title %}
+      {{ product.featured_image | image_url: width: 800 | image_tag: loading: 'lazy', alt: card_alt }}
     {% else %}
-      {% render 'wax', style: 'ice', label: product.type | default: 'Wax' %}
+      {% assign wax_label = product.type | default: 'Wax' %}
+      {% render 'wax', style: 'ice', label: wax_label %}
     {% endif %}
     {% if product.tags contains 'break' or product.tags contains 'pack-wars' %}
       <span class="badge">Break</span>
