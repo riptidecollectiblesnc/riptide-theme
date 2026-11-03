@@ -4,7 +4,7 @@
   assign logo_w_m = section.settings.logo_width_mobile | default: 120
   assign logo_h_m = section.settings.logo_height_mobile | default: 44
 %}
-<header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px;">
+<header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px;">
   <div class="wrap bar{% if section.settings.logo_align == 'center' %} is-center{% endif %}">
     <button class="icon-btn menu-btn" type="button" data-menu-open aria-label="Open menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -118,6 +118,17 @@
       "label": "Sticky header",
       "default": true,
       "info": "The bar stays full width. The logo and menu sit in the center 90%."
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Bar height",
+      "min": 48,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 64,
+      "info": "Makes the bar taller. The logo still uses its own size, so the bar will not get shorter than the logo."
     },
     {
       "type": "image_picker",

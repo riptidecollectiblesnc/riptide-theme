@@ -1,6 +1,6 @@
 {% if section.settings.enabled and section.settings.text != blank %}
   {% capture announce_style %}{% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}{% endcapture %}
-  <div class="bar-fill fill-{{ section.settings.fill }}" style="--fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;">
+  <div class="bar-fill fill-{{ section.settings.fill }}" style="--bar-h: {{ section.settings.bar_height }}px; --fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;">
     {% if section.settings.link != blank %}
       <a class="announce" href="{{ section.settings.link }}" style="{{ announce_style }}">{{ section.settings.text }}</a>
     {% else %}
@@ -18,6 +18,16 @@
       "id": "enabled",
       "label": "Show announcement",
       "default": true
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Height",
+      "min": 28,
+      "max": 180,
+      "step": 2,
+      "unit": "px",
+      "default": 44
     },
     {
       "type": "text",

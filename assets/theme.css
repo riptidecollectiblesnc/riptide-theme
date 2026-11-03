@@ -224,7 +224,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  min-height: 64px;
+  min-height: var(--bar-h, 64px);
 }
 .brand {
   display: flex;
@@ -317,12 +317,17 @@ body { padding-bottom: 64px; }
   background: transparent;
 }
 .ticker.bar-fill {
-  display: block;
-  min-height: 0;
-  padding-block: 0.45rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: var(--bar-h, 40px);
+  min-height: var(--bar-h, 40px);
+  padding-block: 0;
+  overflow: hidden;
 }
 .ticker-track {
   display: flex;
+  flex: 0 0 auto;
   width: max-content;
   animation: ticker var(--ticker-ms, 40s) linear infinite;
   will-change: transform;
@@ -356,7 +361,9 @@ body { padding-bottom: 64px; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 2.75rem;
+  box-sizing: border-box;
+  height: var(--bar-h, auto);
+  min-height: var(--bar-h, 2.75rem);
 }
 .hero h1 { font-size: clamp(2.6rem, 8vw, 4.6rem); max-width: 12ch; }
 .hero .lede { margin-top: 0.8rem; max-width: 38rem; color: var(--color-muted); font-size: 1.05rem; }

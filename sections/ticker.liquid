@@ -1,5 +1,5 @@
 {% if section.blocks.size > 0 %}
-  <div class="ticker bar-fill fill-{{ section.settings.fill }}" data-ticker style="--ticker-ms: {{ section.settings.scroll_seconds }}s; --fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;" aria-hidden="true">
+  <div class="ticker bar-fill fill-{{ section.settings.fill }}" data-ticker style="--bar-h: {{ section.settings.bar_height }}px; --ticker-ms: {{ section.settings.scroll_seconds }}s; --fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;" aria-hidden="true">
     <div class="ticker-track">
       <div class="ticker-set">
         {% for block in section.blocks %}
@@ -51,6 +51,16 @@
       "unit": "s",
       "default": 40,
       "info": "Seconds for one full pass. Lower is faster. The ticker stays full width."
+    },
+    {
+      "type": "range",
+      "id": "bar_height",
+      "label": "Height",
+      "min": 24,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 40
     },
     {
       "type": "header",
