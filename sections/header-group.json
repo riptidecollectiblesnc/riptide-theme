@@ -53,7 +53,7 @@
         "logo_height_mobile": 40,
         "logo_align": "left",
         "show_name": true,
-        "menu": ""
+        "menu": "main-menu"
       }
     }
   },
