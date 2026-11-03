@@ -22,7 +22,9 @@
         "text_italic": false,
         "text_align": "default",
         "text_valign": "default",
-        "text_color": "#FFFFFF",
+        "text_color": "#ffffff",
+        "text_fill": "solid",
+        "text_fill_2": "#00e5ff",
         "text_size": 14,
         "text_depth": "hard",
         "text_depth_amount": 6,
@@ -32,6 +34,19 @@
         "fill_color": "#00e5ff",
         "fill_color_2": "#6d1ecc",
         "fill_angle": 90
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo": "shopify://shop_images/magnific_make-img1-in-neon-purple-_SOhr56yUb8_c64d3a63-d1dd-4ab1-ba25-9021492addc0.png",
+        "logo_width": 200,
+        "logo_height": 120,
+        "logo_width_mobile": 40,
+        "logo_height_mobile": 40,
+        "logo_align": "left",
+        "show_name": false,
+        "menu": "main-menu"
       }
     },
     "ticker": {
@@ -47,6 +62,8 @@
             "title_align": "default",
             "title_valign": "default",
             "title_color": "#ff00e6",
+            "title_fill": "solid",
+            "title_fill_2": "#00e5ff",
             "title_size": 20,
             "title_depth": "hard",
             "title_depth_amount": 4,
@@ -58,6 +75,8 @@
             "detail_align": "default",
             "detail_valign": "default",
             "detail_color": "#8eafbf",
+            "detail_fill": "solid",
+            "detail_fill_2": "#00e5ff",
             "detail_size": 14,
             "detail_depth": "none",
             "detail_depth_amount": 8,
@@ -74,6 +93,8 @@
             "title_align": "default",
             "title_valign": "middle",
             "title_color": "#02fff7",
+            "title_fill": "solid",
+            "title_fill_2": "#00e5ff",
             "title_size": 20,
             "title_depth": "double",
             "title_depth_amount": 8,
@@ -85,6 +106,8 @@
             "detail_align": "default",
             "detail_valign": "top",
             "detail_color": "#8eafbf",
+            "detail_fill": "solid",
+            "detail_fill_2": "#00e5ff",
             "detail_size": 18,
             "detail_depth": "none",
             "detail_depth_amount": 8,
@@ -101,10 +124,12 @@
             "title_align": "default",
             "title_valign": "middle",
             "title_color": "#fff700",
+            "title_fill": "solid",
+            "title_fill_2": "#00e5ff",
             "title_size": 20,
             "title_depth": "double",
             "title_depth_amount": 8,
-            "title_depth_color": "#FFF5AD",
+            "title_depth_color": "#fff5ad",
             "detail": "Thu–Sat 9:30 PM ET",
             "detail_font": "Oswald, sans-serif",
             "detail_bold": false,
@@ -112,6 +137,8 @@
             "detail_align": "default",
             "detail_valign": "default",
             "detail_color": "#8eafbf",
+            "detail_fill": "solid",
+            "detail_fill_2": "#00e5ff",
             "detail_size": 18,
             "detail_depth": "none",
             "detail_depth_amount": 8,
@@ -132,24 +159,11 @@
         "fill_color_2": "#00e5ff",
         "fill_angle": 90
       }
-    },
-    "header": {
-      "type": "header",
-      "settings": {
-        "logo": "shopify://shop_images/magnific_make-img1-in-neon-purple-_SOhr56yUb8_c64d3a63-d1dd-4ab1-ba25-9021492addc0.png",
-        "logo_width": 200,
-        "logo_height": 120,
-        "logo_width_mobile": 40,
-        "logo_height_mobile": 40,
-        "logo_align": "left",
-        "show_name": false,
-        "menu": "main-menu"
-      }
     }
   },
   "order": [
     "announcement",
-    "ticker",
-    "header"
+    "header",
+    "ticker"
   ]
 }
