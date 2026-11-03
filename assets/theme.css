@@ -33,6 +33,26 @@ body {
 }
 
 img { max-width: 100%; height: auto; display: block; }
+.site-header .logo-frame,
+.site-header .logo {
+  width: var(--logo-w, 160px) !important;
+  height: var(--logo-h, 80px) !important;
+  min-width: var(--logo-w, 160px) !important;
+  min-height: var(--logo-h, 80px) !important;
+  max-width: none !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  flex: 0 0 auto !important;
+}
+@media (max-width: 480px) {
+  .site-header .logo-frame,
+  .site-header .logo {
+    width: var(--logo-w-m, 120px) !important;
+    height: var(--logo-h-m, 48px) !important;
+    min-width: var(--logo-w-m, 120px) !important;
+    min-height: var(--logo-h-m, 48px) !important;
+  }
+}
 button, input, select, textarea { font: inherit; color: inherit; }
 a { color: inherit; text-decoration: none; }
 h1, h2, h3, p { margin: 0; }

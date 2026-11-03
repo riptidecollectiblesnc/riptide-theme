@@ -4,23 +4,13 @@
   assign logo_w_m = section.settings.logo_width_mobile | default: 120
   assign logo_h_m = section.settings.logo_height_mobile | default: 44
 %}
-<style>
-  @media (max-width: 799px) {
-    .logo-frame,
-    .logo-frame .logo {
-      width: {{ logo_w_m }}px !important;
-      height: {{ logo_h_m }}px !important;
-      max-width: {{ logo_w_m }}px !important;
-    }
-  }
-</style>
-<header class="site-header">
+<header class="site-header" style="--logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px;">
   <div class="wrap bar{% if section.settings.logo_align == 'center' %} is-center{% endif %}">
     <button class="icon-btn menu-btn" type="button" data-menu-open aria-label="Open menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
     <a class="brand" href="{{ routes.root_url }}">
-      <span class="logo-frame" style="width: {{ logo_w }}px; height: {{ logo_h }}px;">
+      <span class="logo-frame">
         {% if section.settings.logo != blank %}
           <img
             class="logo"
@@ -28,7 +18,6 @@
             alt="{{ shop.name | escape }}"
             width="{{ logo_w }}"
             height="{{ logo_h }}"
-            style="width: {{ logo_w }}px; height: {{ logo_h }}px; max-width: {{ logo_w }}px; object-fit: contain;"
           >
         {% else %}
           <span class="mark" aria-hidden="true"></span>
@@ -124,9 +113,9 @@
   "name": "Header",
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "range", "id": "logo_width", "label": "Desktop logo width", "min": 40, "max": 480, "step": 4, "unit": "px", "default": 160, "info": "This is the size in the desktop editor. 120 is allowed." },
-    { "type": "range", "id": "logo_height", "label": "Desktop logo height", "min": 24, "max": 180, "step": 2, "unit": "px", "default": 56 },
-    { "type": "range", "id": "logo_width_mobile", "label": "Logo width on mobile", "min": 40, "max": 280, "step": 4, "unit": "px", "default": 140 },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 40, "max": 480, "step": 4, "unit": "px", "default": 160, "info": "This is the size you see in the theme editor." },
+    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 24, "max": 240, "step": 2, "unit": "px", "default": 80 },
+    { "type": "range", "id": "logo_width_mobile", "label": "Phone logo width", "min": 40, "max": 280, "step": 4, "unit": "px", "default": 140, "info": "Only applies on screens under 480px. The theme editor uses Logo width and Logo height." },
     { "type": "range", "id": "logo_height_mobile", "label": "Logo height on mobile", "min": 24, "max": 120, "step": 2, "unit": "px", "default": 44 },
     {
       "type": "select",
