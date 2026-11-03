@@ -200,7 +200,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   text-transform: uppercase;
   font-size: 1.25rem;
 }
-.brand span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.brand .shop-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mark {
   width: 36px;
   height: 36px;

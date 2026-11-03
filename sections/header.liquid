@@ -1,12 +1,26 @@
+{% liquid
+  assign logo_w = section.settings.logo_width | default: 160
+  assign logo_h = section.settings.logo_height | default: 56
+  assign logo_w_m = section.settings.logo_width_mobile | default: 120
+  assign logo_h_m = section.settings.logo_height_mobile | default: 44
+%}
 {% style %}
-  #shopify-section-{{ section.id }} .logo-frame {
-    width: {{ section.settings.logo_width_mobile }}px;
-    height: {{ section.settings.logo_height_mobile }}px;
+  .brand .logo-frame,
+  .brand .logo,
+  .brand .mark {
+    width: {{ logo_w }}px !important;
+    height: {{ logo_h }}px !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: contain;
+    flex: none;
   }
-  @media screen and (min-width: 800px) {
-    #shopify-section-{{ section.id }} .logo-frame {
-      width: {{ section.settings.logo_width }}px;
-      height: {{ section.settings.logo_height }}px;
+  @media screen and (max-width: 799px) {
+    .brand .logo-frame,
+    .brand .logo,
+    .brand .mark {
+      width: {{ logo_w_m }}px !important;
+      height: {{ logo_h_m }}px !important;
     }
   }
 {% endstyle %}
@@ -18,7 +32,7 @@
     <a class="brand" href="{{ routes.root_url }}">
       <span class="logo-frame">
         {% if section.settings.logo != blank %}
-          {{ section.settings.logo | image_url: width: 800 | image_tag: alt: shop.name, class: 'logo' }}
+          {{ section.settings.logo | image_url: width: 800 | image_tag: alt: shop.name, class: 'logo', width: logo_w, height: logo_h }}
         {% else %}
           <span class="mark" aria-hidden="true"></span>
         {% endif %}
@@ -113,8 +127,8 @@
   "name": "Header",
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 40, "max": 480, "step": 4, "unit": "px", "default": 200 },
-    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 24, "max": 180, "step": 2, "unit": "px", "default": 56 },
+    { "type": "range", "id": "logo_width", "label": "Desktop logo width", "min": 40, "max": 480, "step": 4, "unit": "px", "default": 160, "info": "This is the size in the desktop editor. 120 is allowed." },
+    { "type": "range", "id": "logo_height", "label": "Desktop logo height", "min": 24, "max": 180, "step": 2, "unit": "px", "default": 56 },
     { "type": "range", "id": "logo_width_mobile", "label": "Logo width on mobile", "min": 40, "max": 280, "step": 4, "unit": "px", "default": 140 },
     { "type": "range", "id": "logo_height_mobile", "label": "Logo height on mobile", "min": 24, "max": 120, "step": 2, "unit": "px", "default": 44 },
     {
