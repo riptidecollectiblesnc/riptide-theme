@@ -68,7 +68,7 @@
           "type": "hit",
           "settings": {
             "title": "Pick-A-Pack & Pack Wars",
-            "title_font": "inherit",
+            "title_font": "\"Bebas Neue\", sans-serif",
             "title_bold": false,
             "title_italic": false,
             "title_align": "default",
