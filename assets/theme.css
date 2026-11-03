@@ -316,16 +316,30 @@ body { padding-bottom: 64px; }
   border-block: 1px solid var(--color-border);
   background: transparent;
 }
+.ticker.bar-fill {
+  display: block;
+  min-height: 0;
+  padding-block: 0.45rem;
+}
 .ticker-track {
   display: flex;
-  gap: 2rem;
   width: max-content;
-  padding: 0.45rem 1rem;
   animation: ticker var(--ticker-ms, 40s) linear infinite;
+  will-change: transform;
 }
-.ticker:hover .ticker-track { animation-play-state: paused; }
+.ticker-set {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+}
+.ticker-item { white-space: nowrap; }
 .ticker b { color: var(--color-primary); font-weight: 700; }
-@keyframes ticker { to { transform: translateX(-50%); } }
+@keyframes ticker {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
 
 .hero {
   display: grid;

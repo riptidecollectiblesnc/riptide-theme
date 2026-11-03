@@ -1,13 +1,40 @@
 {% if section.blocks.size > 0 %}
-  <div class="ticker bar-fill fill-{{ section.settings.fill }}" style="--ticker-ms: {{ section.settings.scroll_seconds }}s; --fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;" aria-hidden="true">
+  <div class="ticker bar-fill fill-{{ section.settings.fill }}" data-ticker style="--ticker-ms: {{ section.settings.scroll_seconds }}s; --fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;" aria-hidden="true">
     <div class="ticker-track">
-      {% for pass in (1..2) %}
+      <div class="ticker-set">
         {% for block in section.blocks %}
-          <span {{ block.shopify_attributes }}><b style="{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</b> <span style="{% render 'field-style', font: block.settings.detail_font, bold: block.settings.detail_bold, italic: block.settings.detail_italic, align: block.settings.detail_align, valign: block.settings.detail_valign, color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</span></span>
+          <span class="ticker-item" {{ block.shopify_attributes }}><b style="{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</b> <span style="{% render 'field-style', font: block.settings.detail_font, bold: block.settings.detail_bold, italic: block.settings.detail_italic, align: block.settings.detail_align, valign: block.settings.detail_valign, color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</span></span>
         {% endfor %}
-      {% endfor %}
+      </div>
     </div>
   </div>
+  <script>
+    (function () {
+      var root = document.currentScript && document.currentScript.previousElementSibling;
+      if (!root || !root.hasAttribute('data-ticker')) root = document.querySelector('[data-ticker]');
+      if (!root || root.dataset.ready === '1') return;
+      var track = root.querySelector('.ticker-track');
+      var set = root.querySelector('.ticker-set');
+      if (!track || !set) return;
+      var seed = Array.prototype.map.call(set.children, function (node) {
+        var copy = node.cloneNode(true);
+        copy.removeAttribute('data-shopify-editor-block');
+        return copy;
+      });
+      var need = Math.max(root.clientWidth || 0, window.innerWidth || 0);
+      var guard = 0;
+      while (set.scrollWidth < need && guard < 30) {
+        seed.forEach(function (node) { set.appendChild(node.cloneNode(true)); });
+        guard += 1;
+      }
+      var twin = set.cloneNode(true);
+      twin.querySelectorAll('[data-shopify-editor-block]').forEach(function (node) {
+        node.removeAttribute('data-shopify-editor-block');
+      });
+      track.appendChild(twin);
+      root.dataset.ready = '1';
+    })();
+  </script>
 {% endif %}
 
 {% schema %}
