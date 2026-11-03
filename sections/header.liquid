@@ -3,6 +3,22 @@
   assign logo_h = section.settings.logo_height | default: 56
   assign logo_w_m = section.settings.logo_width_mobile | default: 120
   assign logo_h_m = section.settings.logo_height_mobile | default: 44
+  case section.settings.menu_align_h
+    when 'left'
+      assign menu_h = 'flex-start'
+    when 'right'
+      assign menu_h = 'flex-end'
+    else
+      assign menu_h = 'center'
+  endcase
+  case section.settings.menu_align_v
+    when 'top'
+      assign menu_v = 'flex-start'
+    when 'bottom'
+      assign menu_v = 'flex-end'
+    else
+      assign menu_v = 'center'
+  endcase
 %}
 {% capture menu_style %}{% render 'field-style', font: section.settings.menu_font, bold: section.settings.menu_bold, italic: section.settings.menu_italic, fill: section.settings.menu_fill, fill_2: section.settings.menu_fill_2, color: section.settings.menu_color, size: section.settings.menu_size, depth: section.settings.menu_depth, amount: section.settings.menu_depth_amount, shadow: section.settings.menu_depth_color %}{% endcapture %}
 {% style %}
@@ -25,6 +41,11 @@
     border: {{ section.settings.menu_border }}px solid {{ section.settings.menu_border_color }};
     border-radius: 10px;
     padding: {{ section.settings.menu_pad }}px {{ section.settings.menu_pad | times: 2 }}px;
+    display: inline-flex;
+    justify-content: {{ menu_h }};
+    align-items: {{ menu_v }};
+    {% if section.settings.menu_cell_height > 0 %}min-height: {{ section.settings.menu_cell_height }}px;{% endif %}
+    {% if section.settings.menu_cell_width > 0 %}width: {{ section.settings.menu_cell_width }}px;{% endif %}
     {% case section.settings.menu_cell_fill %}
       {% when 'solid' %}background: {{ section.settings.menu_cell_color }};
       {% when 'tide' %}background-image: linear-gradient(90deg, #042028, #00e5ff 42%, #7af6ff 50%, #00e5ff 58%, #042028);
@@ -43,6 +64,11 @@
       {% when 'neon' %}box-shadow: 0 0 {{ section.settings.menu_cell_depth_amount }}px {{ section.settings.menu_cell_depth_color }};
       {% when 'press' %}box-shadow: inset 0 2px 8px {{ section.settings.menu_cell_depth_color }};
     {% endcase %}
+  }
+  #shopify-section-{{ section.id }} .desk-nav .nav-link > span,
+  #shopify-section-{{ section.id }} .sheet .nav-link > span {
+    width: 100%;
+    text-align: {{ section.settings.menu_align_h }};
   }
 {% endstyle %}
 <header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px;">
@@ -372,6 +398,50 @@
       "step": 2,
       "unit": "px",
       "default": 8
+    },
+    {
+      "type": "select",
+      "id": "menu_align_h",
+      "label": "Text horizontal",
+      "default": "center",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "menu_align_v",
+      "label": "Text vertical",
+      "default": "middle",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "middle", "label": "Middle" },
+        { "value": "bottom", "label": "Bottom" }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "menu_cell_width",
+      "label": "Cell width",
+      "min": 0,
+      "max": 240,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "0 hugs the word. Set a width before Left or Right will show."
+    },
+    {
+      "type": "range",
+      "id": "menu_cell_height",
+      "label": "Cell height",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "info": "0 hugs the word. Raise this before Top or Bottom will show."
     },
     {
       "type": "range",
