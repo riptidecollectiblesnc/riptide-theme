@@ -22,6 +22,24 @@
         <li><strong>Sealed</strong><span>Wax and spots</span></li>
       </ul>
     </div>
+    {% liquid
+      assign feed = section.settings.feed_url
+      assign yid = ''
+      assign twitch = ''
+      if feed contains 'watch?v='
+        assign yid = feed | split: 'watch?v=' | last | split: '&' | first
+      elsif feed contains 'youtu.be/'
+        assign yid = feed | split: 'youtu.be/' | last | split: '?' | first
+      elsif feed contains 'youtube.com/live/'
+        assign yid = feed | split: '/live/' | last | split: '?' | first
+      elsif feed contains 'youtube.com/embed/'
+        assign yid = feed | split: '/embed/' | last | split: '?' | first
+      elsif feed contains 'twitch.tv/'
+        assign twitch = feed | replace: 'https://www.twitch.tv/', '' | replace: 'http://www.twitch.tv/', '' | replace: '@', '' | split: '/' | first | split: '?' | first
+      endif
+      assign room = section.settings.whatnot_url | default: settings.whatnot_url
+    %}
+    <div class="stage-row" style="--stage-h: {{ section.settings.stage_height }}px;">
     <div
       class="stage stage-fit-{{ section.settings.stage_fit }}"
       aria-hidden="true"
@@ -37,6 +55,32 @@
         <span class="live-dot"></span>
         <span style="{% render 'field-style', font: section.settings.lower_font, bold: section.settings.lower_bold, italic: section.settings.lower_italic, align: section.settings.lower_align, valign: section.settings.lower_valign, fill: section.settings.lower_fill, fill_2: section.settings.lower_fill_2, color: section.settings.lower_color, size: section.settings.lower_size, depth: section.settings.lower_depth, amount: section.settings.lower_depth_amount, shadow: section.settings.lower_depth_color %}">{{ section.settings.lower }}</span>
       </div>
+    </div>
+    <div class="stage stage-feed">
+      {% if section.settings.show_live and yid != blank %}
+        <iframe src="https://www.youtube.com/embed/{{ yid | escape }}?rel=0&autoplay=1" title="Live show" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+      {% elsif section.settings.show_live and twitch != blank %}
+        <iframe src="https://player.twitch.tv/?channel={{ twitch | url_encode }}&parent={{ request.host }}" title="Live show" allowfullscreen></iframe>
+      {% elsif section.settings.show_live %}
+        <div class="feed-card is-live">
+          <span class="live-dot"></span>
+          <p class="kicker">Live</p>
+          <p>Whatnot is on. Their player cannot run inside this site.</p>
+          {% if room != blank %}
+            <a class="btn btn-primary" href="{{ room }}" target="_blank" rel="noreferrer">Watch the feed</a>
+          {% endif %}
+        </div>
+      {% else %}
+        <div class="feed-card">
+          <span class="live-dot is-off"></span>
+          <p class="kicker">Offline</p>
+          <p>{{ section.settings.offline_label | default: 'Thu–Sat 9:30 PM ET' }}</p>
+          {% if room != blank %}
+            <a class="btn btn-ghost" href="{{ room }}" target="_blank" rel="noreferrer">Whatnot room</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
     </div>
   </div>
 </section>
@@ -1778,6 +1822,34 @@
       "id": "stage_label_depth_color",
       "label": "Slab label depth color",
       "default": "#00e5ff"
+    },
+    {
+      "type": "header",
+      "content": "Live feed"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_live",
+      "label": "Show is live",
+      "default": false,
+      "info": "Off shows the offline card to the right of the show image. On plays the feed."
+    },
+    {
+      "type": "text",
+      "id": "offline_label",
+      "label": "Offline line",
+      "default": "Thu–Sat 9:30 PM ET"
+    },
+    {
+      "type": "text",
+      "id": "feed_url",
+      "label": "Live feed URL",
+      "info": "YouTube or Twitch link. Whatnot blocks its player on other sites, so this is the video that plays in the pane when the show is live."
+    },
+    {
+      "type": "url",
+      "id": "whatnot_url",
+      "label": "Whatnot room"
     },
     {
       "type": "header",
