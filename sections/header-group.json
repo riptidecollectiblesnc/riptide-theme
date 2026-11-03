@@ -112,7 +112,7 @@
             "detail_align": "default",
             "detail_valign": "default",
             "detail_color": "#8eafbf",
-            "detail_size": 16,
+            "detail_size": 18,
             "detail_depth": "none",
             "detail_depth_amount": 8,
             "detail_depth_color": "#00e5ff"
