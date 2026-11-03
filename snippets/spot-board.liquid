@@ -20,7 +20,7 @@
 -%}
 <div class="spot-board" data-wheel>
   <div class="spot-head">
-    <span>{{ title | default: product.title }}</span>
+    <span {% if title_style != blank %}style="{{ title_style }}"{% endif %}>{{ title | default: product.title }}</span>
     <span>{{ taken }} / {{ product.variants.size }} filled</span>
   </div>
   <div class="fillbar" aria-hidden="true"><span style="width: {{ pct }}%"></span></div>

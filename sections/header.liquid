@@ -112,23 +112,81 @@
 {
   "name": "Header",
   "settings": [
-    { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 40, "max": 480, "step": 4, "unit": "px", "default": 160, "info": "This is the size you see in the theme editor." },
-    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 24, "max": 240, "step": 2, "unit": "px", "default": 80 },
-    { "type": "range", "id": "logo_width_mobile", "label": "Phone logo width", "min": 40, "max": 280, "step": 4, "unit": "px", "default": 140, "info": "Only applies on screens under 480px. The theme editor uses Logo width and Logo height." },
-    { "type": "range", "id": "logo_height_mobile", "label": "Logo height on mobile", "min": 24, "max": 120, "step": 2, "unit": "px", "default": 44 },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "label": "Logo width",
+      "min": 40,
+      "max": 480,
+      "step": 4,
+      "unit": "px",
+      "default": 160,
+      "info": "This is the size you see in the theme editor."
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "Logo height",
+      "min": 24,
+      "max": 240,
+      "step": 2,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "logo_width_mobile",
+      "label": "Phone logo width",
+      "min": 40,
+      "max": 280,
+      "step": 4,
+      "unit": "px",
+      "default": 140,
+      "info": "Only applies on screens under 480px. The theme editor uses Logo width and Logo height."
+    },
+    {
+      "type": "range",
+      "id": "logo_height_mobile",
+      "label": "Logo height on mobile",
+      "min": 24,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 44
+    },
     {
       "type": "select",
       "id": "logo_align",
       "label": "Logo position",
       "default": "left",
       "options": [
-        { "value": "left", "label": "Left" },
-        { "value": "center", "label": "Centered" }
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Centered"
+        }
       ]
     },
-    { "type": "checkbox", "id": "show_name", "label": "Show shop name next to the logo", "default": true },
-    { "type": "link_list", "id": "menu", "label": "Menu", "info": "Leave empty to use Shop, Breaks, Live, Auctions, Hits, and Whatnot." }
+    {
+      "type": "checkbox",
+      "id": "show_name",
+      "label": "Show shop name next to the logo",
+      "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "info": "Leave empty to use Shop, Breaks, Live, Auctions, Hits, and Whatnot."
+    }
   ]
 }
 {% endschema %}

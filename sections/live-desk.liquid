@@ -18,8 +18,8 @@
   <div class="wrap">
     <header class="section-head">
       <div>
-        {% if section.settings.kicker != blank %}<p class="kicker">{{ section.settings.kicker }}</p>{% endif %}
-        <h2 class="display">{{ section.settings.heading }}</h2>
+        {% if section.settings.kicker != blank %}<p class="kicker" style="{% render 'field-style', color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>{% endif %}
+        <h2 class="display" style="{% render 'field-style', color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
       </div>
     </header>
     <div class="live-grid">
@@ -33,7 +33,7 @@
             {% render 'wax', style: 'ice', label: 'Live' %}
             <div class="stage-lower">
               <span class="live-dot"></span>
-              <span>{{ section.settings.lower }}</span>
+              <span style="{% render 'field-style', color: section.settings.lower_color, size: section.settings.lower_size, depth: section.settings.lower_depth, amount: section.settings.lower_depth_amount, shadow: section.settings.lower_depth_color %}">{{ section.settings.lower }}</span>
             </div>
           {% endif %}
         </div>
@@ -41,7 +41,7 @@
           <p class="fine" style="margin-top:0.6rem">Paste a YouTube link in this section. Until then the stage stays on the slab.</p>
         {% endif %}
         {% if provider == 'whatnot' or provider == 'off' %}
-          <p class="muted" style="margin-top:0.7rem">{{ section.settings.note }}</p>
+          <p class="muted" style="margin-top:0.7rem;{% render 'field-style', color: section.settings.note_color, size: section.settings.note_size, depth: section.settings.note_depth, amount: section.settings.note_depth_amount, shadow: section.settings.note_depth_color %}">{{ section.settings.note }}</p>
           {% if whatnot != blank %}
             <a class="btn btn-primary" style="margin-top:0.6rem" href="{{ whatnot }}" target="_blank" rel="noreferrer">Open the Whatnot room</a>
           {% endif %}
@@ -71,27 +71,306 @@
 {
   "name": "Live desk",
   "settings": [
-    { "type": "text", "id": "kicker", "label": "Kicker", "default": "On air" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "Live" },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "On air"
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "range",
+      "id": "kicker_size",
+      "label": "Kicker size",
+      "min": 10,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "kicker_depth",
+      "label": "Kicker depth",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "kicker_depth_amount",
+      "label": "Kicker depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "kicker_depth_color",
+      "label": "Kicker depth color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Live"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#f4fbff"
+    },
+    {
+      "type": "range",
+      "id": "heading_size",
+      "label": "Heading size",
+      "min": 10,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "select",
+      "id": "heading_depth",
+      "label": "Heading depth",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_depth_amount",
+      "label": "Heading depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "heading_depth_color",
+      "label": "Heading depth color",
+      "default": "#00e5ff"
+    },
     {
       "type": "select",
       "id": "provider",
       "label": "Stream",
       "default": "whatnot",
       "options": [
-        { "value": "whatnot", "label": "Whatnot" },
-        { "value": "youtube", "label": "YouTube" },
-        { "value": "twitch", "label": "Twitch" },
-        { "value": "off", "label": "Stage only" }
+        {
+          "value": "whatnot",
+          "label": "Whatnot"
+        },
+        {
+          "value": "youtube",
+          "label": "YouTube"
+        },
+        {
+          "value": "twitch",
+          "label": "Twitch"
+        },
+        {
+          "value": "off",
+          "label": "Stage only"
+        }
       ]
     },
-    { "type": "text", "id": "youtube_url", "label": "YouTube URL", "info": "Watch, youtu.be, or live link." },
-    { "type": "text", "id": "twitch_channel", "label": "Twitch channel" },
-    { "type": "url", "id": "whatnot_url", "label": "Whatnot URL", "info": "Falls back to the theme Whatnot link. Whatnot does not allow the show to be embedded." },
-    { "type": "text", "id": "lower", "label": "Stage line", "default": "Whatnot · Thu–Sat 9:30 PM ET" },
-    { "type": "textarea", "id": "note", "label": "Note", "default": "Whatnot does not allow the show to play inside another site. The button opens the room." },
-    { "type": "checkbox", "id": "show_chat", "label": "Show YouTube or Twitch chat", "default": true }
+    {
+      "type": "text",
+      "id": "youtube_url",
+      "label": "YouTube URL",
+      "info": "Watch, youtu.be, or live link."
+    },
+    {
+      "type": "text",
+      "id": "twitch_channel",
+      "label": "Twitch channel"
+    },
+    {
+      "type": "url",
+      "id": "whatnot_url",
+      "label": "Whatnot URL",
+      "info": "Falls back to the theme Whatnot link. Whatnot does not allow the show to be embedded."
+    },
+    {
+      "type": "text",
+      "id": "lower",
+      "label": "Stage line",
+      "default": "Whatnot \u00b7 Thu\u2013Sat 9:30 PM ET"
+    },
+    {
+      "type": "color",
+      "id": "lower_color",
+      "label": "Stage line color",
+      "default": "#e7f6fb"
+    },
+    {
+      "type": "range",
+      "id": "lower_size",
+      "label": "Stage line size",
+      "min": 10,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "lower_depth",
+      "label": "Stage line depth",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "lower_depth_amount",
+      "label": "Stage line depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "lower_depth_color",
+      "label": "Stage line depth color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "textarea",
+      "id": "note",
+      "label": "Note",
+      "default": "Whatnot does not allow the show to play inside another site. The button opens the room."
+    },
+    {
+      "type": "color",
+      "id": "note_color",
+      "label": "Note color",
+      "default": "#8eafbf"
+    },
+    {
+      "type": "range",
+      "id": "note_size",
+      "label": "Note size",
+      "min": 10,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "note_depth",
+      "label": "Note depth",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "note_depth_amount",
+      "label": "Note depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "note_depth_color",
+      "label": "Note depth color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_chat",
+      "label": "Show YouTube or Twitch chat",
+      "default": true
+    }
   ],
-  "presets": [{ "name": "Live desk" }]
+  "presets": [
+    {
+      "name": "Live desk"
+    }
+  ]
 }
 {% endschema %}

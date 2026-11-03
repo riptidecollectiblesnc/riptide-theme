@@ -3,7 +3,7 @@
     <div class="foot-grid">
       <div>
         <p class="display foot-name">{{ shop.name }}</p>
-        <p class="muted" style="margin-top:0.55rem;max-width:28rem">{{ section.settings.blurb }}</p>
+        <p class="muted" style="margin-top:0.55rem;max-width:28rem;{% render 'field-style', color: section.settings.blurb_color, size: section.settings.blurb_size, depth: section.settings.blurb_depth, amount: section.settings.blurb_depth_amount, shadow: section.settings.blurb_depth_color %}">{{ section.settings.blurb }}</p>
       </div>
       <div>
         <p class="kicker">Shop</p>
@@ -34,8 +34,73 @@
 {
   "name": "Footer",
   "settings": [
-    { "type": "textarea", "id": "blurb", "label": "Blurb", "default": "Online-only from the Crystal Coast. Sealed wax, breaks, and live shows." },
-    { "type": "link_list", "id": "menu", "label": "Menu" }
+    {
+      "type": "textarea",
+      "id": "blurb",
+      "label": "Blurb",
+      "default": "Online-only from the Crystal Coast. Sealed wax, breaks, and live shows."
+    },
+    {
+      "type": "color",
+      "id": "blurb_color",
+      "label": "Blurb color",
+      "default": "#8eafbf"
+    },
+    {
+      "type": "range",
+      "id": "blurb_size",
+      "label": "Blurb size",
+      "min": 10,
+      "max": 96,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "blurb_depth",
+      "label": "Blurb depth",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "blurb_depth_amount",
+      "label": "Blurb depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "blurb_depth_color",
+      "label": "Blurb depth color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu"
+    }
   ]
 }
 {% endschema %}

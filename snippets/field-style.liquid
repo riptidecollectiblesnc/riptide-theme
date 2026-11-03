@@ -1,0 +1,11 @@
+{%- comment -%} color, size, depth (none|soft|hard|neon), amount, shadow {%- endcomment -%}
+{%- liquid
+  assign paint = color
+  assign px = size | default: 0
+  assign d = depth | default: 'none'
+  assign n = amount | default: 0
+  assign glow = shadow | default: paint
+-%}
+{%- if paint != blank -%}color: {{ paint }}; -webkit-text-fill-color: {{ paint }}; background-image: none;{%- endif -%}
+{%- if px > 0 -%}font-size: {{ px }}px;{%- endif -%}
+{%- if d == 'soft' and n > 0 -%}text-shadow: 0 {{ n | times: 0.4 }}px {{ n }}px {{ glow }};{%- elsif d == 'hard' and n > 0 -%}text-shadow: {{ n | times: 0.35 }}px {{ n | times: 0.35 }}px 0 {{ glow }};{%- elsif d == 'neon' and n > 0 -%}text-shadow: 0 0 {{ n | times: 0.45 }}px {{ glow }}, 0 0 {{ n }}px {{ glow }};{%- endif -%}
