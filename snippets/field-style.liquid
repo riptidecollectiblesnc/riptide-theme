@@ -6,6 +6,7 @@
   assign n = amount | default: 0
   assign glow = shadow | default: paint
 -%}
+{%- if font != blank and font != 'inherit' -%}font-family: {{ font }};{%- if font contains 'Bebas' or font contains 'Anton' -%}font-weight: 400;{%- endif -%}{%- endif -%}
 {%- if paint != blank -%}color: {{ paint }}; -webkit-text-fill-color: {{ paint }}; background-image: none;{%- endif -%}
 {%- if px > 0 -%}font-size: {{ px }}px;{%- endif -%}
 {%- if d == 'soft' and n > 0 -%}text-shadow: 0 {{ n | times: 0.4 }}px {{ n }}px {{ glow }};

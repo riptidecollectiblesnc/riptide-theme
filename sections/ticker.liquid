@@ -3,7 +3,7 @@
     <div class="ticker-track">
       {% for pass in (1..2) %}
         {% for block in section.blocks %}
-          <span {{ block.shopify_attributes }}><b style="{% render 'field-style', color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</b> <span style="{% render 'field-style', color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</span></span>
+          <span {{ block.shopify_attributes }}><b style="{% render 'field-style', font: block.settings.title_font, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</b> <span style="{% render 'field-style', font: block.settings.detail_font, color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</span></span>
         {% endfor %}
       {% endfor %}
     </div>
@@ -115,6 +115,50 @@
           "default": "Hit"
         },
         {
+          "type": "select",
+          "id": "title_font",
+          "label": "Title font",
+          "default": "inherit",
+          "options": [
+            {
+              "value": "inherit",
+              "label": "Theme default"
+            },
+            {
+              "value": "Unbounded, sans-serif",
+              "label": "Unbounded"
+            },
+            {
+              "value": "Outfit, sans-serif",
+              "label": "Outfit"
+            },
+            {
+              "value": "\"Barlow Condensed\", sans-serif",
+              "label": "Barlow Condensed"
+            },
+            {
+              "value": "\"Bebas Neue\", sans-serif",
+              "label": "Bebas Neue"
+            },
+            {
+              "value": "Oswald, sans-serif",
+              "label": "Oswald"
+            },
+            {
+              "value": "Anton, sans-serif",
+              "label": "Anton"
+            },
+            {
+              "value": "Archivo, sans-serif",
+              "label": "Archivo"
+            },
+            {
+              "value": "Inter, sans-serif",
+              "label": "Inter"
+            }
+          ]
+        },
+        {
           "type": "color",
           "id": "title_color",
           "label": "Title color",
@@ -207,6 +251,50 @@
           "id": "detail",
           "label": "Detail",
           "default": "Replace this"
+        },
+        {
+          "type": "select",
+          "id": "detail_font",
+          "label": "Detail font",
+          "default": "inherit",
+          "options": [
+            {
+              "value": "inherit",
+              "label": "Theme default"
+            },
+            {
+              "value": "Unbounded, sans-serif",
+              "label": "Unbounded"
+            },
+            {
+              "value": "Outfit, sans-serif",
+              "label": "Outfit"
+            },
+            {
+              "value": "\"Barlow Condensed\", sans-serif",
+              "label": "Barlow Condensed"
+            },
+            {
+              "value": "\"Bebas Neue\", sans-serif",
+              "label": "Bebas Neue"
+            },
+            {
+              "value": "Oswald, sans-serif",
+              "label": "Oswald"
+            },
+            {
+              "value": "Anton, sans-serif",
+              "label": "Anton"
+            },
+            {
+              "value": "Archivo, sans-serif",
+              "label": "Archivo"
+            },
+            {
+              "value": "Inter, sans-serif",
+              "label": "Inter"
+            }
+          ]
         },
         {
           "type": "color",

@@ -1,5 +1,5 @@
 {% if section.settings.enabled and section.settings.text != blank %}
-  {% capture announce_style %}{% render 'field-style', color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}{% endcapture %}
+  {% capture announce_style %}{% render 'field-style', font: section.settings.text_font, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}{% endcapture %}
   <div class="bar-fill fill-{{ section.settings.fill }}" style="--fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;">
     {% if section.settings.link != blank %}
       <a class="announce" href="{{ section.settings.link }}" style="{{ announce_style }}">{{ section.settings.text }}</a>
@@ -24,6 +24,50 @@
       "id": "text",
       "label": "Text",
       "default": "Thursday through Saturday, 9:30 PM ET on Whatnot. In-house live is paused."
+    },
+    {
+      "type": "select",
+      "id": "text_font",
+      "label": "Text font",
+      "default": "inherit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Theme default"
+        },
+        {
+          "value": "Unbounded, sans-serif",
+          "label": "Unbounded"
+        },
+        {
+          "value": "Outfit, sans-serif",
+          "label": "Outfit"
+        },
+        {
+          "value": "\"Barlow Condensed\", sans-serif",
+          "label": "Barlow Condensed"
+        },
+        {
+          "value": "\"Bebas Neue\", sans-serif",
+          "label": "Bebas Neue"
+        },
+        {
+          "value": "Oswald, sans-serif",
+          "label": "Oswald"
+        },
+        {
+          "value": "Anton, sans-serif",
+          "label": "Anton"
+        },
+        {
+          "value": "Archivo, sans-serif",
+          "label": "Archivo"
+        },
+        {
+          "value": "Inter, sans-serif",
+          "label": "Inter"
+        }
+      ]
     },
     {
       "type": "color",

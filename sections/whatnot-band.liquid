@@ -3,20 +3,20 @@
   <div class="wrap">
     <header class="section-head">
       <div>
-        <p class="kicker" style="{% render 'field-style', color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>
-        <h2 class="display" style="{% render 'field-style', color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
+        <p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>
+        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
       </div>
       {% if room != blank %}
         <a class="btn btn-primary" href="{{ room }}" target="_blank" rel="noreferrer">Open Whatnot</a>
       {% endif %}
     </header>
-    <p class="lede" style="margin-top:0;{% render 'field-style', color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</p>
+    <p class="lede" style="margin-top:0;{% render 'field-style', font: section.settings.text_font, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</p>
     {% if section.blocks.size > 0 %}
       <ul class="schedule">
         {% for block in section.blocks %}
           <li class="panel" {{ block.shopify_attributes }}>
-            <strong style="{% render 'field-style', color: block.settings.day_color, size: block.settings.day_size, depth: block.settings.day_depth, amount: block.settings.day_depth_amount, shadow: block.settings.day_depth_color %}">{{ block.settings.day }}</strong>
-            <span style="{% render 'field-style', color: block.settings.time_color, size: block.settings.time_size, depth: block.settings.time_depth, amount: block.settings.time_depth_amount, shadow: block.settings.time_depth_color %}">{{ block.settings.time }}</span>
+            <strong style="{% render 'field-style', font: block.settings.day_font, color: block.settings.day_color, size: block.settings.day_size, depth: block.settings.day_depth, amount: block.settings.day_depth_amount, shadow: block.settings.day_depth_color %}">{{ block.settings.day }}</strong>
+            <span style="{% render 'field-style', font: block.settings.time_font, color: block.settings.time_color, size: block.settings.time_size, depth: block.settings.time_depth, amount: block.settings.time_depth_amount, shadow: block.settings.time_depth_color %}">{{ block.settings.time }}</span>
           </li>
         {% endfor %}
       </ul>
@@ -33,6 +33,50 @@
       "id": "kicker",
       "label": "Kicker",
       "default": "Off-site room"
+    },
+    {
+      "type": "select",
+      "id": "kicker_font",
+      "label": "Kicker font",
+      "default": "inherit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Theme default"
+        },
+        {
+          "value": "Unbounded, sans-serif",
+          "label": "Unbounded"
+        },
+        {
+          "value": "Outfit, sans-serif",
+          "label": "Outfit"
+        },
+        {
+          "value": "\"Barlow Condensed\", sans-serif",
+          "label": "Barlow Condensed"
+        },
+        {
+          "value": "\"Bebas Neue\", sans-serif",
+          "label": "Bebas Neue"
+        },
+        {
+          "value": "Oswald, sans-serif",
+          "label": "Oswald"
+        },
+        {
+          "value": "Anton, sans-serif",
+          "label": "Anton"
+        },
+        {
+          "value": "Archivo, sans-serif",
+          "label": "Archivo"
+        },
+        {
+          "value": "Inter, sans-serif",
+          "label": "Inter"
+        }
+      ]
     },
     {
       "type": "color",
@@ -56,18 +100,54 @@
       "label": "Kicker depth",
       "default": "none",
       "options": [
-        { "value": "none", "label": "None" },
-        { "value": "soft", "label": "Soft shadow" },
-        { "value": "hard", "label": "Hard offset" },
-        { "value": "lift", "label": "Lift" },
-        { "value": "long", "label": "Long shadow" },
-        { "value": "echo", "label": "Echo" },
-        { "value": "press", "label": "Letterpress" },
-        { "value": "emboss", "label": "Emboss" },
-        { "value": "outline", "label": "Outline" },
-        { "value": "neon", "label": "Neon glow" },
-        { "value": "double", "label": "Double glow" },
-        { "value": "foil", "label": "Foil" }
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        }
       ]
     },
     {
@@ -93,6 +173,50 @@
       "default": "Whatnot"
     },
     {
+      "type": "select",
+      "id": "heading_font",
+      "label": "Heading font",
+      "default": "inherit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Theme default"
+        },
+        {
+          "value": "Unbounded, sans-serif",
+          "label": "Unbounded"
+        },
+        {
+          "value": "Outfit, sans-serif",
+          "label": "Outfit"
+        },
+        {
+          "value": "\"Barlow Condensed\", sans-serif",
+          "label": "Barlow Condensed"
+        },
+        {
+          "value": "\"Bebas Neue\", sans-serif",
+          "label": "Bebas Neue"
+        },
+        {
+          "value": "Oswald, sans-serif",
+          "label": "Oswald"
+        },
+        {
+          "value": "Anton, sans-serif",
+          "label": "Anton"
+        },
+        {
+          "value": "Archivo, sans-serif",
+          "label": "Archivo"
+        },
+        {
+          "value": "Inter, sans-serif",
+          "label": "Inter"
+        }
+      ]
+    },
+    {
       "type": "color",
       "id": "heading_color",
       "label": "Heading color",
@@ -114,18 +238,54 @@
       "label": "Heading depth",
       "default": "none",
       "options": [
-        { "value": "none", "label": "None" },
-        { "value": "soft", "label": "Soft shadow" },
-        { "value": "hard", "label": "Hard offset" },
-        { "value": "lift", "label": "Lift" },
-        { "value": "long", "label": "Long shadow" },
-        { "value": "echo", "label": "Echo" },
-        { "value": "press", "label": "Letterpress" },
-        { "value": "emboss", "label": "Emboss" },
-        { "value": "outline", "label": "Outline" },
-        { "value": "neon", "label": "Neon glow" },
-        { "value": "double", "label": "Double glow" },
-        { "value": "foil", "label": "Foil" }
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        }
       ]
     },
     {
@@ -151,6 +311,50 @@
       "default": "Shows run in the Whatnot room. This theme links out. Whatnot does not let another site embed the stream."
     },
     {
+      "type": "select",
+      "id": "text_font",
+      "label": "Text font",
+      "default": "inherit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Theme default"
+        },
+        {
+          "value": "Unbounded, sans-serif",
+          "label": "Unbounded"
+        },
+        {
+          "value": "Outfit, sans-serif",
+          "label": "Outfit"
+        },
+        {
+          "value": "\"Barlow Condensed\", sans-serif",
+          "label": "Barlow Condensed"
+        },
+        {
+          "value": "\"Bebas Neue\", sans-serif",
+          "label": "Bebas Neue"
+        },
+        {
+          "value": "Oswald, sans-serif",
+          "label": "Oswald"
+        },
+        {
+          "value": "Anton, sans-serif",
+          "label": "Anton"
+        },
+        {
+          "value": "Archivo, sans-serif",
+          "label": "Archivo"
+        },
+        {
+          "value": "Inter, sans-serif",
+          "label": "Inter"
+        }
+      ]
+    },
+    {
       "type": "color",
       "id": "text_color",
       "label": "Text color",
@@ -172,18 +376,54 @@
       "label": "Text depth",
       "default": "none",
       "options": [
-        { "value": "none", "label": "None" },
-        { "value": "soft", "label": "Soft shadow" },
-        { "value": "hard", "label": "Hard offset" },
-        { "value": "lift", "label": "Lift" },
-        { "value": "long", "label": "Long shadow" },
-        { "value": "echo", "label": "Echo" },
-        { "value": "press", "label": "Letterpress" },
-        { "value": "emboss", "label": "Emboss" },
-        { "value": "outline", "label": "Outline" },
-        { "value": "neon", "label": "Neon glow" },
-        { "value": "double", "label": "Double glow" },
-        { "value": "foil", "label": "Foil" }
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        }
       ]
     },
     {
@@ -221,6 +461,50 @@
           "default": "Thursday"
         },
         {
+          "type": "select",
+          "id": "day_font",
+          "label": "Day font",
+          "default": "inherit",
+          "options": [
+            {
+              "value": "inherit",
+              "label": "Theme default"
+            },
+            {
+              "value": "Unbounded, sans-serif",
+              "label": "Unbounded"
+            },
+            {
+              "value": "Outfit, sans-serif",
+              "label": "Outfit"
+            },
+            {
+              "value": "\"Barlow Condensed\", sans-serif",
+              "label": "Barlow Condensed"
+            },
+            {
+              "value": "\"Bebas Neue\", sans-serif",
+              "label": "Bebas Neue"
+            },
+            {
+              "value": "Oswald, sans-serif",
+              "label": "Oswald"
+            },
+            {
+              "value": "Anton, sans-serif",
+              "label": "Anton"
+            },
+            {
+              "value": "Archivo, sans-serif",
+              "label": "Archivo"
+            },
+            {
+              "value": "Inter, sans-serif",
+              "label": "Inter"
+            }
+          ]
+        },
+        {
           "type": "color",
           "id": "day_color",
           "label": "Day color",
@@ -242,18 +526,54 @@
           "label": "Day depth",
           "default": "none",
           "options": [
-            { "value": "none", "label": "None" },
-            { "value": "soft", "label": "Soft shadow" },
-            { "value": "hard", "label": "Hard offset" },
-            { "value": "lift", "label": "Lift" },
-            { "value": "long", "label": "Long shadow" },
-            { "value": "echo", "label": "Echo" },
-            { "value": "press", "label": "Letterpress" },
-            { "value": "emboss", "label": "Emboss" },
-            { "value": "outline", "label": "Outline" },
-            { "value": "neon", "label": "Neon glow" },
-            { "value": "double", "label": "Double glow" },
-            { "value": "foil", "label": "Foil" }
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "soft",
+              "label": "Soft shadow"
+            },
+            {
+              "value": "hard",
+              "label": "Hard offset"
+            },
+            {
+              "value": "lift",
+              "label": "Lift"
+            },
+            {
+              "value": "long",
+              "label": "Long shadow"
+            },
+            {
+              "value": "echo",
+              "label": "Echo"
+            },
+            {
+              "value": "press",
+              "label": "Letterpress"
+            },
+            {
+              "value": "emboss",
+              "label": "Emboss"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "neon",
+              "label": "Neon glow"
+            },
+            {
+              "value": "double",
+              "label": "Double glow"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
+            }
           ]
         },
         {
@@ -279,6 +599,50 @@
           "default": "9:30 PM ET"
         },
         {
+          "type": "select",
+          "id": "time_font",
+          "label": "Time font",
+          "default": "inherit",
+          "options": [
+            {
+              "value": "inherit",
+              "label": "Theme default"
+            },
+            {
+              "value": "Unbounded, sans-serif",
+              "label": "Unbounded"
+            },
+            {
+              "value": "Outfit, sans-serif",
+              "label": "Outfit"
+            },
+            {
+              "value": "\"Barlow Condensed\", sans-serif",
+              "label": "Barlow Condensed"
+            },
+            {
+              "value": "\"Bebas Neue\", sans-serif",
+              "label": "Bebas Neue"
+            },
+            {
+              "value": "Oswald, sans-serif",
+              "label": "Oswald"
+            },
+            {
+              "value": "Anton, sans-serif",
+              "label": "Anton"
+            },
+            {
+              "value": "Archivo, sans-serif",
+              "label": "Archivo"
+            },
+            {
+              "value": "Inter, sans-serif",
+              "label": "Inter"
+            }
+          ]
+        },
+        {
           "type": "color",
           "id": "time_color",
           "label": "Time color",
@@ -300,18 +664,54 @@
           "label": "Time depth",
           "default": "none",
           "options": [
-            { "value": "none", "label": "None" },
-            { "value": "soft", "label": "Soft shadow" },
-            { "value": "hard", "label": "Hard offset" },
-            { "value": "lift", "label": "Lift" },
-            { "value": "long", "label": "Long shadow" },
-            { "value": "echo", "label": "Echo" },
-            { "value": "press", "label": "Letterpress" },
-            { "value": "emboss", "label": "Emboss" },
-            { "value": "outline", "label": "Outline" },
-            { "value": "neon", "label": "Neon glow" },
-            { "value": "double", "label": "Double glow" },
-            { "value": "foil", "label": "Foil" }
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "soft",
+              "label": "Soft shadow"
+            },
+            {
+              "value": "hard",
+              "label": "Hard offset"
+            },
+            {
+              "value": "lift",
+              "label": "Lift"
+            },
+            {
+              "value": "long",
+              "label": "Long shadow"
+            },
+            {
+              "value": "echo",
+              "label": "Echo"
+            },
+            {
+              "value": "press",
+              "label": "Letterpress"
+            },
+            {
+              "value": "emboss",
+              "label": "Emboss"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "neon",
+              "label": "Neon glow"
+            },
+            {
+              "value": "double",
+              "label": "Double glow"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
+            }
           ]
         },
         {
