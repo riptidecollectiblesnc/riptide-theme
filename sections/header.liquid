@@ -126,6 +126,48 @@
     width: 100%;
     text-align: {{ section.settings.top_align_h }};
   }
+  #shopify-section-{{ section.id }} .nav-item { position: relative; }
+  #shopify-section-{{ section.id }} .nav-drop {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 220px;
+    z-index: 70;
+    padding: 0.45rem;
+    background: var(--color-bg);
+    border: 1px solid color-mix(in srgb, var(--color-neon) 35%, var(--color-border));
+    border-radius: 12px;
+    box-shadow: 0 18px 40px color-mix(in srgb, black 45%, transparent);
+  }
+  #shopify-section-{{ section.id }} .nav-drop::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -14px;
+    height: 14px;
+  }
+  #shopify-section-{{ section.id }} .nav-item:hover .nav-drop,
+  #shopify-section-{{ section.id }} .nav-item:focus-within .nav-drop { display: grid; }
+  #shopify-section-{{ section.id }} .nav-drop-link {
+    display: block;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    color: var(--color-fg);
+    text-decoration: none;
+  }
+  #shopify-section-{{ section.id }} .nav-drop-link:hover,
+  #shopify-section-{{ section.id }} .nav-drop-link.is-on {
+    background: color-mix(in srgb, var(--color-neon) 16%, transparent);
+    color: var(--color-primary);
+  }
+  #shopify-section-{{ section.id }} .nav-drop-link.is-sub {
+    padding-left: 1.35rem;
+    color: var(--color-muted);
+    font-size: 0.92em;
+  }
+  #shopify-section-{{ section.id }} .sheet .nav-link.is-child { padding-left: 1.4rem; }
 {% endstyle %}
 <header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px;">
   {% if section.settings.menu_top != blank %}
@@ -160,7 +202,21 @@
     <nav class="desk-nav" aria-label="Primary">
       {% if section.settings.menu != blank %}
         {% for link in section.settings.menu.links %}
-          <a class="nav-link{% if link.current %} is-on{% endif %}" href="{{ link.url }}"><span style="{{ menu_style }}">{{ link.title }}</span></a>
+          {% if link.links != blank %}
+            <div class="nav-item">
+              <a class="nav-link{% if link.current %} is-on{% endif %}" href="{{ link.url }}"><span style="{{ menu_style }}">{{ link.title }}</span></a>
+              <div class="nav-drop">
+                {% for child in link.links %}
+                  <a class="nav-drop-link{% if child.current %} is-on{% endif %}" href="{{ child.url }}">{{ child.title }}</a>
+                  {% for grand in child.links %}
+                    <a class="nav-drop-link is-sub{% if grand.current %} is-on{% endif %}" href="{{ grand.url }}">{{ grand.title }}</a>
+                  {% endfor %}
+                {% endfor %}
+              </div>
+            </div>
+          {% else %}
+            <a class="nav-link{% if link.current %} is-on{% endif %}" href="{{ link.url }}"><span style="{{ menu_style }}">{{ link.title }}</span></a>
+          {% endif %}
         {% endfor %}
       {% else %}
         <a class="nav-link" href="{{ routes.all_products_collection_url }}"><span style="{{ menu_style }}">Shop</span></a>
@@ -207,6 +263,12 @@
     {% if section.settings.menu != blank %}
       {% for link in section.settings.menu.links %}
         <a class="nav-link" href="{{ link.url }}"><span style="{{ menu_style }}">{{ link.title }}</span></a>
+        {% for child in link.links %}
+          <a class="nav-link is-child" href="{{ child.url }}"><span style="{{ menu_style }}">{{ child.title }}</span></a>
+          {% for grand in child.links %}
+            <a class="nav-link is-child" href="{{ grand.url }}"><span style="{{ menu_style }}">{{ grand.title }}</span></a>
+          {% endfor %}
+        {% endfor %}
       {% endfor %}
     {% else %}
       <a class="nav-link" href="{{ routes.all_products_collection_url }}"><span style="{{ menu_style }}">Shop</span></a>
@@ -1196,7 +1258,7 @@
       "type": "link_list",
       "id": "menu",
       "label": "Menu",
-      "info": "Leave empty to use Shop, Breaks, Live, Auctions, Hits, and Whatnot."
+      "info": "Leave empty to use Shop, Breaks, Live, Auctions, Hits, and Whatnot. Nested items drop down on hover."
     }
   ]
 }
