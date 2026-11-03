@@ -1,14 +1,28 @@
-<header class="site-header" style="--logo-w: {{ section.settings.logo_width }}px; --logo-h: {{ section.settings.logo_height }}px; --logo-w-m: {{ section.settings.logo_width_mobile }}px; --logo-h-m: {{ section.settings.logo_height_mobile }}px;">
+{% style %}
+  #shopify-section-{{ section.id }} .logo-frame {
+    width: {{ section.settings.logo_width_mobile }}px;
+    height: {{ section.settings.logo_height_mobile }}px;
+  }
+  @media screen and (min-width: 800px) {
+    #shopify-section-{{ section.id }} .logo-frame {
+      width: {{ section.settings.logo_width }}px;
+      height: {{ section.settings.logo_height }}px;
+    }
+  }
+{% endstyle %}
+<header class="site-header">
   <div class="wrap bar{% if section.settings.logo_align == 'center' %} is-center{% endif %}">
     <button class="icon-btn menu-btn" type="button" data-menu-open aria-label="Open menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
     <a class="brand" href="{{ routes.root_url }}">
-      {% if section.settings.logo != blank %}
-        {{ section.settings.logo | image_url: width: 800 | image_tag: alt: shop.name, class: 'logo', widths: '120, 200, 320, 480, 800' }}
-      {% else %}
-        <span class="mark" aria-hidden="true"></span>
-      {% endif %}
+      <span class="logo-frame">
+        {% if section.settings.logo != blank %}
+          {{ section.settings.logo | image_url: width: 800 | image_tag: alt: shop.name, class: 'logo' }}
+        {% else %}
+          <span class="mark" aria-hidden="true"></span>
+        {% endif %}
+      </span>
       {% if section.settings.show_name %}
         <span class="shop-name">{{ shop.name }}</span>
       {% endif %}
@@ -99,10 +113,10 @@
   "name": "Header",
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "range", "id": "logo_width", "label": "Logo max width", "min": 40, "max": 360, "step": 4, "unit": "px", "default": 200 },
-    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 24, "max": 120, "step": 2, "unit": "px", "default": 52 },
-    { "type": "range", "id": "logo_width_mobile", "label": "Logo max width on mobile", "min": 40, "max": 240, "step": 4, "unit": "px", "default": 140 },
-    { "type": "range", "id": "logo_height_mobile", "label": "Logo height on mobile", "min": 24, "max": 80, "step": 2, "unit": "px", "default": 40 },
+    { "type": "range", "id": "logo_width", "label": "Logo width", "min": 40, "max": 480, "step": 4, "unit": "px", "default": 200 },
+    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 24, "max": 180, "step": 2, "unit": "px", "default": 56 },
+    { "type": "range", "id": "logo_width_mobile", "label": "Logo width on mobile", "min": 40, "max": 280, "step": 4, "unit": "px", "default": 140 },
+    { "type": "range", "id": "logo_height_mobile", "label": "Logo height on mobile", "min": 24, "max": 120, "step": 2, "unit": "px", "default": 44 },
     {
       "type": "select",
       "id": "logo_align",
