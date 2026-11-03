@@ -40,7 +40,7 @@
   #shopify-section-{{ section.id }} .sheet .nav-link {
     border: {{ section.settings.menu_border }}px solid {{ section.settings.menu_border_color }};
     border-radius: 10px;
-    padding: {{ section.settings.menu_pad }}px {{ section.settings.menu_pad | times: 2 }}px;
+    padding: {{ section.settings.menu_pad_top }}px {{ section.settings.menu_pad_x }}px {{ section.settings.menu_pad_bottom }}px {{ section.settings.menu_pad_x }}px;
     display: inline-flex;
     justify-content: {{ menu_h }};
     align-items: {{ menu_v }};
@@ -70,8 +70,19 @@
     width: 100%;
     text-align: {{ section.settings.menu_align_h }};
   }
+  #shopify-section-{{ section.id }} .top-menu {
+    margin-bottom: {{ section.settings.menu_gap }}px;
+    padding-top: {{ section.settings.menu_pad_top }}px;
+  }
 {% endstyle %}
 <header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px;">
+  {% if section.settings.menu_top != blank %}
+    <nav class="wrap desk-nav top-menu" aria-label="Top">
+      {% for link in section.settings.menu_top.links %}
+        <a class="nav-link{% if link.current %} is-on{% endif %}" href="{{ link.url }}"><span style="{{ menu_style }}">{{ link.title }}</span></a>
+      {% endfor %}
+    </nav>
+  {% endif %}
   <div class="wrap bar{% if section.settings.logo_align == 'center' %} is-center{% endif %}">
     <button class="icon-btn menu-btn" type="button" data-menu-open aria-label="Open menu">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -136,6 +147,11 @@
       <input class="field" type="search" name="q" placeholder="Search wax and breaks" aria-label="Search">
       <input type="hidden" name="type" value="product">
     </form>
+    {% if section.settings.menu_top != blank %}
+      {% for link in section.settings.menu_top.links %}
+        <a class="nav-link{% if link.current %} is-on{% endif %}" href="{{ link.url }}"><span style="{{ menu_style }}">{{ link.title }}</span></a>
+      {% endfor %}
+    {% endif %}
     {% if section.settings.menu != blank %}
       {% for link in section.settings.menu.links %}
         <a class="nav-link" href="{{ link.url }}"><span style="{{ menu_style }}">{{ link.title }}</span></a>
@@ -391,13 +407,33 @@
     },
     {
       "type": "range",
-      "id": "menu_pad",
-      "label": "Padding inside cell",
+      "id": "menu_pad_top",
+      "label": "Padding top",
       "min": 0,
-      "max": 24,
+      "max": 40,
       "step": 2,
       "unit": "px",
       "default": 8
+    },
+    {
+      "type": "range",
+      "id": "menu_pad_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "menu_pad_x",
+      "label": "Padding sides",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
     },
     {
       "type": "select",
@@ -606,6 +642,12 @@
       "id": "show_name",
       "label": "Show shop name next to the logo",
       "default": true
+    },
+    {
+      "type": "link_list",
+      "id": "menu_top",
+      "label": "Top menu",
+      "info": "Shows as its own row above the main menu. Leave empty to hide it."
     },
     {
       "type": "link_list",
