@@ -809,19 +809,19 @@
     },
     {
       "id": "menu_x",
-      "label": "Menu position X",
+      "label": "Menu L/R",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves left. Positive moves right."
     },
     {
       "id": "menu_y",
-      "label": "Menu position Y",
+      "label": "Menu Up/Down",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves up. Positive moves down."
     },
     {
       "type": "range",
@@ -915,7 +915,7 @@
       "id": "menu_cell_height",
       "label": "Cell height",
       "min": 0,
-      "max": 80,
+      "max": 200,
       "step": 2,
       "unit": "px",
       "default": 0,
@@ -1299,19 +1299,19 @@
     },
     {
       "id": "logo_x",
-      "label": "X axis",
+      "label": "Logo L/R",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'logo' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves left. Positive moves right."
     },
     {
       "id": "logo_y",
-      "label": "Y axis",
+      "label": "Logo Up/Down",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'logo' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves up. Positive moves down."
     },
     {
       "type": "range",
@@ -1338,19 +1338,19 @@
     },
     {
       "id": "logo_x_mobile",
-      "label": "Phone X axis",
+      "label": "Phone logo L/R",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'logo' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves left. Positive moves right."
     },
     {
       "id": "logo_y_mobile",
-      "label": "Phone Y axis",
+      "label": "Phone logo Up/Down",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'logo' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves up. Positive moves down."
     },
     {
       "type": "select",
@@ -1394,19 +1394,19 @@
     },
     {
       "id": "search_x",
-      "label": "X axis",
+      "label": "Search L/R",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'search' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves left. Positive moves right."
     },
     {
       "id": "search_y",
-      "label": "Y axis",
+      "label": "Search Up/Down",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'search' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves up. Positive moves down."
     },
     {
       "type": "header",
@@ -1415,35 +1415,35 @@
     },
     {
       "id": "account_x",
-      "label": "Account X axis",
+      "label": "Account L/R",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves left. Positive moves right."
     },
     {
       "id": "account_y",
-      "label": "Account Y axis",
+      "label": "Account Up/Down",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves up. Positive moves down."
     },
     {
       "id": "cart_x",
-      "label": "Cart X axis",
+      "label": "Cart L/R",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves left. Positive moves right."
     },
     {
       "id": "cart_y",
-      "label": "Cart Y axis",
+      "label": "Cart Up/Down",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves up. Positive moves down."
     },
     {
       "type": "header",
@@ -2216,19 +2216,19 @@
     },
     {
       "id": "top_x",
-      "label": "Top menu position X",
+      "label": "Top menu L/R",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves left. Positive moves right."
     },
     {
       "id": "top_y",
-      "label": "Top menu position Y",
+      "label": "Top menu Up/Down",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves up. Positive moves down."
     },
     {
       "type": "range",
@@ -2522,19 +2522,19 @@
     },
     {
       "id": "tagline_x",
-      "label": "X axis",
+      "label": "Tagline L/R",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'tagline' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves left. Positive moves right."
     },
     {
       "id": "tagline_y",
-      "label": "Y axis",
+      "label": "Tagline Up/Down",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'tagline' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves up. Positive moves down."
     },
     {
       "type": "range",
@@ -2560,19 +2560,19 @@
     },
     {
       "id": "tagline_x_mobile",
-      "label": "Phone X axis",
+      "label": "Phone tagline L/R",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'tagline' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves left. Positive moves right."
     },
     {
       "id": "tagline_y_mobile",
-      "label": "Phone Y axis",
+      "label": "Phone tagline Up/Down",
       "default": 0,
       "visible_if": "{{ section.settings.edit_group == 'tagline' }}",
       "type": "number",
-      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+      "info": "Negative moves up. Positive moves down."
     },
     {
       "type": "header",
