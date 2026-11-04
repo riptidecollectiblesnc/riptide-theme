@@ -161,4 +161,32 @@
   }
   paintClocks();
   window.setInterval(paintClocks, 1000);
+
+  function keepLead(root) {
+    if (!root || !root.querySelectorAll) return;
+    root.querySelectorAll(".kicker, .display, .lede, .announce, .nav-link, .shop-name, .ticker-item, .rte, .keep-lead, .collection-all").forEach(function (el) {
+      var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      var list = [];
+      while (walker.nextNode()) list.push(walker.currentNode);
+      list.forEach(function (node) {
+        var v = node.nodeValue;
+        if (!v) return;
+        var i = 0;
+        var head = v.charAt(0);
+        if (head === "^") {
+          while (v.charAt(i) === "^") i += 1;
+        } else if (head === " ") {
+          while (v.charAt(i) === " ") i += 1;
+        } else {
+          return;
+        }
+        if (!i) return;
+        node.nodeValue = "\u00A0".repeat(i) + v.slice(i);
+      });
+    });
+  }
+  keepLead(document);
+  document.addEventListener("shopify:section:load", function (event) {
+    keepLead(event.target);
+  });
 })();
