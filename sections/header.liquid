@@ -119,7 +119,12 @@
       {% when 'press' %}box-shadow: inset 0 2px 8px {{ section.settings.menu_cell_depth_color }};
     {% endcase %}
   }
-  #shopify-section-{{ section.id }},
+  .shopify-section-group-header-group,
+  #shopify-section-{{ section.id }} {
+    position: relative;
+    z-index: 90;
+    overflow: visible;
+  }
   #shopify-section-{{ section.id }} .site-header,
   #shopify-section-{{ section.id }} .bar,
   #shopify-section-{{ section.id }} .desk-nav,
