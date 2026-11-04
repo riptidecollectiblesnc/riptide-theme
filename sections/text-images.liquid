@@ -84,23 +84,25 @@
       "type": "range",
       "id": "pad_top",
       "label": "Top space",
-      "min": 0,
+      "min": -200,
       "max": 200,
-      "step": 2,
+      "step": 4,
       "default": 24,
       "unit": "px",
-      "visible_if": "{{ section.settings.edit_group == 'canvas' }}"
+      "visible_if": "{{ section.settings.edit_group == 'canvas' }}",
+      "info": "Negative pulls this section into the one next to it."
     },
     {
       "type": "range",
       "id": "pad_bottom",
       "label": "Bottom space",
-      "min": 0,
+      "min": -200,
       "max": 200,
-      "step": 2,
+      "step": 4,
       "default": 24,
       "unit": "px",
-      "visible_if": "{{ section.settings.edit_group == 'canvas' }}"
+      "visible_if": "{{ section.settings.edit_group == 'canvas' }}",
+      "info": "Negative pulls this section into the one next to it."
     },
     {
       "type": "header",
@@ -427,28 +429,20 @@
           "visible_if": "{{ block.settings.edit_group == 'position' }}"
         },
         {
-          "type": "range",
           "id": "x",
           "label": "X axis",
-          "min": -1000,
-          "max": 1000,
-          "step": 20,
           "default": 40,
-          "unit": "px",
-          "info": "Positive moves right. Range is -1000 to 1000.",
-          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+          "visible_if": "{{ block.settings.edit_group == 'position' }}",
+          "type": "number",
+          "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
         },
         {
-          "type": "range",
           "id": "y",
           "label": "Y axis",
-          "min": -1000,
-          "max": 1000,
-          "step": 20,
           "default": 40,
-          "unit": "px",
-          "info": "Positive moves down. Range is -1000 to 1000.",
-          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+          "visible_if": "{{ block.settings.edit_group == 'position' }}",
+          "type": "number",
+          "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
         },
         {
           "type": "select",
@@ -746,28 +740,20 @@
           "visible_if": "{{ block.settings.edit_group == 'position' }}"
         },
         {
-          "type": "range",
           "id": "x",
           "label": "X axis",
-          "min": -1000,
-          "max": 1000,
-          "step": 20,
           "default": 40,
-          "unit": "px",
-          "info": "Range is -1000 to 1000.",
-          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+          "visible_if": "{{ block.settings.edit_group == 'position' }}",
+          "type": "number",
+          "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
         },
         {
-          "type": "range",
           "id": "y",
           "label": "Y axis",
-          "min": -1000,
-          "max": 1000,
-          "step": 20,
           "default": 360,
-          "unit": "px",
-          "info": "Range is -1000 to 1000.",
-          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+          "visible_if": "{{ block.settings.edit_group == 'position' }}",
+          "type": "number",
+          "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
         },
         {
           "type": "range",
@@ -1090,7 +1076,7 @@
           "settings": {
             "x": 40,
             "y": 40,
-            "size": 36,
+            "width_px": 480,
             "z": 1
           }
         },
@@ -1099,7 +1085,7 @@
           "settings": {
             "x": 520,
             "y": 40,
-            "size": 36,
+            "width_px": 480,
             "z": 1
           }
         },

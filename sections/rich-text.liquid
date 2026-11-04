@@ -197,23 +197,25 @@
       "type": "range",
       "id": "pad_top",
       "label": "Top space",
-      "min": 0,
+      "min": -200,
       "max": 200,
       "step": 4,
       "unit": "px",
       "default": 52,
-      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}",
+      "info": "Negative pulls this section into the one next to it."
     },
     {
       "type": "range",
       "id": "pad_bottom",
       "label": "Bottom space",
-      "min": 0,
+      "min": -200,
       "max": 200,
       "step": 4,
       "unit": "px",
       "default": 52,
-      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}",
+      "info": "Negative pulls this section into the one next to it."
     },
     {
       "type": "range",

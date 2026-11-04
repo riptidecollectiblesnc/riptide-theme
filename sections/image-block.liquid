@@ -230,28 +230,20 @@
       "visible_if": "{{ section.settings.edit_group == 'position' }}"
     },
     {
-      "type": "range",
       "id": "x",
       "label": "X axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Moves the image left or right. Positive moves right. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'position' }}"
+      "visible_if": "{{ section.settings.edit_group == 'position' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
-      "type": "range",
       "id": "y",
       "label": "Y axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Moves the image up or down. Positive moves down. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'position' }}"
+      "visible_if": "{{ section.settings.edit_group == 'position' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
       "type": "select",
@@ -640,23 +632,25 @@
       "type": "range",
       "id": "pad_top",
       "label": "Top space",
-      "min": 0,
+      "min": -200,
       "max": 200,
       "step": 4,
       "unit": "px",
       "default": 24,
-      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}",
+      "info": "Negative pulls this section into the one next to it."
     },
     {
       "type": "range",
       "id": "pad_bottom",
       "label": "Bottom space",
-      "min": 0,
+      "min": -200,
       "max": 200,
       "step": 4,
       "unit": "px",
       "default": 24,
-      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}",
+      "info": "Negative pulls this section into the one next to it."
     }
   ],
   "presets": [

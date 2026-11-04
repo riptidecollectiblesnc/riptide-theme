@@ -51,6 +51,8 @@
 %}
 {% capture menu_style %}{% render 'field-style', font: section.settings.menu_font, bold: section.settings.menu_bold, italic: section.settings.menu_italic, fill: section.settings.menu_fill, fill_2: section.settings.menu_fill_2, color: section.settings.menu_color, size: section.settings.menu_size, depth: section.settings.menu_depth, amount: section.settings.menu_depth_amount, shadow: section.settings.menu_depth_color %}{% endcapture %}
 {% capture top_style %}{% render 'field-style', font: section.settings.top_font, bold: top_is_bold, italic: top_is_italic, fill: section.settings.top_fill, fill_2: section.settings.top_fill_2, color: section.settings.top_color, size: section.settings.top_size, depth: section.settings.top_depth, amount: section.settings.top_depth_amount, shadow: section.settings.top_depth_color %}{% endcapture %}
+{% capture account_style %}{% render 'field-style', font: section.settings.account_font, bold: section.settings.account_bold, italic: section.settings.account_italic, align: section.settings.account_align, valign: section.settings.account_valign, fill: section.settings.account_fill, fill_2: section.settings.account_fill_2, color: section.settings.account_color, size: section.settings.account_size, depth: section.settings.account_depth, amount: section.settings.account_depth_amount, shadow: section.settings.account_depth_color %}{% endcapture %}
+{% capture cart_style %}{% render 'field-style', font: section.settings.cart_font, bold: section.settings.cart_bold, italic: section.settings.cart_italic, align: section.settings.cart_align, valign: section.settings.cart_valign, fill: section.settings.cart_fill, fill_2: section.settings.cart_fill_2, color: section.settings.cart_color, size: section.settings.cart_size, depth: section.settings.cart_depth, amount: section.settings.cart_depth_amount, shadow: section.settings.cart_depth_color %}{% endcapture %}
 {% style %}
   {% if section.settings.sticky %}
     #shopify-section-group-header-group,
@@ -229,6 +231,27 @@
   #shopify-section-{{ section.id }} .cart-link {
     transform: translate({{ section.settings.cart_x | default: 0 }}px, {{ section.settings.cart_y | default: 0 }}px);
   }
+  #shopify-section-{{ section.id }} .account-link.has-label,
+  #shopify-section-{{ section.id }} .cart-link.has-label {
+    width: auto;
+    height: auto;
+    min-height: 44px;
+    padding: 0 0.7rem;
+    gap: 0.4rem;
+  }
+  #shopify-section-{{ section.id }} .account-link.align-left,
+  #shopify-section-{{ section.id }} .cart-link.align-left { justify-content: flex-start; }
+  #shopify-section-{{ section.id }} .account-link.align-center,
+  #shopify-section-{{ section.id }} .cart-link.align-center { justify-content: center; }
+  #shopify-section-{{ section.id }} .account-link.align-right,
+  #shopify-section-{{ section.id }} .cart-link.align-right { justify-content: flex-end; }
+  #shopify-section-{{ section.id }} .account-link.valign-top,
+  #shopify-section-{{ section.id }} .cart-link.valign-top { align-items: flex-start; }
+  #shopify-section-{{ section.id }} .account-link.valign-middle,
+  #shopify-section-{{ section.id }} .cart-link.valign-middle { align-items: center; }
+  #shopify-section-{{ section.id }} .account-link.valign-bottom,
+  #shopify-section-{{ section.id }} .cart-link.valign-bottom { align-items: flex-end; }
+  #shopify-section-{{ section.id }} .btn-label { line-height: 1; white-space: nowrap; }
 {% endstyle %}
 <header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px; --logo-x: {{ logo_x }}px; --logo-y: {{ logo_y }}px; --logo-x-m: {{ logo_x_m }}px; --logo-y-m: {{ logo_y_m }}px; padding-top: {{ section.settings.pad_top | default: 0 }}px; padding-bottom: {{ section.settings.pad_bottom | default: 0 }}px;">
   {% if section.settings.tagline != blank %}
@@ -300,12 +323,14 @@
       <input type="hidden" name="type" value="product">
     </form>
     {% if shop.customer_accounts_enabled %}
-      <a class="icon-btn account-link" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" aria-label="Account">
+      <a class="icon-btn account-link{% if section.settings.account_label != blank %} has-label{% endif %} align-{{ section.settings.account_align | default: 'center' }} valign-{{ section.settings.account_valign | default: 'middle' }}" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" aria-label="{{ section.settings.account_label | default: 'Account' | escape }}">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 19c1.4-3 3.8-4.5 7-4.5S17.6 16 19 19"/></svg>
+        {% if section.settings.account_label != blank %}<span class="btn-label" style="{{ account_style }}">{{ section.settings.account_label }}</span>{% endif %}
       </a>
     {% endif %}
-    <a class="icon-btn cart-link" href="{{ routes.cart_url }}" aria-label="Cart">
+    <a class="icon-btn cart-link{% if section.settings.cart_label != blank %} has-label{% endif %} align-{{ section.settings.cart_align | default: 'center' }} valign-{{ section.settings.cart_valign | default: 'middle' }}" href="{{ routes.cart_url }}" aria-label="{{ section.settings.cart_label | default: 'Cart' | escape }}">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg>
+      {% if section.settings.cart_label != blank %}<span class="btn-label" style="{{ cart_style }}">{{ section.settings.cart_label }}</span>{% endif %}
       <span class="count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
     </a>
   </div>
@@ -708,28 +733,20 @@
       "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
-      "type": "range",
       "id": "menu_x",
       "label": "Menu position X",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Negative moves left. Positive moves right. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
-      "type": "range",
       "id": "menu_y",
       "label": "Menu position Y",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Positive moves the main menu down, toward the bottom of the header. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
       "type": "range",
@@ -1023,28 +1040,20 @@
       "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
-      "type": "range",
       "id": "logo_x",
       "label": "X axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Slides the logo left or right. 0 leaves it where it is. A higher number moves it right. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
-      "type": "range",
       "id": "logo_y",
       "label": "Y axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Slides the logo up or down. 0 leaves it where it is. A higher number moves it down. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
       "type": "range",
@@ -1070,28 +1079,20 @@
       "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
-      "type": "range",
       "id": "logo_x_mobile",
       "label": "Phone X axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Only applies on screens under 480px. Does not add to the desktop X axis. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
-      "type": "range",
       "id": "logo_y_mobile",
       "label": "Phone Y axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Only applies on screens under 480px. A higher number moves the logo down. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
       "type": "select",
@@ -1134,28 +1135,20 @@
       "visible_if": "{{ section.settings.edit_group == 'search' }}"
     },
     {
-      "type": "range",
       "id": "search_x",
       "label": "X axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Slides the search left or right. A higher number moves it right. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'search' }}"
+      "visible_if": "{{ section.settings.edit_group == 'search' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
-      "type": "range",
       "id": "search_y",
       "label": "Y axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Slides the search up or down. A higher number moves it down. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'search' }}"
+      "visible_if": "{{ section.settings.edit_group == 'search' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
       "type": "header",
@@ -1163,51 +1156,549 @@
       "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
     },
     {
-      "type": "range",
       "id": "account_x",
       "label": "Account X axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Slides the account button left or right. A higher number moves it right. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
-      "type": "range",
       "id": "account_y",
       "label": "Account Y axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Slides the account button up or down. A higher number moves it down. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
-      "type": "range",
       "id": "cart_x",
       "label": "Cart X axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Slides the cart button left or right. A higher number moves it right. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+    },
+    {
+      "id": "cart_y",
+      "label": "Cart Y axis",
+      "default": 0,
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
+    },
+    {
+      "type": "header",
+      "content": "Account text",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "text",
+      "id": "account_label",
+      "label": "Account text",
+      "default": "Account",
+      "info": "Clear this to show only the icon.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "select",
+      "id": "account_font",
+      "label": "Font",
+      "default": "inherit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Theme default"
+        },
+        {
+          "value": "Unbounded, sans-serif",
+          "label": "Unbounded"
+        },
+        {
+          "value": "Outfit, sans-serif",
+          "label": "Outfit"
+        },
+        {
+          "value": "\"Barlow Condensed\", sans-serif",
+          "label": "Barlow Condensed"
+        },
+        {
+          "value": "\"Bebas Neue\", sans-serif",
+          "label": "Bebas Neue"
+        },
+        {
+          "value": "Oswald, sans-serif",
+          "label": "Oswald"
+        },
+        {
+          "value": "Anton, sans-serif",
+          "label": "Anton"
+        },
+        {
+          "value": "Archivo, sans-serif",
+          "label": "Archivo"
+        },
+        {
+          "value": "Inter, sans-serif",
+          "label": "Inter"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "account_bold",
+      "label": "Bold",
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "account_italic",
+      "label": "Italic",
+      "default": false,
       "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
     },
     {
       "type": "range",
-      "id": "cart_y",
-      "label": "Cart Y axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
+      "id": "account_size",
+      "label": "Size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
       "unit": "px",
-      "default": 0,
-      "info": "Slides the cart button up or down. A higher number moves it down. Range is -1000 to 1000.",
+      "default": 16,
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "color",
+      "id": "account_color",
+      "label": "Color",
+      "default": "#8eafbf",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "select",
+      "id": "account_fill",
+      "label": "Fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "Gradient is painted on the letters. Solid uses the menu color.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "color",
+      "id": "account_fill_2",
+      "label": "Second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "select",
+      "id": "account_depth",
+      "label": "Depth",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "range",
+      "id": "account_depth_amount",
+      "label": "Depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "color",
+      "id": "account_depth_color",
+      "label": "Depth color",
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "select",
+      "id": "account_align",
+      "label": "Horizontal align",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "select",
+      "id": "account_valign",
+      "label": "Vertical align",
+      "default": "middle",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "header",
+      "content": "Cart text",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "text",
+      "id": "cart_label",
+      "label": "Cart text",
+      "default": "Cart",
+      "info": "Clear this to show only the icon.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "select",
+      "id": "cart_font",
+      "label": "Font",
+      "default": "inherit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Theme default"
+        },
+        {
+          "value": "Unbounded, sans-serif",
+          "label": "Unbounded"
+        },
+        {
+          "value": "Outfit, sans-serif",
+          "label": "Outfit"
+        },
+        {
+          "value": "\"Barlow Condensed\", sans-serif",
+          "label": "Barlow Condensed"
+        },
+        {
+          "value": "\"Bebas Neue\", sans-serif",
+          "label": "Bebas Neue"
+        },
+        {
+          "value": "Oswald, sans-serif",
+          "label": "Oswald"
+        },
+        {
+          "value": "Anton, sans-serif",
+          "label": "Anton"
+        },
+        {
+          "value": "Archivo, sans-serif",
+          "label": "Archivo"
+        },
+        {
+          "value": "Inter, sans-serif",
+          "label": "Inter"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "cart_bold",
+      "label": "Bold",
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "cart_italic",
+      "label": "Italic",
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "range",
+      "id": "cart_size",
+      "label": "Size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16,
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "color",
+      "id": "cart_color",
+      "label": "Color",
+      "default": "#8eafbf",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "select",
+      "id": "cart_fill",
+      "label": "Fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "Gradient is painted on the letters. Solid uses the menu color.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "color",
+      "id": "cart_fill_2",
+      "label": "Second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "select",
+      "id": "cart_depth",
+      "label": "Depth",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "range",
+      "id": "cart_depth_amount",
+      "label": "Depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "color",
+      "id": "cart_depth_color",
+      "label": "Depth color",
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "select",
+      "id": "cart_align",
+      "label": "Horizontal align",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
+    },
+    {
+      "type": "select",
+      "id": "cart_valign",
+      "label": "Vertical align",
+      "default": "middle",
+      "options": [
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ],
       "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
     },
     {
@@ -1466,28 +1957,20 @@
       "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
-      "type": "range",
       "id": "top_x",
       "label": "Top menu position X",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Negative moves left. Positive moves right, up to 800. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
-      "type": "range",
       "id": "top_y",
       "label": "Top menu position Y",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Positive moves the top menu down. Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
       "type": "range",
@@ -1780,28 +2263,20 @@
       "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
     },
     {
-      "type": "range",
       "id": "tagline_x",
       "label": "X axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
-      "type": "range",
       "id": "tagline_y",
       "label": "Y axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
       "type": "range",
@@ -1826,28 +2301,20 @@
       "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
     },
     {
-      "type": "range",
       "id": "tagline_x_mobile",
       "label": "Phone X axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
-      "type": "range",
       "id": "tagline_y_mobile",
       "label": "Phone Y axis",
-      "min": -1000,
-      "max": 1000,
-      "step": 20,
-      "unit": "px",
       "default": 0,
-      "info": "Range is -1000 to 1000.",
-      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}",
+      "type": "number",
+      "info": "Type any pixel. Negative moves left or up. A slider cannot step smaller than 20 across a 2000px range."
     },
     {
       "type": "header",
@@ -2193,24 +2660,24 @@
       "type": "range",
       "id": "pad_top",
       "label": "Top space",
-      "min": 0,
+      "min": -200,
       "max": 200,
-      "step": 2,
+      "step": 4,
       "unit": "px",
       "default": 0,
-      "info": "Added space. Zero keeps the header tight.",
+      "info": "Negative pulls this section into the one next to it.",
       "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     },
     {
       "type": "range",
       "id": "pad_bottom",
       "label": "Bottom space",
-      "min": 0,
+      "min": -200,
       "max": 200,
-      "step": 2,
+      "step": 4,
       "unit": "px",
       "default": 0,
-      "info": "Added space. Zero keeps the header tight.",
+      "info": "Negative pulls this section into the one next to it.",
       "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     }
   ]
