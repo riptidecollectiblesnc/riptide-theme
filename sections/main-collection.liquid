@@ -313,6 +313,56 @@
       "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {
+      "type": "select",
+      "id": "sec_image_motion",
+      "label": "Image motion",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "ken",
+          "label": "Ken Burns"
+        },
+        {
+          "value": "drift",
+          "label": "Drift"
+        },
+        {
+          "value": "rise",
+          "label": "Rise"
+        },
+        {
+          "value": "breathe",
+          "label": "Breathe"
+        },
+        {
+          "value": "float",
+          "label": "Float"
+        },
+        {
+          "value": "sheen",
+          "label": "Sheen"
+        },
+        {
+          "value": "tide",
+          "label": "Tide glow"
+        },
+        {
+          "value": "spotlight",
+          "label": "Spotlight"
+        },
+        {
+          "value": "holo",
+          "label": "Holo shift"
+        }
+      ],
+      "info": "Moves only the background photo. Ken Burns zooms, Drift pans, Rise slides up, Breathe pulses, Float bobs, Sheen sweeps a light, Tide glow washes cyan, Spotlight travels, Holo shift cycles color.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
       "type": "header",
       "content": "Section space",
       "visible_if": "{{ section.settings.edit_group == 'section_space' }}"

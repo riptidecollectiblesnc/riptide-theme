@@ -807,6 +807,82 @@ body { padding-bottom: 64px; }
 }
 .bar-fill.fill-custom { background-image: linear-gradient(var(--fill-angle, 90deg), var(--fill, #00e5ff), var(--fill-2, #6d1ecc)); }
 @keyframes fill-pan { to { background-position: 200% 0; } }
+.sec-bg-clip {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+.sec-bg-fill,
+.sec-bg-photo,
+.sec-bg-fx {
+  position: absolute;
+  inset: 0;
+}
+.sec-bg-photo {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  will-change: transform;
+}
+.sec-bg-photo.is-ken { inset: -8%; animation: bg-ken 28s ease-in-out infinite alternate; }
+.sec-bg-photo.is-drift { animation: bg-drift 18s ease-in-out infinite alternate; background-size: 125% 115%; }
+.sec-bg-photo.is-rise { inset: -12% 0; animation: bg-rise 22s ease-in-out infinite alternate; }
+.sec-bg-photo.is-breathe { animation: bg-breathe 8s ease-in-out infinite; }
+.sec-bg-photo.is-float { animation: bg-float 9s ease-in-out infinite; }
+.sec-bg-photo.is-holo { animation: bg-holo 16s linear infinite; }
+.sec-bg-fx.is-sheen {
+  background: linear-gradient(115deg, transparent 32%, rgba(255, 255, 255, 0.42) 48%, rgba(122, 246, 255, 0.38) 50%, transparent 66%);
+  background-size: 240% 100%;
+  animation: fill-pan 4.5s linear infinite;
+  mix-blend-mode: screen;
+}
+.sec-bg-fx.is-tide {
+  background: radial-gradient(70% 80% at 50% 110%, rgba(0, 229, 255, 0.55), transparent 58%);
+  animation: bg-tide 7s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+.sec-bg-fx.is-spotlight {
+  background: radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.42), transparent 26%);
+  animation: bg-spot 12s ease-in-out infinite alternate;
+  mix-blend-mode: screen;
+}
+@keyframes bg-ken {
+  from { transform: scale(1) translate3d(0, 0, 0); }
+  to { transform: scale(1.14) translate3d(-3%, -2%, 0); }
+}
+@keyframes bg-drift {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+@keyframes bg-rise {
+  from { transform: translate3d(0, 6%, 0); }
+  to { transform: translate3d(0, -6%, 0); }
+}
+@keyframes bg-breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}
+@keyframes bg-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -3%, 0); }
+}
+@keyframes bg-holo {
+  0%, 100% { filter: hue-rotate(0deg) saturate(1); }
+  50% { filter: hue-rotate(36deg) saturate(1.3); }
+}
+@keyframes bg-tide {
+  0%, 100% { opacity: 0.35; transform: translate3d(0, 10%, 0) scale(1); }
+  50% { opacity: 0.85; transform: translate3d(0, -8%, 0) scale(1.08); }
+}
+@keyframes bg-spot {
+  from { transform: translate3d(-18%, -10%, 0) scale(1); }
+  to { transform: translate3d(48%, 16%, 0) scale(1.25); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sec-bg-photo, .sec-bg-fx { animation: none; }
+}
 
 /* Premium finish. Same components, heavier atmosphere. */
 :root {
