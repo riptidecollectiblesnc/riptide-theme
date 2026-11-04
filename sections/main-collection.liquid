@@ -1,9 +1,25 @@
-<section class="section">
+{% liquid
+  assign title = section.settings.title
+  if title == blank
+    assign title = collection.title
+  endif
+  assign href = section.settings.link_url
+  if href == blank
+    assign href = routes.all_products_collection_url
+  endif
+  assign show_link = false
+  if section.settings.link != blank or section.settings.arrow != blank
+    assign show_link = true
+  endif
+%}
+<section class="section collection-page" style="padding-top: {{ section.settings.pad_top }}px; padding-bottom: {{ section.settings.pad_bottom }}px;">
   <div class="wrap">
     <header class="section-head">
       <div>
-        <p class="kicker">Collection</p>
-        <h1 class="display">{{ collection.title }}</h1>
+        {% if section.settings.eyebrow != blank %}
+          <p class="kicker keep-lead" style="{% render 'field-style', font: section.settings.eyebrow_font, bold: section.settings.eyebrow_bold, italic: section.settings.eyebrow_italic, align: section.settings.eyebrow_align, valign: section.settings.eyebrow_valign, fill: section.settings.eyebrow_fill, fill_2: section.settings.eyebrow_fill_2, color: section.settings.eyebrow_color, size: section.settings.eyebrow_size, depth: section.settings.eyebrow_depth, amount: section.settings.eyebrow_depth_amount, shadow: section.settings.eyebrow_depth_color %}">{% render 'keep-space', text: section.settings.eyebrow %}</p>
+        {% endif %}
+        <h1 class="display collection-line keep-lead" style="{% render 'field-style', font: section.settings.title_font, bold: section.settings.title_bold, italic: section.settings.title_italic, align: section.settings.title_align, valign: section.settings.title_valign, fill: section.settings.title_fill, fill_2: section.settings.title_fill_2, color: section.settings.title_color, size: section.settings.title_size, depth: section.settings.title_depth, amount: section.settings.title_depth_amount, shadow: section.settings.title_depth_color %}">{% render 'keep-space', text: title %}{% if show_link %}<a class="collection-all keep-lead" href="{{ href }}" style="{% render 'field-style', font: section.settings.link_font, bold: section.settings.link_bold, italic: section.settings.link_italic, align: section.settings.link_align, valign: section.settings.link_valign, fill: section.settings.link_fill, fill_2: section.settings.link_fill_2, color: section.settings.link_color, size: section.settings.link_size, depth: section.settings.link_depth, amount: section.settings.link_depth_amount, shadow: section.settings.link_depth_color %}">{% if section.settings.arrow != blank %}{% render 'keep-space', text: section.settings.arrow %}{% endif %}{% if section.settings.arrow != blank and section.settings.link != blank %} {% endif %}{% render 'keep-space', text: section.settings.link %}</a>{% endif %}</h1>
         {% if collection.description != blank %}
           <div class="rte" style="margin-top:0.5rem">{{ collection.description }}</div>
         {% endif %}
@@ -58,7 +74,815 @@
 {% schema %}
 {
   "name": "Collection",
+  "enabled_on": {
+    "templates": [
+      "collection"
+    ]
+  },
   "settings": [
+    {
+      "type": "header",
+      "content": "This header"
+    },
+    {
+      "type": "paragraph",
+      "content": "Three pieces of text. The small line is the word Collection. The big line is the collection name, such as Card Boxes. The link sits after an arrow, such as Card Boxes → All."
+    },
+    {
+      "type": "header",
+      "content": "Section space"
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "label": "Top space",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 52,
+      "info": "Space above the whole collection section."
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "label": "Bottom space",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 52,
+      "info": "Space below the whole collection section."
+    },
+    {
+      "type": "header",
+      "content": "Small line"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Small line",
+      "default": "Collection",
+      "info": "The line above the name. This is the word Collection. Spaces at the start are kept. If the theme editor deletes them when you save, type ^ once for each space. ^^^Hello is three spaces, then Hello."
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_font",
+      "label": "Small line font",
+      "default": "inherit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Theme default"
+        },
+        {
+          "value": "Unbounded, sans-serif",
+          "label": "Unbounded"
+        },
+        {
+          "value": "Outfit, sans-serif",
+          "label": "Outfit"
+        },
+        {
+          "value": "\"Barlow Condensed\", sans-serif",
+          "label": "Barlow Condensed"
+        },
+        {
+          "value": "\"Bebas Neue\", sans-serif",
+          "label": "Bebas Neue"
+        },
+        {
+          "value": "Oswald, sans-serif",
+          "label": "Oswald"
+        },
+        {
+          "value": "Anton, sans-serif",
+          "label": "Anton"
+        },
+        {
+          "value": "Archivo, sans-serif",
+          "label": "Archivo"
+        },
+        {
+          "value": "Inter, sans-serif",
+          "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "eyebrow_bold",
+      "label": "Small line bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "eyebrow_italic",
+      "label": "Small line italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_align",
+      "label": "Small line horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_valign",
+      "label": "Small line vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_color",
+      "label": "Small line color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_fill",
+      "label": "Small line fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "Gradient is painted on the letters. Solid uses the color above."
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_fill_2",
+      "label": "Small line second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient."
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_size",
+      "label": "Small line size",
+      "min": 10,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "eyebrow_depth",
+      "label": "Small line depth",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "eyebrow_depth_amount",
+      "label": "Small line depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "eyebrow_depth_color",
+      "label": "Small line depth color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "header",
+      "content": "Collection name"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Name",
+      "info": "Leave blank to use the collection's name from Shopify, such as Card Boxes. Type here only to replace that name. Spaces at the start are kept. If the theme editor deletes them when you save, type ^ once for each space. ^^^Hello is three spaces, then Hello."
+    },
+    {
+      "type": "select",
+      "id": "title_font",
+      "label": "Name font",
+      "default": "inherit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Theme default"
+        },
+        {
+          "value": "Unbounded, sans-serif",
+          "label": "Unbounded"
+        },
+        {
+          "value": "Outfit, sans-serif",
+          "label": "Outfit"
+        },
+        {
+          "value": "\"Barlow Condensed\", sans-serif",
+          "label": "Barlow Condensed"
+        },
+        {
+          "value": "\"Bebas Neue\", sans-serif",
+          "label": "Bebas Neue"
+        },
+        {
+          "value": "Oswald, sans-serif",
+          "label": "Oswald"
+        },
+        {
+          "value": "Anton, sans-serif",
+          "label": "Anton"
+        },
+        {
+          "value": "Archivo, sans-serif",
+          "label": "Archivo"
+        },
+        {
+          "value": "Inter, sans-serif",
+          "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "title_bold",
+      "label": "Name bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "title_italic",
+      "label": "Name italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "title_align",
+      "label": "Name horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "title_valign",
+      "label": "Name vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Name color",
+      "default": "#f4fbff"
+    },
+    {
+      "type": "select",
+      "id": "title_fill",
+      "label": "Name fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "Gradient is painted on the letters. Solid uses the color above."
+    },
+    {
+      "type": "color",
+      "id": "title_fill_2",
+      "label": "Name second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient."
+    },
+    {
+      "type": "range",
+      "id": "title_size",
+      "label": "Name size",
+      "min": 10,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "select",
+      "id": "title_depth",
+      "label": "Name depth",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "title_depth_amount",
+      "label": "Name depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "title_depth_color",
+      "label": "Name depth color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "header",
+      "content": "Link after the name"
+    },
+    {
+      "type": "text",
+      "id": "arrow",
+      "label": "Arrow",
+      "default": "➜",
+      "info": "Sits between the collection name and the link. Clear it to hide the arrow."
+    },
+    {
+      "type": "text",
+      "id": "link",
+      "label": "Link",
+      "default": "All",
+      "info": "The word after the arrow. Default is All, so the line reads Card Boxes → All. Clear it to hide the link. Spaces at the start are kept. If the theme editor deletes them when you save, type ^ once for each space. ^^^Hello is three spaces, then Hello."
+    },
+    {
+      "type": "select",
+      "id": "link_font",
+      "label": "Link font",
+      "default": "inherit",
+      "options": [
+        {
+          "value": "inherit",
+          "label": "Theme default"
+        },
+        {
+          "value": "Unbounded, sans-serif",
+          "label": "Unbounded"
+        },
+        {
+          "value": "Outfit, sans-serif",
+          "label": "Outfit"
+        },
+        {
+          "value": "\"Barlow Condensed\", sans-serif",
+          "label": "Barlow Condensed"
+        },
+        {
+          "value": "\"Bebas Neue\", sans-serif",
+          "label": "Bebas Neue"
+        },
+        {
+          "value": "Oswald, sans-serif",
+          "label": "Oswald"
+        },
+        {
+          "value": "Anton, sans-serif",
+          "label": "Anton"
+        },
+        {
+          "value": "Archivo, sans-serif",
+          "label": "Archivo"
+        },
+        {
+          "value": "Inter, sans-serif",
+          "label": "Inter"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "link_bold",
+      "label": "Link bold",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "link_italic",
+      "label": "Link italic",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "link_align",
+      "label": "Link horizontal",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "link_valign",
+      "label": "Link vertical",
+      "default": "default",
+      "options": [
+        {
+          "value": "default",
+          "label": "Theme default"
+        },
+        {
+          "value": "top",
+          "label": "Top"
+        },
+        {
+          "value": "middle",
+          "label": "Middle"
+        },
+        {
+          "value": "bottom",
+          "label": "Bottom"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "select",
+      "id": "link_fill",
+      "label": "Link fill",
+      "default": "solid",
+      "options": [
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "Gradient is painted on the letters. Solid uses the color above."
+    },
+    {
+      "type": "color",
+      "id": "link_fill_2",
+      "label": "Link second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient."
+    },
+    {
+      "type": "range",
+      "id": "link_size",
+      "label": "Link size",
+      "min": 10,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 22
+    },
+    {
+      "type": "select",
+      "id": "link_depth",
+      "label": "Link depth",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "link_depth_amount",
+      "label": "Link depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "color",
+      "id": "link_depth_color",
+      "label": "Link depth color",
+      "default": "#00e5ff"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link",
+      "info": "Leave blank to open the All products collection."
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
     {
       "type": "range",
       "id": "per_page",
