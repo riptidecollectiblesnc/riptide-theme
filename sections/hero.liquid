@@ -1,4 +1,26 @@
 {% render 'section-bg', section: section %}
+{% style %}
+  #shopify-section-{{ section.id }} .hero-lede strong,
+  #shopify-section-{{ section.id }} .hero-lede b {
+    color: var(--bold-c, #00e5ff);
+    -webkit-text-fill-color: var(--bold-c, #00e5ff);
+    background: none;
+  }
+  #shopify-section-{{ section.id }} .hero-lede em,
+  #shopify-section-{{ section.id }} .hero-lede i {
+    color: var(--italic-c, #e4c06a);
+    -webkit-text-fill-color: var(--italic-c, #e4c06a);
+    background: none;
+  }
+  #shopify-section-{{ section.id }} .hero-lede a {
+    color: var(--link-c, #7af6ff);
+    -webkit-text-fill-color: var(--link-c, #7af6ff);
+    background: none;
+    text-decoration: underline;
+  }
+  #shopify-section-{{ section.id }} .hero-lede p { margin: 0; }
+  #shopify-section-{{ section.id }} .hero-lede p + p { margin-top: 0.7rem; }
+{% endstyle %}
 <section class="hero-section" style="padding-top: {{ section.settings.pad_top }}px; padding-bottom: {{ section.settings.pad_bottom }}px;">
   <div class="wrap hero">
     <div class="hero-copy">
@@ -7,7 +29,7 @@
       {% endif %}
       <h1 class="display hero-title" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, fill_2: section.settings.heading_fill_2, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h1>
       {% if section.settings.text != blank %}
-        <p class="lede" style="{% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, fill: section.settings.text_fill, fill_2: section.settings.text_fill_2, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</p>
+        <div class="lede rte hero-lede" style="max-width: {{ section.settings.text_width | default: 560 }}px; width: 100%; --bold-c: {{ section.settings.text_bold_color | default: '#00e5ff' }}; --italic-c: {{ section.settings.text_italic_color | default: '#e4c06a' }}; --link-c: {{ section.settings.text_link_color | default: '#7af6ff' }}; {% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, fill: section.settings.text_fill, fill_2: section.settings.text_fill_2, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</div>
       {% endif %}
       <div class="hero-actions">
         {% if section.settings.button_label != blank %}
@@ -52,7 +74,7 @@
         {% capture stage_label_style %}{% render 'field-style', font: section.settings.stage_label_font, bold: section.settings.stage_label_bold, italic: section.settings.stage_label_italic, align: section.settings.stage_label_align, valign: section.settings.stage_label_valign, fill: section.settings.stage_label_fill, fill_2: section.settings.stage_label_fill_2, color: section.settings.stage_label_color, size: section.settings.stage_label_size, depth: section.settings.stage_label_depth, amount: section.settings.stage_label_depth_amount, shadow: section.settings.stage_label_depth_color %}{% endcapture %}
         {% render 'wax', style: 'crystal', label: section.settings.stage_label, label_style: stage_label_style %}
       {% endif %}
-      <div class="stage-lower">
+      <div class="stage-lower" style="background: {{ section.settings.lower_bg | default: '#42bdbb' }};">
         <span class="live-dot"></span>
         <span style="{% render 'field-style', font: section.settings.lower_font, bold: section.settings.lower_bold, italic: section.settings.lower_italic, align: section.settings.lower_align, valign: section.settings.lower_valign, fill: section.settings.lower_fill, fill_2: section.settings.lower_fill_2, color: section.settings.lower_color, size: section.settings.lower_size, depth: section.settings.lower_depth, amount: section.settings.lower_depth_amount, shadow: section.settings.lower_depth_color %}">{{ section.settings.lower }}</span>
       </div>
@@ -718,10 +740,22 @@
       "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
-      "type": "textarea",
+      "type": "richtext",
       "id": "text",
       "label": "Text",
-      "default": "Factory-sealed wax, spot boards, and live shows. The room is on Whatnot Thursday through Saturday at 9:30 PM ET.",
+      "default": "<p>Factory-sealed wax, spot boards, and live shows. The room is on Whatnot Thursday through Saturday at 9:30 PM ET.</p>",
+      "info": "Bold, italic, and links can each use their own color below.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "range",
+      "id": "text_width",
+      "label": "Text width",
+      "min": 200,
+      "max": 900,
+      "step": 10,
+      "unit": "px",
+      "default": 560,
       "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
@@ -838,6 +872,30 @@
       "id": "text_color",
       "label": "Text color",
       "default": "#d5e6ee",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_bold_color",
+      "label": "Bold color",
+      "default": "#00e5ff",
+      "info": "Color of bold text in the editor.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_italic_color",
+      "label": "Italic color",
+      "default": "#e4c06a",
+      "info": "Color of italic text in the editor.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_link_color",
+      "label": "Link color",
+      "default": "#7af6ff",
+      "info": "Color of links in the editor.",
       "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
@@ -1749,6 +1807,14 @@
       "id": "lower_color",
       "label": "Stage line color",
       "default": "#e7f6fb",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "lower_bg",
+      "label": "Stage line background",
+      "default": "#42bdbb",
+      "info": "The bar behind the stage line. The color above is the text.",
       "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
