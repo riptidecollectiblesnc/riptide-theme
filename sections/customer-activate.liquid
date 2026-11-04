@@ -1,4 +1,4 @@
-<section class="section">
+<section class="section" style="padding-top: {{ section.settings.pad_top }}px; padding-bottom: {{ section.settings.pad_bottom }}px;">
   <div class="wrap" style="max-width:440px">
     <h1 class="display">Activate account</h1>
     {% form 'activate_customer_password' %}
@@ -16,6 +16,33 @@
 {% schema %}
 {
   "name": "Activate account",
-  "settings": []
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section space"
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "label": "Top space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 52,
+      "info": "Space above and below this section."
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "label": "Bottom space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 52,
+      "info": "Space above and below this section."
+    }
+  ]
 }
 {% endschema %}
