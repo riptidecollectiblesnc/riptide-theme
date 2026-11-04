@@ -18,6 +18,12 @@
     background: none;
     text-decoration: underline;
   }
+  #shopify-section-{{ section.id }} .hero-lede [style*="color"] {
+    -webkit-text-fill-color: currentColor !important;
+    background-image: none !important;
+    -webkit-background-clip: border-box !important;
+    background-clip: border-box !important;
+  }
   #shopify-section-{{ section.id }} .hero-lede p { margin: 0; }
   #shopify-section-{{ section.id }} .hero-lede p + p { margin-top: 0.7rem; }
 {% endstyle %}
@@ -28,8 +34,14 @@
         <p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, fill: section.settings.kicker_fill, fill_2: section.settings.kicker_fill_2, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}"><span class="live-dot"></span> {{ section.settings.kicker }}</p>
       {% endif %}
       <h1 class="display hero-title" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, fill_2: section.settings.heading_fill_2, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h1>
-      {% if section.settings.text != blank %}
-        <div class="lede rte hero-lede" style="max-width: {{ section.settings.text_width | default: 560 }}px; width: 100%; --bold-c: {{ section.settings.text_bold_color | default: '#00e5ff' }}; --italic-c: {{ section.settings.text_italic_color | default: '#e4c06a' }}; --link-c: {{ section.settings.text_link_color | default: '#7af6ff' }}; {% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, fill: section.settings.text_fill, fill_2: section.settings.text_fill_2, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ section.settings.text }}</div>
+      {% liquid
+        assign hero_copy = section.settings.text
+        if section.settings.text_page != blank and section.settings.text_page.content != blank
+          assign hero_copy = section.settings.text_page.content
+        endif
+      %}
+      {% if hero_copy != blank %}
+        <div class="lede rte hero-lede" style="max-width: {{ section.settings.text_width | default: 560 }}px; width: 100%; --bold-c: {{ section.settings.text_bold_color | default: '#00e5ff' }}; --italic-c: {{ section.settings.text_italic_color | default: '#e4c06a' }}; --link-c: {{ section.settings.text_link_color | default: '#7af6ff' }}; {% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, fill: section.settings.text_fill, fill_2: section.settings.text_fill_2, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}">{{ hero_copy }}</div>
       {% endif %}
       <div class="hero-actions">
         {% if section.settings.button_label != blank %}
@@ -744,7 +756,14 @@
       "id": "text",
       "label": "Text",
       "default": "<p>Factory-sealed wax, spot boards, and live shows. The room is on Whatnot Thursday through Saturday at 9:30 PM ET.</p>",
-      "info": "Bold, italic, and links can each use their own color below.",
+      "info": "Theme editor text cannot color a highlight. For that, use Colored text page below.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "page",
+      "id": "text_page",
+      "label": "Colored text page",
+      "info": "Open this page under Admin, Pages. Highlight words and use the color button. You can color as many selections as you want in the same block. Save the page, then refresh this preview.",
       "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
