@@ -60,7 +60,11 @@
       position: sticky;
       top: 0;
       z-index: 80;
-      background: var(--color-bg);
+      background: transparent;
+    }
+    .shopify-section-group-header-group[data-stuck] .site-header {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
     }
   {% endif %}
   #shopify-section-{{ section.id }} .top-menu,
@@ -528,7 +532,15 @@
           group.style.right = '0';
           group.style.width = '100%';
           group.style.zIndex = '80';
-          group.style.background = 'var(--color-bg)';
+          group.style.background = 'transparent';
+          var nodes = group.querySelectorAll('.shopify-section, .bar-fill, .nav-link, .sec-bg-fill, .sec-bg-photo, .sec-bg-fx, .ticker-track');
+          for (var i = 0; i < nodes.length; i++) {
+            nodes[i].style.animation = 'none';
+          }
+          void group.offsetWidth;
+          for (var j = 0; j < nodes.length; j++) {
+            nodes[j].style.animation = '';
+          }
         }
       } else if (group.dataset.stuck) {
         group.dataset.stuck = '';
