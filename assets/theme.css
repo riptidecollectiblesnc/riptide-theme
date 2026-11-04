@@ -44,8 +44,12 @@ img { max-width: 100%; height: auto; display: block; }
   object-fit: contain !important;
   flex: 0 0 auto !important;
 }
-.site-header .logo-frame {
-  transform: translate(var(--logo-x, 0px), var(--logo-y, 0px));
+.site-header .brand {
+  position: relative;
+  align-self: center;
+  min-height: 0;
+  max-height: 100%;
+  overflow: visible;
 }
 @media (max-width: 480px) {
   .site-header .logo-frame,
@@ -218,6 +222,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   position: relative;
   z-index: 40;
   width: 100%;
+  overflow: visible;
   border-bottom: 1px solid var(--color-border);
   background: color-mix(in srgb, var(--color-bg) 84%, transparent);
   backdrop-filter: blur(16px);
@@ -230,7 +235,10 @@ ul { margin: 0; padding: 0; list-style: none; }
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  height: var(--bar-h, 64px);
   min-height: var(--bar-h, 64px);
+  max-height: var(--bar-h, 64px);
+  overflow: visible;
 }
 .brand {
   display: flex;
