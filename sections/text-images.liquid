@@ -204,6 +204,40 @@
       "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {
+      "type": "range",
+      "id": "sec_fill_speed",
+      "label": "Fill speed",
+      "min": 1,
+      "max": 8,
+      "step": 1,
+      "default": 1,
+      "info": "1 is that fill's normal pace. 8 is eight times faster. Only animated fills use this.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "range",
+      "id": "sec_fill_duration",
+      "label": "Fill duration",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "s",
+      "default": 0,
+      "info": "0 keeps that fill's own timing. Any other number is how long one sweep takes, before speed.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "range",
+      "id": "sec_fill_power",
+      "label": "Fill intensity",
+      "min": 1,
+      "max": 10,
+      "step": 1,
+      "default": 5,
+      "info": "How wide the sweep is. 5 matches the original. Higher is stronger.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
       "type": "color",
       "id": "sec_fill_color",
       "label": "Fill color",

@@ -6,6 +6,12 @@
   assign angle = section.settings.sec_angle | default: 90
   assign photo = section.settings.sec_image
   assign motion = section.settings.sec_image_motion | default: 'none'
+  assign speed = section.settings.sec_fill_speed | default: 1
+  assign custom_dur = section.settings.sec_fill_duration | default: 0
+  assign power = section.settings.sec_fill_power | default: 5
+  if speed < 1
+    assign speed = 1
+  endif
   assign use_motion = false
   if photo != blank and motion != blank and motion != 'none'
     assign use_motion = true
@@ -51,6 +57,25 @@
   {% assign sweep = false %}
   {% if preset == 'foil-sweep' or preset == 'aurora-sheet' %}{% assign sweep = true %}{% endif %}
   {% if preset == 'none' and movers contains fill %}{% assign sweep = true %}{% endif %}
+  {% assign base = 9 %}
+  {% case fill %}
+    {% when 'pulse' %}{% assign base = 6 %}
+    {% when 'electric' %}{% assign base = 2 %}
+    {% when 'chrome' %}{% assign base = 5 %}
+    {% when 'goldrush' %}{% assign base = 4 %}
+    {% when 'sheen' %}{% assign base = 4 %}
+    {% when 'lava' %}{% assign base = 7 %}
+    {% when 'prism' %}{% assign base = 8 %}
+    {% when 'ember' %}{% assign base = 8 %}
+    {% when 'wave' %}{% assign base = 10 %}
+    {% when 'aurora' %}{% assign base = 12 %}
+    {% when 'current' %}{% assign base = 14 %}
+    {% when 'foil' %}{% assign base = 9 %}
+  {% endcase %}
+  {% if preset == 'aurora-sheet' %}{% assign base = 12 %}{% endif %}
+  {% if preset == 'foil-sweep' and custom_dur == 0 %}{% assign base = 9 %}{% endif %}
+  {% if custom_dur > 0 %}{% assign base = custom_dur %}{% endif %}
+  {% assign span = power | times: 28 | plus: 100 %}
   {% style %}
     #shopify-section-{{ section.id }} {
       position: relative;
@@ -75,29 +100,14 @@
           {% if preset == 'grid' %}
             background-size: 28px 28px, 28px 28px, cover;
           {% elsif sweep %}
-            background-size: 240% 100%;
+            background-size: {{ span }}% 100%;
           {% else %}
             background-size: cover;
           {% endif %}
           background-position: center;
         {% endif %}
         {% if photo == blank and sweep %}
-          {% case fill %}
-            {% when 'pulse' %}{% assign dur = '6s' %}
-            {% when 'electric' %}{% assign dur = '2.4s' %}
-            {% when 'chrome' %}{% assign dur = '5s' %}
-            {% when 'goldrush' %}{% assign dur = '4s' %}
-            {% when 'sheen' %}{% assign dur = '3.5s' %}
-            {% when 'lava' %}{% assign dur = '7s' %}
-            {% when 'prism' %}{% assign dur = '8s' %}
-            {% when 'ember' %}{% assign dur = '8s' %}
-            {% when 'wave' %}{% assign dur = '10s' %}
-            {% when 'aurora' %}{% assign dur = '12s' %}
-            {% when 'current' %}{% assign dur = '14s' %}
-            {% else %}{% assign dur = '9s' %}
-          {% endcase %}
-          {% if preset == 'aurora-sheet' %}{% assign dur = '12s' %}{% endif %}
-          animation: fill-pan {{ dur }} linear infinite;
+          animation: fill-pan calc({{ base }}s / {{ speed }}) linear infinite;
         {% endif %}
         {% if preset == 'slab' %}
           box-shadow: inset 0 0 0 1px #00eaff, inset 0 0 40px color-mix(in srgb, #00e5ff 28%, transparent);
@@ -108,7 +118,7 @@
   {% if use_motion %}
     <div class="sec-bg-clip" aria-hidden="true">
       {% if fill == 'solid' or fill == 'glass' or fill == 'mesh' or grad != blank %}
-        <div class="sec-bg-fill" style="{% if fill == 'solid' or fill == 'mesh' %}background-color: {{ paint }};{% elsif fill == 'glass' %}background-color: color-mix(in srgb, {{ paint }} 22%, transparent);{% endif %}{% if grad != blank %}background-image: {{ grad }};{% if preset == 'grid' %}background-size: 28px 28px, 28px 28px, cover;{% elsif sweep %}background-size: 240% 100%; animation: fill-pan 9s linear infinite;{% else %}background-size: cover;{% endif %}{% endif %}"></div>
+        <div class="sec-bg-fill" style="{% if fill == 'solid' or fill == 'mesh' %}background-color: {{ paint }};{% elsif fill == 'glass' %}background-color: color-mix(in srgb, {{ paint }} 22%, transparent);{% endif %}{% if grad != blank %}background-image: {{ grad }};{% if preset == 'grid' %}background-size: 28px 28px, 28px 28px, cover;{% elsif sweep %}background-size: {{ span }}% 100%; animation: fill-pan calc({{ base }}s / {{ speed }}) linear infinite;{% else %}background-size: cover;{% endif %}{% endif %}"></div>
       {% endif %}
       <div class="sec-bg-photo is-{{ motion }}" style="background-image: url({{ photo | image_url: width: 2000 }});"></div>
       {% if motion == 'sheen' or motion == 'tide' or motion == 'spotlight' %}
