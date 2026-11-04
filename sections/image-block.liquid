@@ -12,8 +12,8 @@
 <section class="section image-section" style="padding-top: {{ section.settings.pad_top }}px; padding-bottom: {{ section.settings.pad_bottom }}px;">
   <div class="wrap">
     <div
-      class="image-hold place-{{ section.settings.place }}{% if ratio != 'natural' %} has-ratio{% endif %}"
-      style="--img-w: {{ section.settings.size }}%; --img-x: {{ section.settings.x }}px; --img-y: {{ section.settings.y }}px; --img-ratio: {{ ratio }}; --img-fit: {{ section.settings.fit }}; --img-pos: {{ section.settings.crop_x }} {{ section.settings.crop_y }};"
+      class="image-hold place-{{ section.settings.place }}{% if section.settings.ratio_lock == false %} is-unlocked{% endif %}{% if ratio != 'natural' %} has-ratio{% endif %}"
+      style="--img-w: {{ section.settings.width_px | default: 1600 }}px; --img-h: {{ section.settings.height_px | default: 400 }}px; --img-x: {{ section.settings.x }}px; --img-y: {{ section.settings.y }}px; --img-ratio: {{ ratio }}; --img-fit: {{ section.settings.fit }}; --img-pos: {{ section.settings.crop_x }} {{ section.settings.crop_y }};"
     >
       <div
         class="image-cell {% if section.settings.show_cell == false %}is-clear{% else %}fill-{{ section.settings.cell_fill | default: 'none' }}{% endif %} depth-{{ section.settings.cell_depth | default: 'soft' }}"
@@ -171,16 +171,36 @@
       "visible_if": "{{ section.settings.edit_group == 'size' }}"
     },
     {
-      "type": "range",
-      "id": "size",
-      "label": "Size",
-      "min": 20,
-      "max": 100,
-      "step": 2,
-      "unit": "%",
-      "default": 100,
-      "info": "Width of the image inside the section.",
+      "type": "checkbox",
+      "id": "ratio_lock",
+      "label": "Lock aspect ratio",
+      "default": true,
+      "info": "On uses the picture's own shape. Off lets width and height be set apart.",
       "visible_if": "{{ section.settings.edit_group == 'size' }}"
+    },
+    {
+      "type": "range",
+      "id": "width_px",
+      "label": "Width",
+      "min": 40,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 1600,
+      "info": "Width in pixels.",
+      "visible_if": "{{ section.settings.edit_group == 'size' }}"
+    },
+    {
+      "type": "range",
+      "id": "height_px",
+      "label": "Height",
+      "min": 40,
+      "max": 2000,
+      "step": 20,
+      "unit": "px",
+      "default": 400,
+      "info": "Only used when aspect ratio is unlocked.",
+      "visible_if": "{{ section.settings.edit_group == 'size'  and section.settings.ratio_lock == false }}"
     },
     {
       "type": "header",

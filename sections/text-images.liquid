@@ -14,7 +14,7 @@
             endif
             assign ratio = block.settings.ratio
           %}
-          <div class="canvas-item place-{{ block.settings.place }}{% if ratio != 'natural' %} has-ratio{% endif %}" style="--ix: {{ block.settings.x }}px; --iy: {{ block.settings.y }}px; --iw: {{ block.settings.size }}%; --iz: {{ block.settings.z }}; --img-ratio: {{ ratio }}; --img-fit: {{ block.settings.fit }}; --img-pos: {{ block.settings.crop_x }} {{ block.settings.crop_y }};" {{ block.shopify_attributes }}>
+          <div class="canvas-item place-{{ block.settings.place }}{% if block.settings.ratio_lock == false %} is-unlocked{% endif %}{% if ratio != 'natural' %} has-ratio{% endif %}" style="--ix: {{ block.settings.x }}px; --iy: {{ block.settings.y }}px; --iw: {{ block.settings.width_px | default: 480 }}px; --ih: {{ block.settings.height_px | default: 480 }}px; --iz: {{ block.settings.z }}; --img-ratio: {{ ratio }}; --img-fit: {{ block.settings.fit }}; --img-pos: {{ block.settings.crop_x }} {{ block.settings.crop_y }};" {{ block.shopify_attributes }}>
             <div class="image-cell {% if block.settings.show_cell == false %}is-clear{% else %}fill-{{ block.settings.cell_fill }}{% endif %} depth-{{ block.settings.cell_depth }}" style="--cell-border: {{ block.settings.border_width }}px; --cell-border-color: {{ block.settings.border_color }}; --fill: {{ block.settings.cell_color }}; --fill-2: {{ block.settings.cell_color_2 }}; --fill-angle: {{ block.settings.cell_angle }}deg; --depth: {{ block.settings.cell_depth_amount }}px; --depth-color: {{ block.settings.cell_depth_color }};">
               {% if block.settings.image != blank %}
                 {% if block.settings.link != blank %}
@@ -368,16 +368,36 @@
           "visible_if": "{{ block.settings.edit_group == 'size' }}"
         },
         {
-          "type": "range",
-          "id": "size",
-          "label": "Size",
-          "min": 10,
-          "max": 100,
-          "step": 2,
-          "default": 36,
-          "unit": "%",
-          "info": "Width inside this section.",
+          "type": "checkbox",
+          "id": "ratio_lock",
+          "label": "Lock aspect ratio",
+          "default": true,
+          "info": "On uses the picture's own shape. Off lets width and height be set apart.",
           "visible_if": "{{ block.settings.edit_group == 'size' }}"
+        },
+        {
+          "type": "range",
+          "id": "width_px",
+          "label": "Width",
+          "min": 40,
+          "max": 2000,
+          "step": 20,
+          "unit": "px",
+          "default": 480,
+          "info": "Width in pixels.",
+          "visible_if": "{{ block.settings.edit_group == 'size' }}"
+        },
+        {
+          "type": "range",
+          "id": "height_px",
+          "label": "Height",
+          "min": 40,
+          "max": 2000,
+          "step": 20,
+          "unit": "px",
+          "default": 480,
+          "info": "Only used when aspect ratio is unlocked.",
+          "visible_if": "{{ block.settings.edit_group == 'size'  and block.settings.ratio_lock == false }}"
         },
         {
           "type": "header",

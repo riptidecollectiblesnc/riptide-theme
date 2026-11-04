@@ -86,6 +86,12 @@
 .rich-section .display { margin-bottom: 0.65rem; }
 .rich-section .rte { max-width: none; }
 
+.image-section,
+.image-hold,
+.text-images,
+.text-images .canvas {
+  overflow: visible;
+}
 .image-hold {
   display: flex;
   width: 100%;
@@ -97,8 +103,9 @@
 .image-hold > img,
 .image-hold > a,
 .image-hold > .image-empty {
-  width: var(--img-w, 100%);
-  max-width: 100%;
+  width: var(--img-w, 1600px);
+  max-width: none;
+  height: auto;
   transform: translate(var(--img-x, 0px), var(--img-y, 0px));
 }
 .image-cell {
@@ -106,7 +113,7 @@
   border-width: var(--cell-border, 1px);
   border-color: var(--cell-border-color, #00eaff);
   border-radius: var(--radius-card);
-  overflow: hidden;
+  overflow: visible;
   box-sizing: border-box;
   background: transparent;
   line-height: 0;
@@ -157,6 +164,8 @@
   background: none !important;
   background-image: none !important;
   box-shadow: none !important;
+  overflow: visible !important;
+  border-radius: 0;
 }
 .image-cell.is-clear img,
 .image-cell.is-clear a {
@@ -192,11 +201,18 @@
 .image-cell.is-clear.depth-foil a {
   filter: drop-shadow(0 calc(var(--depth, 6px) * 0.4) calc(var(--depth, 6px) * 0.8) #e4c06a);
 }
+.image-hold.is-unlocked > .image-cell {
+  height: var(--img-h, 400px);
+}
+.image-hold.is-unlocked img,
+.image-hold.is-unlocked a {
+  height: 100%;
+}
 .image-hold img {
   display: block;
   width: 100%;
   height: auto;
-  object-fit: var(--img-fit, cover);
+  object-fit: var(--img-fit, contain);
   object-position: var(--img-pos, center center);
 }
 .image-hold.has-ratio > .image-cell > img,
@@ -252,9 +268,19 @@
   position: absolute;
   left: var(--ix, 0px);
   top: var(--iy, 0px);
-  width: var(--iw, 40%);
+  width: var(--iw, 480px);
+  height: auto;
   z-index: var(--iz, 1);
   max-width: none;
+  overflow: visible;
+}
+.canvas-item.is-unlocked {
+  height: var(--ih, 480px);
+}
+.canvas-item.is-unlocked .image-cell,
+.canvas-item.is-unlocked a,
+.canvas-item.is-unlocked img {
+  height: 100%;
 }
 .canvas-item.place-center {
   left: calc(50% + var(--ix, 0px));
@@ -269,7 +295,7 @@
   display: block;
   width: 100%;
   height: auto;
-  object-fit: var(--img-fit, cover);
+  object-fit: var(--img-fit, contain);
   object-position: var(--img-pos, center center);
 }
 .canvas-item.has-ratio img,
