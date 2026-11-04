@@ -1,3 +1,4 @@
+{% render 'section-bg', section: section %}
 {% liquid
   assign logo_w = section.settings.logo_width | default: 160
   assign logo_h = section.settings.logo_height | default: 56
@@ -229,7 +230,14 @@
     transform: translate({{ section.settings.cart_x | default: 0 }}px, {{ section.settings.cart_y | default: 0 }}px);
   }
 {% endstyle %}
-<header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px; --logo-x: {{ logo_x }}px; --logo-y: {{ logo_y }}px; --logo-x-m: {{ logo_x_m }}px; --logo-y-m: {{ logo_y_m }}px;">
+<header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px; --logo-x: {{ logo_x }}px; --logo-y: {{ logo_y }}px; --logo-x-m: {{ logo_x_m }}px; --logo-y-m: {{ logo_y_m }}px; padding-top: {{ section.settings.pad_top | default: 0 }}px; padding-bottom: {{ section.settings.pad_bottom | default: 0 }}px;">
+  {% if section.settings.tagline != blank %}
+    <div class="tagline-hold image-cell {% if section.settings.tagline_show_cell == false %}is-clear{% else %}fill-{{ section.settings.tagline_fill | default: 'none' }}{% endif %} depth-{{ section.settings.tagline_depth | default: 'soft' }}" style="--tag-w: {{ section.settings.tagline_width | default: 220 }}px; --tag-h: {{ section.settings.tagline_height | default: 48 }}px; --tag-x: {{ section.settings.tagline_x | default: 0 }}px; --tag-y: {{ section.settings.tagline_y | default: 0 }}px; --tag-w-m: {{ section.settings.tagline_width_mobile | default: 160 }}px; --tag-h-m: {{ section.settings.tagline_height_mobile | default: 36 }}px; --tag-x-m: {{ section.settings.tagline_x_mobile | default: 0 }}px; --tag-y-m: {{ section.settings.tagline_y_mobile | default: 0 }}px; --cell-border: {{ section.settings.tagline_border | default: 0 }}px; --cell-border-color: {{ section.settings.tagline_border_color | default: '#00EAFF' }}; --fill: {{ section.settings.tagline_color | default: '#0E1C28' }}; --fill-2: {{ section.settings.tagline_color_2 | default: '#00E5FF' }}; --fill-angle: {{ section.settings.tagline_angle | default: 90 }}deg; --depth: {{ section.settings.tagline_depth_amount | default: 6 }}px; --depth-color: {{ section.settings.tagline_depth_color | default: '#00E5FF' }};">
+      {% if section.settings.tagline_link != blank %}<a href="{{ section.settings.tagline_link }}">{% endif %}
+      <img src="{{ section.settings.tagline | image_url: width: 1400 }}" alt="{{ section.settings.tagline_alt | default: shop.name | escape }}" width="{{ section.settings.tagline_width | default: 220 }}" height="{{ section.settings.tagline_height | default: 48 }}">
+      {% if section.settings.tagline_link != blank %}</a>{% endif %}
+    </div>
+  {% endif %}
   {% if section.settings.menu_top != blank %}
     <nav class="wrap desk-nav top-menu" aria-label="Top">
       {% for link in section.settings.menu_top.links %}
@@ -416,8 +424,70 @@
   "name": "Header",
   "settings": [
     {
+      "type": "select",
+      "id": "edit_group",
+      "label": "Edit",
+      "default": "menu_text",
+      "options": [
+        {
+          "value": "menu_text",
+          "label": "Menu text"
+        },
+        {
+          "value": "menu_cells",
+          "label": "Menu cells"
+        },
+        {
+          "value": "bar",
+          "label": "Bar"
+        },
+        {
+          "value": "logo",
+          "label": "Logo"
+        },
+        {
+          "value": "search",
+          "label": "Search"
+        },
+        {
+          "value": "account_and_cart",
+          "label": "Account and cart"
+        },
+        {
+          "value": "top_menu_text",
+          "label": "Top menu text"
+        },
+        {
+          "value": "top_menu_cells",
+          "label": "Top menu cells"
+        },
+        {
+          "value": "tagline",
+          "label": "Tagline"
+        },
+        {
+          "value": "tagline_cell",
+          "label": "Tagline cell"
+        },
+        {
+          "value": "tagline_depth",
+          "label": "Tagline depth"
+        },
+        {
+          "value": "background",
+          "label": "Background"
+        },
+        {
+          "value": "section_space",
+          "label": "Section space"
+        }
+      ],
+      "info": "Opens that group. Pick another title to switch."
+    },
+    {
       "type": "header",
-      "content": "Menu text"
+      "content": "Menu text",
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "select",
@@ -461,19 +531,22 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "checkbox",
       "id": "menu_bold",
       "label": "Menu bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "checkbox",
       "id": "menu_italic",
       "label": "Menu italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "range",
@@ -483,13 +556,15 @@
       "max": 32,
       "step": 1,
       "unit": "px",
-      "default": 16
+      "default": 16,
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "color",
       "id": "menu_color",
       "label": "Menu color",
-      "default": "#8eafbf"
+      "default": "#8eafbf",
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "select",
@@ -530,14 +605,16 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "Gradient is painted on the letters. Solid uses the menu color."
+      "info": "Gradient is painted on the letters. Solid uses the menu color.",
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "color",
       "id": "menu_fill_2",
       "label": "Menu second color",
       "default": "#00e5ff",
-      "info": "Second color for Custom gradient."
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "select",
@@ -593,7 +670,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "range",
@@ -603,17 +681,20 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "color",
       "id": "menu_depth_color",
       "label": "Menu depth color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'menu_text' }}"
     },
     {
       "type": "header",
-      "content": "Menu cells"
+      "content": "Menu cells",
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "range",
@@ -623,29 +704,32 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 10
+      "default": 10,
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "range",
       "id": "menu_x",
       "label": "Menu position X",
-      "min": -120,
-      "max": 120,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Negative moves left. Positive moves right."
+      "info": "Negative moves left. Positive moves right. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "range",
       "id": "menu_y",
       "label": "Menu position Y",
-      "min": -40,
-      "max": 80,
-      "step": 2,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
-      "default": 12,
-      "info": "Positive moves the main menu down, toward the bottom of the header."
+      "default": 0,
+      "info": "Positive moves the main menu down, toward the bottom of the header. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "range",
@@ -655,7 +739,8 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "range",
@@ -665,7 +750,8 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "range",
@@ -675,7 +761,8 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 16
+      "default": 16,
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "select",
@@ -695,7 +782,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "select",
@@ -715,7 +803,8 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "range",
@@ -726,7 +815,8 @@
       "step": 4,
       "unit": "px",
       "default": 0,
-      "info": "0 hugs the word. Set a width before Left or Right will show."
+      "info": "0 hugs the word. Set a width before Left or Right will show.",
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "range",
@@ -737,7 +827,8 @@
       "step": 2,
       "unit": "px",
       "default": 0,
-      "info": "0 hugs the word. Raise this before Top or Bottom will show."
+      "info": "0 hugs the word. Raise this before Top or Bottom will show.",
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "range",
@@ -747,13 +838,15 @@
       "max": 8,
       "step": 1,
       "unit": "px",
-      "default": 0
+      "default": 0,
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "color",
       "id": "menu_border_color",
       "label": "Border color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "select",
@@ -801,20 +894,23 @@
           "value": "custom",
           "label": "Custom gradient"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "color",
       "id": "menu_cell_color",
       "label": "Cell color",
-      "default": "#0e1c28"
+      "default": "#0e1c28",
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "color",
       "id": "menu_cell_color_2",
       "label": "Cell second color",
       "default": "#00e5ff",
-      "info": "Used by Custom gradient."
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "select",
@@ -846,7 +942,8 @@
           "value": "press",
           "label": "Pressed in"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "range",
@@ -856,20 +953,28 @@
       "max": 24,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
     },
     {
       "type": "color",
       "id": "menu_cell_depth_color",
       "label": "Cell depth color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'menu_cells' }}"
+    },
+    {
+      "type": "header",
+      "content": "Bar",
+      "visible_if": "{{ section.settings.edit_group == 'bar' }}"
     },
     {
       "type": "checkbox",
       "id": "sticky",
       "label": "Sticky header",
       "default": true,
-      "info": "Freezes the top of the page while you scroll, the same idea as a frozen row in a sheet."
+      "info": "Freezes the top of the page while you scroll, the same idea as a frozen row in a sheet.",
+      "visible_if": "{{ section.settings.edit_group == 'bar' }}"
     },
     {
       "type": "range",
@@ -880,12 +985,19 @@
       "step": 4,
       "unit": "px",
       "default": 64,
-      "info": "Makes the bar taller. The logo still uses its own size, so the bar will not get shorter than the logo."
+      "info": "Makes the bar taller. The logo still uses its own size, so the bar will not get shorter than the logo.",
+      "visible_if": "{{ section.settings.edit_group == 'bar' }}"
+    },
+    {
+      "type": "header",
+      "content": "Logo",
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "image_picker",
       "id": "logo",
-      "label": "Logo"
+      "label": "Logo",
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "range",
@@ -896,7 +1008,8 @@
       "step": 4,
       "unit": "px",
       "default": 160,
-      "info": "This is the size you see in the theme editor."
+      "info": "This is the size you see in the theme editor.",
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "range",
@@ -906,29 +1019,32 @@
       "max": 224,
       "step": 2,
       "unit": "px",
-      "default": 80
+      "default": 80,
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "range",
       "id": "logo_x",
       "label": "X axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Slides the logo left or right. 0 leaves it where it is. A higher number moves it right."
+      "info": "Slides the logo left or right. 0 leaves it where it is. A higher number moves it right. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "range",
       "id": "logo_y",
       "label": "Y axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Slides the logo up or down. 0 leaves it where it is. A higher number moves it down."
+      "info": "Slides the logo up or down. 0 leaves it where it is. A higher number moves it down. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "range",
@@ -939,7 +1055,8 @@
       "step": 4,
       "unit": "px",
       "default": 140,
-      "info": "Only applies on screens under 480px. The theme editor uses Logo width and Logo height."
+      "info": "Only applies on screens under 480px. The theme editor uses Logo width and Logo height.",
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "range",
@@ -949,29 +1066,32 @@
       "max": 120,
       "step": 2,
       "unit": "px",
-      "default": 44
+      "default": 44,
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "range",
       "id": "logo_x_mobile",
       "label": "Phone X axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Only applies on screens under 480px. Does not add to the desktop X axis."
+      "info": "Only applies on screens under 480px. Does not add to the desktop X axis. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "range",
       "id": "logo_y_mobile",
       "label": "Phone Y axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Only applies on screens under 480px. A higher number moves the logo down."
+      "info": "Only applies on screens under 480px. A higher number moves the logo down. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "select",
@@ -987,17 +1107,20 @@
           "value": "center",
           "label": "Centered"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "checkbox",
       "id": "show_name",
       "label": "Show shop name next to the logo",
-      "default": true
+      "default": true,
+      "visible_if": "{{ section.settings.edit_group == 'logo' }}"
     },
     {
       "type": "header",
-      "content": "Search"
+      "content": "Search",
+      "visible_if": "{{ section.settings.edit_group == 'search' }}"
     },
     {
       "type": "range",
@@ -1007,81 +1130,90 @@
       "max": 500,
       "step": 4,
       "unit": "px",
-      "default": 176
+      "default": 176,
+      "visible_if": "{{ section.settings.edit_group == 'search' }}"
     },
     {
       "type": "range",
       "id": "search_x",
       "label": "X axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Slides the search left or right. A higher number moves it right."
+      "info": "Slides the search left or right. A higher number moves it right. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'search' }}"
     },
     {
       "type": "range",
       "id": "search_y",
       "label": "Y axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Slides the search up or down. A higher number moves it down."
+      "info": "Slides the search up or down. A higher number moves it down. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'search' }}"
     },
     {
       "type": "header",
-      "content": "Account and cart"
+      "content": "Account and cart",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
     },
     {
       "type": "range",
       "id": "account_x",
       "label": "Account X axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Slides the account button left or right. A higher number moves it right."
+      "info": "Slides the account button left or right. A higher number moves it right. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
     },
     {
       "type": "range",
       "id": "account_y",
       "label": "Account Y axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Slides the account button up or down. A higher number moves it down."
+      "info": "Slides the account button up or down. A higher number moves it down. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
     },
     {
       "type": "range",
       "id": "cart_x",
       "label": "Cart X axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Slides the cart button left or right. A higher number moves it right."
+      "info": "Slides the cart button left or right. A higher number moves it right. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
     },
     {
       "type": "range",
       "id": "cart_y",
       "label": "Cart Y axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Slides the cart button up or down. A higher number moves it down."
+      "info": "Slides the cart button up or down. A higher number moves it down. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'account_and_cart' }}"
     },
     {
       "type": "header",
-      "content": "Top menu text"
+      "content": "Top menu text",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "select",
@@ -1125,7 +1257,8 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "select",
@@ -1149,19 +1282,22 @@
           "value": "bold_italic",
           "label": "Bold italic"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "checkbox",
       "id": "top_bold",
       "label": "Bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "checkbox",
       "id": "top_italic",
       "label": "Italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "range",
@@ -1171,13 +1307,15 @@
       "max": 96,
       "step": 1,
       "unit": "px",
-      "default": 14
+      "default": 14,
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "color",
       "id": "top_color",
       "label": "Color",
-      "default": "#8eafbf"
+      "default": "#8eafbf",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "select",
@@ -1218,13 +1356,15 @@
           "value": "custom",
           "label": "Custom gradient"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "color",
       "id": "top_fill_2",
       "label": "Second color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "select",
@@ -1280,7 +1420,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "range",
@@ -1290,24 +1431,28 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "color",
       "id": "top_depth_color",
       "label": "Depth color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_text' }}"
     },
     {
       "type": "header",
-      "content": "Top menu cells"
+      "content": "Top menu cells",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "checkbox",
       "id": "top_cells",
       "label": "Use cell styles",
       "default": false,
-      "info": "Off leaves the top row as plain text. On uses the border, fill, padding, and depth below. None and 0 stay off."
+      "info": "Off leaves the top row as plain text. On uses the border, fill, padding, and depth below. None and 0 stay off.",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "range",
@@ -1317,29 +1462,32 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 10
+      "default": 10,
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "range",
       "id": "top_x",
       "label": "Top menu position X",
-      "min": -120,
-      "max": 800,
-      "step": 10,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Negative moves left. Positive moves right, up to 800."
+      "info": "Negative moves left. Positive moves right, up to 800. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "range",
       "id": "top_y",
       "label": "Top menu position Y",
-      "min": -40,
-      "max": 80,
-      "step": 2,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Positive moves the top menu down."
+      "info": "Positive moves the top menu down. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "range",
@@ -1349,7 +1497,8 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "range",
@@ -1359,7 +1508,8 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "range",
@@ -1369,7 +1519,8 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 16
+      "default": 16,
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "select",
@@ -1389,7 +1540,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "select",
@@ -1409,7 +1561,8 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "range",
@@ -1420,7 +1573,8 @@
       "step": 4,
       "unit": "px",
       "default": 0,
-      "info": "0 hugs the word. Set a width before Left or Right will show."
+      "info": "0 hugs the word. Set a width before Left or Right will show.",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "range",
@@ -1431,7 +1585,8 @@
       "step": 2,
       "unit": "px",
       "default": 0,
-      "info": "0 hugs the word. Raise this before Top or Bottom will show."
+      "info": "0 hugs the word. Raise this before Top or Bottom will show.",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "range",
@@ -1441,13 +1596,15 @@
       "max": 8,
       "step": 1,
       "unit": "px",
-      "default": 0
+      "default": 0,
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "color",
       "id": "top_border_color",
       "label": "Border color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "select",
@@ -1495,19 +1652,22 @@
           "value": "custom",
           "label": "Custom gradient"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "color",
       "id": "top_cell_color",
       "label": "Cell color",
-      "default": "#0e1c28"
+      "default": "#0e1c28",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "color",
       "id": "top_cell_color_2",
       "label": "Cell second color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "select",
@@ -1539,7 +1699,8 @@
           "value": "press",
           "label": "Pressed in"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "range",
@@ -1549,25 +1710,508 @@
       "max": 24,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "color",
       "id": "top_cell_depth_color",
       "label": "Cell depth color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "link_list",
       "id": "menu_top",
       "label": "Top menu",
-      "info": "Shows as its own row above the main menu. Leave empty to hide it."
+      "info": "Shows as its own row above the main menu. Leave empty to hide it.",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
     },
     {
       "type": "link_list",
       "id": "menu",
       "label": "Menu",
-      "info": "Leave empty to use Shop, Breaks, Live, Auctions, Hits, and Whatnot. Nested items drop down on hover."
+      "info": "Leave empty to use Shop, Breaks, Live, Auctions, Hits, and Whatnot. Nested items drop down on hover.",
+      "visible_if": "{{ section.settings.edit_group == 'top_menu_cells' }}"
+    },
+    {
+      "type": "header",
+      "content": "Tagline",
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "tagline",
+      "label": "Tagline image",
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "text",
+      "id": "tagline_alt",
+      "label": "Tagline alt text",
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "url",
+      "id": "tagline_link",
+      "label": "Tagline link",
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_width",
+      "label": "Size width",
+      "min": 40,
+      "max": 640,
+      "step": 6,
+      "unit": "px",
+      "default": 220,
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_height",
+      "label": "Size height",
+      "min": 16,
+      "max": 416,
+      "step": 4,
+      "unit": "px",
+      "default": 48,
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_x",
+      "label": "X axis",
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "default": 0,
+      "info": "Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_y",
+      "label": "Y axis",
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "default": 0,
+      "info": "Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_width_mobile",
+      "label": "Phone size width",
+      "min": 40,
+      "max": 440,
+      "step": 4,
+      "unit": "px",
+      "default": 160,
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_height_mobile",
+      "label": "Phone size height",
+      "min": 16,
+      "max": 216,
+      "step": 2,
+      "unit": "px",
+      "default": 36,
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_x_mobile",
+      "label": "Phone X axis",
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "default": 0,
+      "info": "Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_y_mobile",
+      "label": "Phone Y axis",
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "default": 0,
+      "info": "Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'tagline' }}"
+    },
+    {
+      "type": "header",
+      "content": "Tagline cell",
+      "visible_if": "{{ section.settings.edit_group == 'tagline_cell' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "tagline_show_cell",
+      "label": "Use cell",
+      "default": true,
+      "info": "Off removes the box, border, and fill. Depth still glows a transparent image.",
+      "visible_if": "{{ section.settings.edit_group == 'tagline_cell' }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_border",
+      "label": "Border width",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 0,
+      "visible_if": "{{ section.settings.edit_group == 'tagline_cell' and section.settings.tagline_show_cell }}"
+    },
+    {
+      "type": "color",
+      "id": "tagline_border_color",
+      "label": "Border color",
+      "default": "#00EAFF",
+      "visible_if": "{{ section.settings.edit_group == 'tagline_cell' and section.settings.tagline_show_cell }}"
+    },
+    {
+      "type": "select",
+      "id": "tagline_fill",
+      "label": "Cell fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'tagline_cell' and section.settings.tagline_show_cell }}"
+    },
+    {
+      "type": "color",
+      "id": "tagline_color",
+      "label": "Cell color",
+      "default": "#0E1C28",
+      "visible_if": "{{ section.settings.edit_group == 'tagline_cell' and section.settings.tagline_show_cell }}"
+    },
+    {
+      "type": "color",
+      "id": "tagline_color_2",
+      "label": "Cell second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'tagline_cell' and section.settings.tagline_show_cell }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'tagline_cell' and section.settings.tagline_show_cell }}"
+    },
+    {
+      "type": "header",
+      "content": "Tagline depth",
+      "visible_if": "{{ section.settings.edit_group == 'tagline_depth' }}"
+    },
+    {
+      "type": "select",
+      "id": "tagline_depth",
+      "label": "Cell depth",
+      "default": "soft",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'tagline_depth' }}"
+    },
+    {
+      "type": "range",
+      "id": "tagline_depth_amount",
+      "label": "Cell depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 6,
+      "visible_if": "{{ section.settings.edit_group == 'tagline_depth' }}"
+    },
+    {
+      "type": "color",
+      "id": "tagline_depth_color",
+      "label": "Cell depth color",
+      "default": "#00E5FF",
+      "visible_if": "{{ section.settings.edit_group == 'tagline_depth' }}"
+    },
+    {
+      "type": "header",
+      "content": "Background",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_fill",
+      "label": "Fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "None leaves the section as it is. Foil, Aurora, and Neon pulse animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color",
+      "label": "Fill color",
+      "default": "#0E1C28",
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color_2",
+      "label": "Second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "range",
+      "id": "sec_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_preset",
+      "label": "Image preset",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "deep-tide",
+          "label": "Deep tide"
+        },
+        {
+          "value": "horizon",
+          "label": "Neon horizon"
+        },
+        {
+          "value": "foil-sweep",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "nebula",
+          "label": "Violet nebula"
+        },
+        {
+          "value": "grid",
+          "label": "Night grid"
+        },
+        {
+          "value": "bubbles",
+          "label": "Bubble field"
+        },
+        {
+          "value": "aurora-sheet",
+          "label": "Aurora sheet"
+        },
+        {
+          "value": "slab",
+          "label": "Slab glow"
+        },
+        {
+          "value": "storm",
+          "label": "Storm glass"
+        }
+      ],
+      "info": "Painted art behind the section. Foil sweep and Aurora sheet animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "sec_image",
+      "label": "Background image",
+      "info": "Optional photo. Sits on top of the fill and preset.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section space",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "label": "Top space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "info": "Added space. Zero keeps the header tight.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "label": "Bottom space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "info": "Added space. Zero keeps the header tight.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     }
   ]
 }

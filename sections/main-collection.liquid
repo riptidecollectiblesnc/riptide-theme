@@ -1,3 +1,4 @@
+{% render 'section-bg', section: section %}
 {% liquid
   assign title = section.settings.title
   if title == blank
@@ -81,16 +82,200 @@
   },
   "settings": [
     {
+      "type": "select",
+      "id": "edit_group",
+      "label": "Edit",
+      "default": "this_header",
+      "options": [
+        {
+          "value": "this_header",
+          "label": "This header"
+        },
+        {
+          "value": "background",
+          "label": "Background"
+        },
+        {
+          "value": "section_space",
+          "label": "Section space"
+        },
+        {
+          "value": "small_line",
+          "label": "Small line"
+        },
+        {
+          "value": "collection_name",
+          "label": "Collection name"
+        },
+        {
+          "value": "link_after_the_name",
+          "label": "Link after the name"
+        },
+        {
+          "value": "products",
+          "label": "Products"
+        }
+      ],
+      "info": "Opens that group. Pick another title to switch."
+    },
+    {
       "type": "header",
-      "content": "This header"
+      "content": "This header",
+      "visible_if": "{{ section.settings.edit_group == 'this_header' }}"
     },
     {
       "type": "paragraph",
-      "content": "Three pieces of text. The small line is the word Collection. The big line is the collection name, such as Card Boxes. The link sits after an arrow, such as Card Boxes → All."
+      "content": "Three pieces of text. The small line is the word Collection. The big line is the collection name, such as Card Boxes. The link sits after an arrow, such as Card Boxes → All.",
+      "visible_if": "{{ section.settings.edit_group == 'this_header' }}"
     },
     {
       "type": "header",
-      "content": "Section space"
+      "content": "Background",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_fill",
+      "label": "Fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "None leaves the section as it is. Foil, Aurora, and Neon pulse animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color",
+      "label": "Fill color",
+      "default": "#0E1C28",
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color_2",
+      "label": "Second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "range",
+      "id": "sec_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_preset",
+      "label": "Image preset",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "deep-tide",
+          "label": "Deep tide"
+        },
+        {
+          "value": "horizon",
+          "label": "Neon horizon"
+        },
+        {
+          "value": "foil-sweep",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "nebula",
+          "label": "Violet nebula"
+        },
+        {
+          "value": "grid",
+          "label": "Night grid"
+        },
+        {
+          "value": "bubbles",
+          "label": "Bubble field"
+        },
+        {
+          "value": "aurora-sheet",
+          "label": "Aurora sheet"
+        },
+        {
+          "value": "slab",
+          "label": "Slab glow"
+        },
+        {
+          "value": "storm",
+          "label": "Storm glass"
+        }
+      ],
+      "info": "Painted art behind the section. Foil sweep and Aurora sheet animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "sec_image",
+      "label": "Background image",
+      "info": "Optional photo. Sits on top of the fill and preset.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section space",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     },
     {
       "type": "range",
@@ -101,7 +286,8 @@
       "step": 4,
       "unit": "px",
       "default": 52,
-      "info": "Space above the whole collection section."
+      "info": "Space above the whole collection section.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     },
     {
       "type": "range",
@@ -112,18 +298,21 @@
       "step": 4,
       "unit": "px",
       "default": 52,
-      "info": "Space below the whole collection section."
+      "info": "Space below the whole collection section.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     },
     {
       "type": "header",
-      "content": "Small line"
+      "content": "Small line",
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "text",
       "id": "eyebrow",
       "label": "Small line",
       "default": "Collection",
-      "info": "The line above the name. This is the word Collection. Spaces at the start are kept. If the theme editor deletes them when you save, type ^ once for each space. ^^^Hello is three spaces, then Hello."
+      "info": "The line above the name. This is the word Collection. Spaces at the start are kept. If the theme editor deletes them when you save, type ^ once for each space. ^^^Hello is three spaces, then Hello.",
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "select",
@@ -167,19 +356,22 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "checkbox",
       "id": "eyebrow_bold",
       "label": "Small line bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "checkbox",
       "id": "eyebrow_italic",
       "label": "Small line italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "select",
@@ -203,7 +395,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "select",
@@ -227,13 +420,15 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "color",
       "id": "eyebrow_color",
       "label": "Small line color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "select",
@@ -274,14 +469,16 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
+      "info": "Gradient is painted on the letters. Solid uses the color above.",
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "color",
       "id": "eyebrow_fill_2",
       "label": "Small line second color",
       "default": "#00e5ff",
-      "info": "Second color for Custom gradient."
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "range",
@@ -291,7 +488,8 @@
       "max": 120,
       "step": 2,
       "unit": "px",
-      "default": 14
+      "default": 14,
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "select",
@@ -347,7 +545,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "range",
@@ -357,23 +556,27 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "color",
       "id": "eyebrow_depth_color",
       "label": "Small line depth color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'small_line' }}"
     },
     {
       "type": "header",
-      "content": "Collection name"
+      "content": "Collection name",
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "text",
       "id": "title",
       "label": "Name",
-      "info": "Leave blank to use the collection's name from Shopify, such as Card Boxes. Type here only to replace that name. Spaces at the start are kept. If the theme editor deletes them when you save, type ^ once for each space. ^^^Hello is three spaces, then Hello."
+      "info": "Leave blank to use the collection's name from Shopify, such as Card Boxes. Type here only to replace that name. Spaces at the start are kept. If the theme editor deletes them when you save, type ^ once for each space. ^^^Hello is three spaces, then Hello.",
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "select",
@@ -417,19 +620,22 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "checkbox",
       "id": "title_bold",
       "label": "Name bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "checkbox",
       "id": "title_italic",
       "label": "Name italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "select",
@@ -453,7 +659,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "select",
@@ -477,13 +684,15 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "color",
       "id": "title_color",
       "label": "Name color",
-      "default": "#f4fbff"
+      "default": "#f4fbff",
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "select",
@@ -524,14 +733,16 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
+      "info": "Gradient is painted on the letters. Solid uses the color above.",
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "color",
       "id": "title_fill_2",
       "label": "Name second color",
       "default": "#00e5ff",
-      "info": "Second color for Custom gradient."
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "range",
@@ -541,7 +752,8 @@
       "max": 160,
       "step": 2,
       "unit": "px",
-      "default": 48
+      "default": 48,
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "select",
@@ -597,7 +809,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "range",
@@ -607,31 +820,36 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "color",
       "id": "title_depth_color",
       "label": "Name depth color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'collection_name' }}"
     },
     {
       "type": "header",
-      "content": "Link after the name"
+      "content": "Link after the name",
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "text",
       "id": "arrow",
       "label": "Arrow",
       "default": "➜",
-      "info": "Sits between the collection name and the link. Clear it to hide the arrow."
+      "info": "Sits between the collection name and the link. Clear it to hide the arrow.",
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "text",
       "id": "link",
       "label": "Link",
       "default": "All",
-      "info": "The word after the arrow. Default is All, so the line reads Card Boxes → All. Clear it to hide the link. Spaces at the start are kept. If the theme editor deletes them when you save, type ^ once for each space. ^^^Hello is three spaces, then Hello."
+      "info": "The word after the arrow. Default is All, so the line reads Card Boxes → All. Clear it to hide the link. Spaces at the start are kept. If the theme editor deletes them when you save, type ^ once for each space. ^^^Hello is three spaces, then Hello.",
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "select",
@@ -675,19 +893,22 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "checkbox",
       "id": "link_bold",
       "label": "Link bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "checkbox",
       "id": "link_italic",
       "label": "Link italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "select",
@@ -711,7 +932,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "select",
@@ -735,13 +957,15 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "color",
       "id": "link_color",
       "label": "Link color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "select",
@@ -782,14 +1006,16 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
+      "info": "Gradient is painted on the letters. Solid uses the color above.",
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "color",
       "id": "link_fill_2",
       "label": "Link second color",
       "default": "#00e5ff",
-      "info": "Second color for Custom gradient."
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "range",
@@ -799,7 +1025,8 @@
       "max": 120,
       "step": 2,
       "unit": "px",
-      "default": 22
+      "default": 22,
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "select",
@@ -855,7 +1082,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "range",
@@ -865,23 +1093,27 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "color",
       "id": "link_depth_color",
       "label": "Link depth color",
-      "default": "#00e5ff"
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "url",
       "id": "link_url",
       "label": "Link",
-      "info": "Leave blank to open the All products collection."
+      "info": "Leave blank to open the All products collection.",
+      "visible_if": "{{ section.settings.edit_group == 'link_after_the_name' }}"
     },
     {
       "type": "header",
-      "content": "Products"
+      "content": "Products",
+      "visible_if": "{{ section.settings.edit_group == 'products' }}"
     },
     {
       "type": "range",
@@ -890,7 +1122,8 @@
       "min": 8,
       "max": 24,
       "step": 4,
-      "default": 12
+      "default": 12,
+      "visible_if": "{{ section.settings.edit_group == 'products' }}"
     }
   ]
 }

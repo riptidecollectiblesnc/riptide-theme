@@ -1,0 +1,76 @@
+{% liquid
+  assign fill = section.settings.sec_fill | default: 'none'
+  assign preset = section.settings.sec_preset | default: 'none'
+  assign paint = section.settings.sec_fill_color | default: '#0E1C28'
+  assign paint2 = section.settings.sec_fill_color_2 | default: '#00E5FF'
+  assign angle = section.settings.sec_angle | default: 90
+  assign photo = section.settings.sec_image
+%}
+{% if fill != 'none' or preset != 'none' or photo != blank %}
+  {% style %}
+    #shopify-section-{{ section.id }} {
+      position: relative;
+      isolation: isolate;
+      {% if fill == 'solid' or fill == 'glass' or fill == 'mesh' or fill == 'none' %}
+        {% if fill == 'solid' %}background-color: {{ paint }};
+        {% elsif fill == 'glass' %}background-color: color-mix(in srgb, {{ paint }} 22%, transparent);
+        {% elsif fill == 'mesh' %}background-color: {{ paint }};
+        {% endif %}
+      {% endif %}
+      {% capture grad %}{% endcapture %}
+      {% case preset %}
+        {% when 'deep-tide' %}{% capture grad %}radial-gradient(90% 70% at 50% 110%, #00e5ff 0%, transparent 46%), radial-gradient(70% 50% at 0% 0%, #12323c 0%, transparent 55%), linear-gradient(#041018, #071820){% endcapture %}
+        {% when 'horizon' %}{% capture grad %}linear-gradient(#041018 0 42%, #00e5ff 42% 44%, #e4c06a 44% 46%, #041018 46%){% endcapture %}
+        {% when 'foil-sweep' %}{% capture grad %}linear-gradient(105deg, #6b5424, #e4c06a 28%, #fff6d0 48%, #e4c06a 62%, #8a6a2f){% endcapture %}
+        {% when 'nebula' %}{% capture grad %}radial-gradient(60% 80% at 20% 30%, #6d1ecc 0%, transparent 55%), radial-gradient(50% 60% at 80% 70%, #00e5ff 0%, transparent 50%), linear-gradient(#070612, #12061f){% endcapture %}
+        {% when 'grid' %}{% capture grad %}linear-gradient(#00e5ff 1px, transparent 1px), linear-gradient(90deg, #00e5ff 1px, transparent 1px), linear-gradient(#071018, #071018){% endcapture %}
+        {% when 'bubbles' %}{% capture grad %}radial-gradient(circle at 18% 30%, color-mix(in srgb, #7af6ff 70%, transparent) 0 18px, transparent 19px), radial-gradient(circle at 70% 22%, color-mix(in srgb, #00e5ff 55%, transparent) 0 28px, transparent 29px), radial-gradient(circle at 40% 72%, color-mix(in srgb, #b388ff 50%, transparent) 0 22px, transparent 23px), radial-gradient(circle at 82% 68%, color-mix(in srgb, #7af6ff 40%, transparent) 0 14px, transparent 15px), linear-gradient(#04141c, #071820){% endcapture %}
+        {% when 'aurora-sheet' %}{% capture grad %}linear-gradient(100deg, #041018, #00e5ff 28%, #6d1ecc 58%, #041820){% endcapture %}
+        {% when 'slab' %}{% capture grad %}linear-gradient(#0e1c28, #0e1c28){% endcapture %}
+        {% when 'storm' %}{% capture grad %}radial-gradient(80% 40% at 50% 0%, color-mix(in srgb, #7af6ff 35%, transparent), transparent 60%), repeating-linear-gradient(115deg, transparent 0 10px, color-mix(in srgb, #00e5ff 16%, transparent) 10px 11px), linear-gradient(#071018, #12061f){% endcapture %}
+      {% endcase %}
+      {% if preset == 'none' %}
+        {% case fill %}
+          {% when 'tide' %}{% capture grad %}linear-gradient(90deg, #042028, #00e5ff 42%, #7af6ff 50%, #00e5ff 58%, #042028){% endcapture %}
+          {% when 'violet' %}{% capture grad %}linear-gradient(100deg, #12061f, #6d1ecc 46%, #00e5ff){% endcapture %}
+          {% when 'foil' %}{% capture grad %}linear-gradient(105deg, #6b5424, #e4c06a 28%, #fff6d0 48%, #e4c06a 62%, #8a6a2f){% endcapture %}
+          {% when 'sunset' %}{% capture grad %}linear-gradient(90deg, #3a1020, #ff5a7a 35%, #e4c06a 68%, #6d1ecc){% endcapture %}
+          {% when 'aurora' %}{% capture grad %}linear-gradient(100deg, #041018, #00e5ff 28%, #6d1ecc 58%, #041820){% endcapture %}
+          {% when 'pulse' %}{% capture grad %}linear-gradient(90deg, #00e5ff, #6d1ecc, #00e5ff){% endcapture %}
+          {% when 'mesh' %}{% capture grad %}radial-gradient(circle at 15% 50%, color-mix(in srgb, {{ paint }} 70%, transparent), transparent 42%), radial-gradient(circle at 80% 40%, color-mix(in srgb, {{ paint2 }} 75%, transparent), transparent 46%){% endcapture %}
+          {% when 'custom' %}{% capture grad %}linear-gradient({{ angle }}deg, {{ paint }}, {{ paint2 }}){% endcapture %}
+        {% endcase %}
+      {% endif %}
+      {% assign grad = grad | strip %}
+      {% if photo != blank and grad != blank %}
+        background-image: url({{ photo | image_url: width: 2000 }}), {{ grad }};
+        background-size: cover, {% if preset == 'grid' %}28px 28px, 28px 28px, cover{% else %}cover{% endif %};
+        background-position: center, center;
+        background-repeat: no-repeat;
+      {% elsif photo != blank %}
+        background-image: url({{ photo | image_url: width: 2000 }});
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      {% elsif grad != blank %}
+        background-image: {{ grad }};
+        {% if preset == 'grid' %}
+          background-size: 28px 28px, 28px 28px, cover;
+        {% elsif preset == 'foil-sweep' or preset == 'aurora-sheet' or preset == 'none' and fill == 'foil' or preset == 'none' and fill == 'aurora' or preset == 'none' and fill == 'pulse' %}
+          background-size: 220% 100%;
+        {% else %}
+          background-size: cover;
+        {% endif %}
+        background-position: center;
+      {% endif %}
+      {% if photo == blank %}
+        {% if preset == 'foil-sweep' or preset == 'aurora-sheet' or preset == 'none' and fill == 'foil' or preset == 'none' and fill == 'aurora' or preset == 'none' and fill == 'pulse' %}
+          animation: fill-pan {% if fill == 'pulse' %}6s{% elsif preset == 'aurora-sheet' or fill == 'aurora' %}12s{% else %}9s{% endif %} linear infinite;
+        {% endif %}
+      {% endif %}
+      {% if preset == 'slab' %}
+        box-shadow: inset 0 0 0 1px #00eaff, inset 0 0 40px color-mix(in srgb, #00e5ff 28%, transparent);
+      {% endif %}
+    }
+  {% endstyle %}
+{% endif %}

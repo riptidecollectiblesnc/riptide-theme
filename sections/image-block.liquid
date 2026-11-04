@@ -1,3 +1,4 @@
+{% render 'section-bg', section: section %}
 {% liquid
   assign alt = section.settings.alt
   if alt == blank and section.settings.image != blank
@@ -14,6 +15,10 @@
       class="image-hold place-{{ section.settings.place }}{% if ratio != 'natural' %} has-ratio{% endif %}"
       style="--img-w: {{ section.settings.size }}%; --img-x: {{ section.settings.x }}px; --img-y: {{ section.settings.y }}px; --img-ratio: {{ ratio }}; --img-fit: {{ section.settings.fit }}; --img-pos: {{ section.settings.crop_x }} {{ section.settings.crop_y }};"
     >
+      <div
+        class="image-cell {% if section.settings.show_cell == false %}is-clear{% else %}fill-{{ section.settings.cell_fill | default: 'none' }}{% endif %} depth-{{ section.settings.cell_depth | default: 'soft' }}"
+        style="--cell-border: {{ section.settings.border_width | default: 1 }}px; --cell-border-color: {{ section.settings.border_color | default: '#00EAFF' }}; --fill: {{ section.settings.cell_color | default: '#0E1C28' }}; --fill-2: {{ section.settings.cell_color_2 | default: '#00E5FF' }}; --fill-angle: {{ section.settings.cell_angle | default: 90 }}deg; --depth: {{ section.settings.cell_depth_amount | default: 6 }}px; --depth-color: {{ section.settings.cell_depth_color | default: '#00E5FF' }};"
+      >
       {% if section.settings.image != blank %}
         {% if section.settings.link != blank %}
           <a href="{{ section.settings.link }}">
@@ -25,6 +30,7 @@
       {% else %}
         <div class="image-empty">Add an image in this section.</div>
       {% endif %}
+      </div>
     </div>
   </div>
 </section>
@@ -39,25 +45,70 @@
   },
   "settings": [
     {
+      "type": "select",
+      "id": "edit_group",
+      "label": "Edit",
+      "default": "content",
+      "options": [
+        {
+          "value": "content",
+          "label": "Content"
+        },
+        {
+          "value": "ratio",
+          "label": "Ratio"
+        },
+        {
+          "value": "size",
+          "label": "Size"
+        },
+        {
+          "value": "position",
+          "label": "Position"
+        },
+        {
+          "value": "cell",
+          "label": "Cell"
+        },
+        {
+          "value": "depth",
+          "label": "Depth"
+        },
+        {
+          "value": "background",
+          "label": "Background"
+        },
+        {
+          "value": "section_space",
+          "label": "Section space"
+        }
+      ],
+      "info": "Opens that group. Pick another title to switch."
+    },
+    {
       "type": "image_picker",
       "id": "image",
-      "label": "Image"
+      "label": "Image",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "text",
       "id": "alt",
       "label": "Alt text",
-      "info": "Read by screen readers. Leave blank to use the image's own alt text."
+      "info": "Read by screen readers. Leave blank to use the image's own alt text.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "url",
       "id": "link",
       "label": "Link",
-      "info": "Optional. The image becomes a link."
+      "info": "Optional. The image becomes a link.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "header",
-      "content": "Ratio"
+      "content": "Ratio",
+      "visible_if": "{{ section.settings.edit_group == 'ratio' }}"
     },
     {
       "type": "select",
@@ -93,7 +144,8 @@
           "value": "21 / 9",
           "label": "Banner"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'ratio' }}"
     },
     {
       "type": "select",
@@ -110,11 +162,13 @@
           "label": "Fit inside"
         }
       ],
-      "info": "Used when a ratio is set. Natural shows the whole image."
+      "info": "Used when a ratio is set. Natural shows the whole image.",
+      "visible_if": "{{ section.settings.edit_group == 'ratio' }}"
     },
     {
       "type": "header",
-      "content": "Size"
+      "content": "Size",
+      "visible_if": "{{ section.settings.edit_group == 'size' }}"
     },
     {
       "type": "range",
@@ -125,11 +179,13 @@
       "step": 2,
       "unit": "%",
       "default": 100,
-      "info": "Width of the image inside the section."
+      "info": "Width of the image inside the section.",
+      "visible_if": "{{ section.settings.edit_group == 'size' }}"
     },
     {
       "type": "header",
-      "content": "Position"
+      "content": "Position",
+      "visible_if": "{{ section.settings.edit_group == 'position' }}"
     },
     {
       "type": "select",
@@ -150,29 +206,32 @@
           "label": "Right"
         }
       ],
-      "info": "Where the image sits in the row."
+      "info": "Where the image sits in the row.",
+      "visible_if": "{{ section.settings.edit_group == 'position' }}"
     },
     {
       "type": "range",
       "id": "x",
       "label": "X axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Moves the image left or right. Positive moves right."
+      "info": "Moves the image left or right. Positive moves right. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'position' }}"
     },
     {
       "type": "range",
       "id": "y",
       "label": "Y axis",
-      "min": -200,
-      "max": 200,
-      "step": 4,
+      "min": -1000,
+      "max": 1000,
+      "step": 20,
       "unit": "px",
       "default": 0,
-      "info": "Moves the image up or down. Positive moves down."
+      "info": "Moves the image up or down. Positive moves down. Range is -1000 to 1000.",
+      "visible_if": "{{ section.settings.edit_group == 'position' }}"
     },
     {
       "type": "select",
@@ -193,7 +252,8 @@
           "label": "Right"
         }
       ],
-      "info": "Which side stays visible when Fill and crop cuts the image."
+      "info": "Which side stays visible when Fill and crop cuts the image.",
+      "visible_if": "{{ section.settings.edit_group == 'position' }}"
     },
     {
       "type": "select",
@@ -213,11 +273,348 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'position' }}"
     },
     {
       "type": "header",
-      "content": "Section space"
+      "content": "Cell",
+      "visible_if": "{{ section.settings.edit_group == 'cell' }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cell",
+      "label": "Use cell",
+      "default": true,
+      "info": "Off removes the box, border, and fill. Depth still glows a transparent image.",
+      "visible_if": "{{ section.settings.edit_group == 'cell' }}"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "label": "Border width",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "default": 1,
+      "visible_if": "{{ section.settings.edit_group == 'cell' and section.settings.show_cell }}"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#00EAFF",
+      "visible_if": "{{ section.settings.edit_group == 'cell' and section.settings.show_cell }}"
+    },
+    {
+      "type": "select",
+      "id": "cell_fill",
+      "label": "Cell fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'cell' and section.settings.show_cell }}"
+    },
+    {
+      "type": "color",
+      "id": "cell_color",
+      "label": "Cell color",
+      "default": "#0E1C28",
+      "visible_if": "{{ section.settings.edit_group == 'cell' and section.settings.show_cell }}"
+    },
+    {
+      "type": "color",
+      "id": "cell_color_2",
+      "label": "Cell second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'cell' and section.settings.show_cell }}"
+    },
+    {
+      "type": "range",
+      "id": "cell_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'cell' and section.settings.show_cell }}"
+    },
+    {
+      "type": "header",
+      "content": "Depth",
+      "visible_if": "{{ section.settings.edit_group == 'depth' }}"
+    },
+    {
+      "type": "select",
+      "id": "cell_depth",
+      "label": "Cell depth",
+      "default": "soft",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "soft",
+          "label": "Soft shadow"
+        },
+        {
+          "value": "hard",
+          "label": "Hard offset"
+        },
+        {
+          "value": "lift",
+          "label": "Lift"
+        },
+        {
+          "value": "long",
+          "label": "Long shadow"
+        },
+        {
+          "value": "echo",
+          "label": "Echo"
+        },
+        {
+          "value": "press",
+          "label": "Letterpress"
+        },
+        {
+          "value": "emboss",
+          "label": "Emboss"
+        },
+        {
+          "value": "outline",
+          "label": "Outline"
+        },
+        {
+          "value": "neon",
+          "label": "Neon glow"
+        },
+        {
+          "value": "double",
+          "label": "Double glow"
+        },
+        {
+          "value": "foil",
+          "label": "Foil"
+        }
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'depth' }}"
+    },
+    {
+      "type": "range",
+      "id": "cell_depth_amount",
+      "label": "Cell depth amount",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 6,
+      "visible_if": "{{ section.settings.edit_group == 'depth' }}"
+    },
+    {
+      "type": "color",
+      "id": "cell_depth_color",
+      "label": "Cell depth color",
+      "default": "#00E5FF",
+      "visible_if": "{{ section.settings.edit_group == 'depth' }}"
+    },
+    {
+      "type": "header",
+      "content": "Background",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_fill",
+      "label": "Fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "None leaves the section as it is. Foil, Aurora, and Neon pulse animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color",
+      "label": "Fill color",
+      "default": "#0E1C28",
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color_2",
+      "label": "Second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "range",
+      "id": "sec_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_preset",
+      "label": "Image preset",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "deep-tide",
+          "label": "Deep tide"
+        },
+        {
+          "value": "horizon",
+          "label": "Neon horizon"
+        },
+        {
+          "value": "foil-sweep",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "nebula",
+          "label": "Violet nebula"
+        },
+        {
+          "value": "grid",
+          "label": "Night grid"
+        },
+        {
+          "value": "bubbles",
+          "label": "Bubble field"
+        },
+        {
+          "value": "aurora-sheet",
+          "label": "Aurora sheet"
+        },
+        {
+          "value": "slab",
+          "label": "Slab glow"
+        },
+        {
+          "value": "storm",
+          "label": "Storm glass"
+        }
+      ],
+      "info": "Painted art behind the section. Foil sweep and Aurora sheet animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "sec_image",
+      "label": "Background image",
+      "info": "Optional photo. Sits on top of the fill and preset.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section space",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     },
     {
       "type": "range",
@@ -227,7 +624,8 @@
       "max": 200,
       "step": 4,
       "unit": "px",
-      "default": 24
+      "default": 24,
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     },
     {
       "type": "range",
@@ -237,7 +635,8 @@
       "max": 200,
       "step": 4,
       "unit": "px",
-      "default": 24
+      "default": 24,
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     }
   ],
   "presets": [

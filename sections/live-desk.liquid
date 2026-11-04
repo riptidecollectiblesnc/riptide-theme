@@ -1,3 +1,4 @@
+{% render 'section-bg', section: section %}
 {% liquid
   assign raw = section.settings.youtube_url
   assign yid = ''
@@ -14,12 +15,12 @@
   assign whatnot = section.settings.whatnot_url | default: settings.whatnot_url
   assign provider = section.settings.provider
 %}
-<section class="section">
+<section class="section" style="padding-top: {{ section.settings.pad_top }}px; padding-bottom: {{ section.settings.pad_bottom }}px;">
   <div class="wrap">
     <header class="section-head">
       <div>
-        {% if section.settings.kicker != blank %}<p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, fill: section.settings.kicker_fill, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount %}">{{ section.settings.kicker }}</p>{% endif %}
-        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount %}">{{ section.settings.heading }}</h2>
+        {% if section.settings.kicker != blank %}<p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, fill: section.settings.kicker_fill, fill_2: section.settings.kicker_fill_2, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">{{ section.settings.kicker }}</p>{% endif %}
+        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, fill_2: section.settings.heading_fill_2, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
       </div>
     </header>
     <div class="live-grid">
@@ -33,7 +34,7 @@
             {% render 'wax', style: 'ice', label: 'Live' %}
             <div class="stage-lower">
               <span class="live-dot"></span>
-              <span style="{% render 'field-style', font: section.settings.lower_font, bold: section.settings.lower_bold, italic: section.settings.lower_italic, align: section.settings.lower_align, valign: section.settings.lower_valign, fill: section.settings.lower_fill, size: section.settings.lower_size, depth: section.settings.lower_depth, amount: section.settings.lower_depth_amount %}">{{ section.settings.lower }}</span>
+              <span style="{% render 'field-style', font: section.settings.lower_font, bold: section.settings.lower_bold, italic: section.settings.lower_italic, align: section.settings.lower_align, valign: section.settings.lower_valign, fill: section.settings.lower_fill, fill_2: section.settings.lower_fill_2, color: section.settings.lower_color, size: section.settings.lower_size, depth: section.settings.lower_depth, amount: section.settings.lower_depth_amount, shadow: section.settings.lower_depth_color %}">{{ section.settings.lower }}</span>
             </div>
           {% endif %}
         </div>
@@ -41,7 +42,7 @@
           <p class="fine" style="margin-top:0.6rem">Paste a YouTube link in this section. Until then the stage stays on the slab.</p>
         {% endif %}
         {% if provider == 'whatnot' or provider == 'off' %}
-          <p class="muted" style="margin-top:0.7rem;{% render 'field-style', font: section.settings.note_font, bold: section.settings.note_bold, italic: section.settings.note_italic, align: section.settings.note_align, valign: section.settings.note_valign, fill: section.settings.note_fill, size: section.settings.note_size, depth: section.settings.note_depth, amount: section.settings.note_depth_amount %}">{{ section.settings.note }}</p>
+          <p class="muted" style="margin-top:0.7rem;{% render 'field-style', font: section.settings.note_font, bold: section.settings.note_bold, italic: section.settings.note_italic, align: section.settings.note_align, valign: section.settings.note_valign, fill: section.settings.note_fill, fill_2: section.settings.note_fill_2, color: section.settings.note_color, size: section.settings.note_size, depth: section.settings.note_depth, amount: section.settings.note_depth_amount, shadow: section.settings.note_depth_color %}">{{ section.settings.note }}</p>
           {% if whatnot != blank %}
             <a class="btn btn-primary" style="margin-top:0.6rem" href="{{ whatnot }}" target="_blank" rel="noreferrer">Open the Whatnot room</a>
           {% endif %}
@@ -72,10 +73,32 @@
   "name": "Live desk",
   "settings": [
     {
+      "type": "select",
+      "id": "edit_group",
+      "label": "Edit",
+      "default": "content",
+      "options": [
+        {
+          "value": "content",
+          "label": "Content"
+        },
+        {
+          "value": "background",
+          "label": "Background"
+        },
+        {
+          "value": "section_space",
+          "label": "Section space"
+        }
+      ],
+      "info": "Opens that group. Pick another title to switch."
+    },
+    {
       "type": "text",
       "id": "kicker",
       "label": "Kicker",
-      "default": "On air"
+      "default": "On air",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -119,19 +142,22 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "kicker_bold",
       "label": "Kicker bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "kicker_italic",
       "label": "Kicker italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -155,7 +181,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -179,7 +206,15 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "kicker_color",
+      "label": "Kicker color",
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -220,7 +255,16 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
+      "info": "Gradient is painted on the letters. Solid uses the color above.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "kicker_fill_2",
+      "label": "Kicker second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -230,7 +274,8 @@
       "max": 96,
       "step": 2,
       "unit": "px",
-      "default": 14
+      "default": 14,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -286,7 +331,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -296,13 +342,22 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "kicker_depth_color",
+      "label": "Kicker depth color",
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Heading",
-      "default": "Live"
+      "default": "Live",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -346,19 +401,22 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "heading_bold",
       "label": "Heading bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "heading_italic",
       "label": "Heading italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -382,7 +440,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -406,7 +465,15 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#f4fbff",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -447,7 +514,16 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
+      "info": "Gradient is painted on the letters. Solid uses the color above.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "heading_fill_2",
+      "label": "Heading second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -457,7 +533,8 @@
       "max": 96,
       "step": 2,
       "unit": "px",
-      "default": 48
+      "default": 48,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -513,7 +590,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -523,7 +601,15 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "heading_depth_color",
+      "label": "Heading depth color",
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -547,30 +633,35 @@
           "value": "off",
           "label": "Stage only"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "text",
       "id": "youtube_url",
       "label": "YouTube URL",
-      "info": "Watch, youtu.be, or live link."
+      "info": "Watch, youtu.be, or live link.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "text",
       "id": "twitch_channel",
-      "label": "Twitch channel"
+      "label": "Twitch channel",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "url",
       "id": "whatnot_url",
       "label": "Whatnot URL",
-      "info": "Falls back to the theme Whatnot link. Whatnot does not allow the show to be embedded."
+      "info": "Falls back to the theme Whatnot link. Whatnot does not allow the show to be embedded.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "text",
       "id": "lower",
       "label": "Stage line",
-      "default": "Whatnot \u00b7 Thu\u2013Sat 9:30 PM ET"
+      "default": "Whatnot · Thu–Sat 9:30 PM ET",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -614,19 +705,22 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "lower_bold",
       "label": "Stage line bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "lower_italic",
       "label": "Stage line italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -650,7 +744,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -674,7 +769,15 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "lower_color",
+      "label": "Stage line color",
+      "default": "#e7f6fb",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -715,7 +818,16 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
+      "info": "Gradient is painted on the letters. Solid uses the color above.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "lower_fill_2",
+      "label": "Stage line second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -725,7 +837,8 @@
       "max": 96,
       "step": 2,
       "unit": "px",
-      "default": 14
+      "default": 14,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -781,7 +894,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -791,13 +905,22 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "lower_depth_color",
+      "label": "Stage line depth color",
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "textarea",
       "id": "note",
       "label": "Note",
-      "default": "Whatnot does not allow the show to play inside another site. The button opens the room."
+      "default": "Whatnot does not allow the show to play inside another site. The button opens the room.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -841,19 +964,22 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "note_bold",
       "label": "Note bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "note_italic",
       "label": "Note italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -877,7 +1003,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -901,7 +1028,15 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "note_color",
+      "label": "Note color",
+      "default": "#8eafbf",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -942,7 +1077,16 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
+      "info": "Gradient is painted on the letters. Solid uses the color above.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "note_fill_2",
+      "label": "Note second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -952,7 +1096,8 @@
       "max": 96,
       "step": 2,
       "unit": "px",
-      "default": 16
+      "default": 16,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -1008,7 +1153,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -1018,13 +1164,195 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "note_depth_color",
+      "label": "Note depth color",
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "show_chat",
       "label": "Show YouTube or Twitch chat",
-      "default": true
+      "default": true,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "header",
+      "content": "Background",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_fill",
+      "label": "Fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "None leaves the section as it is. Foil, Aurora, and Neon pulse animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color",
+      "label": "Fill color",
+      "default": "#0E1C28",
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color_2",
+      "label": "Second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "range",
+      "id": "sec_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_preset",
+      "label": "Image preset",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "deep-tide",
+          "label": "Deep tide"
+        },
+        {
+          "value": "horizon",
+          "label": "Neon horizon"
+        },
+        {
+          "value": "foil-sweep",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "nebula",
+          "label": "Violet nebula"
+        },
+        {
+          "value": "grid",
+          "label": "Night grid"
+        },
+        {
+          "value": "bubbles",
+          "label": "Bubble field"
+        },
+        {
+          "value": "aurora-sheet",
+          "label": "Aurora sheet"
+        },
+        {
+          "value": "slab",
+          "label": "Slab glow"
+        },
+        {
+          "value": "storm",
+          "label": "Storm glass"
+        }
+      ],
+      "info": "Painted art behind the section. Foil sweep and Aurora sheet animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "sec_image",
+      "label": "Background image",
+      "info": "Optional photo. Sits on top of the fill and preset.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section space",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "label": "Top space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 52,
+      "info": "Space above and below this section.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "label": "Bottom space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 52,
+      "info": "Space above and below this section.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     }
   ],
   "presets": [

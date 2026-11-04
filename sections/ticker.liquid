@@ -1,38 +1,51 @@
+{% render 'section-bg', section: section %}
 {% if section.blocks.size > 0 %}
+  <div class="ticker-slot" style="padding-top: {{ section.settings.pad_top }}px; padding-bottom: {{ section.settings.pad_bottom }}px;">
   <div class="ticker bar-fill fill-{{ section.settings.fill }}" data-ticker style="--bar-h: {{ section.settings.bar_height }}px; --ticker-ms: {{ section.settings.scroll_seconds }}s; --fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;" aria-hidden="true">
     <div class="ticker-track">
       <div class="ticker-set">
         {% for block in section.blocks %}
-          <span class="ticker-item" {{ block.shopify_attributes }}><b style="{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, fill: block.settings.title_fill, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount %}">{{ block.settings.title }}</b> <span style="{% render 'field-style', font: block.settings.detail_font, bold: block.settings.detail_bold, italic: block.settings.detail_italic, align: block.settings.detail_align, valign: block.settings.detail_valign, fill: block.settings.detail_fill, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount %}">{{ block.settings.detail }}</span></span>
+          <span class="ticker-item" {{ block.shopify_attributes }}><b style="{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, fill: block.settings.title_fill, fill_2: block.settings.title_fill_2, color: block.settings.title_color, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount, shadow: block.settings.title_depth_color %}">{{ block.settings.title }}</b> <span style="{% render 'field-style', font: block.settings.detail_font, bold: block.settings.detail_bold, italic: block.settings.detail_italic, align: block.settings.detail_align, valign: block.settings.detail_valign, fill: block.settings.detail_fill, fill_2: block.settings.detail_fill_2, color: block.settings.detail_color, size: block.settings.detail_size, depth: block.settings.detail_depth, amount: block.settings.detail_depth_amount, shadow: block.settings.detail_depth_color %}">{{ block.settings.detail }}</span></span>
         {% endfor %}
       </div>
     </div>
   </div>
+  </div>
   <script>
     (function () {
-      var root = document.currentScript && document.currentScript.previousElementSibling;
-      if (!root || !root.hasAttribute('data-ticker')) root = document.querySelector('[data-ticker]');
+      var slot = document.currentScript && document.currentScript.previousElementSibling;
+      var root = slot && slot.querySelector ? slot.querySelector('[data-ticker]') : null;
+      if (!root) root = document.querySelector('[data-ticker]');
       if (!root || root.dataset.ready === '1') return;
       var track = root.querySelector('.ticker-track');
-      var set = root.querySelector('.ticker-set');
+      var set = track && track.querySelector('.ticker-set');
       if (!track || !set) return;
+      root.dataset.ready = '1';
       var seed = Array.prototype.map.call(set.children, function (node) {
         var copy = node.cloneNode(true);
         copy.removeAttribute('data-shopify-editor-block');
         return copy;
       });
-      var need = Math.max(root.clientWidth || 0, window.innerWidth || 0);
-      var guard = 0;
-      while (set.scrollWidth < need && guard < 30) {
-        seed.forEach(function (node) { set.appendChild(node.cloneNode(true)); });
-        guard += 1;
+      function pump() {
+        var sets = track.querySelectorAll('.ticker-set');
+        for (var i = 1; i < sets.length; i++) sets[i].remove();
+        var need = Math.max(root.clientWidth || 0, window.innerWidth || 0);
+        var guard = 0;
+        while (set.scrollWidth < need && guard < 30) {
+          seed.forEach(function (node) { set.appendChild(node.cloneNode(true)); });
+          guard += 1;
+        }
+        var twin = set.cloneNode(true);
+        twin.setAttribute('aria-hidden', 'true');
+        twin.querySelectorAll('[data-shopify-editor-block]').forEach(function (node) {
+          node.removeAttribute('data-shopify-editor-block');
+        });
+        track.appendChild(twin);
+        var shift = set.offsetWidth;
+        if (shift) track.style.setProperty('--ticker-shift', shift + 'px');
       }
-      var twin = set.cloneNode(true);
-      twin.querySelectorAll('[data-shopify-editor-block]').forEach(function (node) {
-        node.removeAttribute('data-shopify-editor-block');
-      });
-      track.appendChild(twin);
-      root.dataset.ready = '1';
+      pump();
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(pump);
     })();
   </script>
 {% endif %}
@@ -42,6 +55,31 @@
   "name": "Hit ticker",
   "settings": [
     {
+      "type": "select",
+      "id": "edit_group",
+      "label": "Edit",
+      "default": "content",
+      "options": [
+        {
+          "value": "content",
+          "label": "Content"
+        },
+        {
+          "value": "background",
+          "label": "Background"
+        },
+        {
+          "value": "background_2",
+          "label": "Section background"
+        },
+        {
+          "value": "section_space",
+          "label": "Section space"
+        }
+      ],
+      "info": "Opens that group. Pick another title to switch."
+    },
+    {
       "type": "range",
       "id": "scroll_seconds",
       "label": "Scroll speed",
@@ -50,7 +88,8 @@
       "step": 2,
       "unit": "s",
       "default": 40,
-      "info": "Seconds for one full pass. Lower is faster. The ticker stays full width."
+      "info": "Seconds for one full pass. Lower is faster. The ticker stays full width.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -60,11 +99,13 @@
       "max": 160,
       "step": 2,
       "unit": "px",
-      "default": 40
+      "default": 40,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "header",
-      "content": "Background"
+      "content": "Background",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {
       "type": "select",
@@ -112,21 +153,24 @@
           "value": "custom",
           "label": "Custom gradient"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {
       "type": "color",
       "id": "fill_color",
       "label": "Fill color",
       "default": "#04090e",
-      "info": "Solid, glass, mesh, and custom gradient."
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {
       "type": "color",
       "id": "fill_color_2",
       "label": "Second color",
       "default": "#00e5ff",
-      "info": "Custom gradient, glass edge, and mesh."
+      "info": "Custom gradient, glass edge, and mesh.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {
       "type": "range",
@@ -137,7 +181,181 @@
       "step": 15,
       "unit": "deg",
       "default": 90,
-      "info": "Used by Custom gradient."
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section background",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_fill",
+      "label": "Fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "None leaves the section as it is. Foil, Aurora, and Neon pulse animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color",
+      "label": "Fill color",
+      "default": "#0E1C28",
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color_2",
+      "label": "Second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "range",
+      "id": "sec_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_preset",
+      "label": "Image preset",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "deep-tide",
+          "label": "Deep tide"
+        },
+        {
+          "value": "horizon",
+          "label": "Neon horizon"
+        },
+        {
+          "value": "foil-sweep",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "nebula",
+          "label": "Violet nebula"
+        },
+        {
+          "value": "grid",
+          "label": "Night grid"
+        },
+        {
+          "value": "bubbles",
+          "label": "Bubble field"
+        },
+        {
+          "value": "aurora-sheet",
+          "label": "Aurora sheet"
+        },
+        {
+          "value": "slab",
+          "label": "Slab glow"
+        },
+        {
+          "value": "storm",
+          "label": "Storm glass"
+        }
+      ],
+      "info": "Painted art behind the section. Foil sweep and Aurora sheet animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "sec_image",
+      "label": "Background image",
+      "info": "Optional photo. Sits on top of the fill and preset.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section space",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "label": "Top space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "info": "Added space. Zero keeps the bar tight.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "label": "Bottom space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "info": "Added space. Zero keeps the bar tight.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     }
   ],
   "blocks": [
@@ -256,6 +474,12 @@
           ]
         },
         {
+          "type": "color",
+          "id": "title_color",
+          "label": "Title color",
+          "default": "#e7f6fb"
+        },
+        {
           "type": "select",
           "id": "title_fill",
           "label": "Title fill",
@@ -295,6 +519,13 @@
             }
           ],
           "info": "Gradient is painted on the letters. Solid uses the color above."
+        },
+        {
+          "type": "color",
+          "id": "title_fill_2",
+          "label": "Title second color",
+          "default": "#00e5ff",
+          "info": "Second color for Custom gradient."
         },
         {
           "type": "range",
@@ -371,6 +602,12 @@
           "step": 2,
           "unit": "px",
           "default": 8
+        },
+        {
+          "type": "color",
+          "id": "title_depth_color",
+          "label": "Title depth color",
+          "default": "#00e5ff"
         },
         {
           "type": "text",
@@ -483,6 +720,12 @@
           ]
         },
         {
+          "type": "color",
+          "id": "detail_color",
+          "label": "Detail color",
+          "default": "#8eafbf"
+        },
+        {
           "type": "select",
           "id": "detail_fill",
           "label": "Detail fill",
@@ -522,6 +765,13 @@
             }
           ],
           "info": "Gradient is painted on the letters. Solid uses the color above."
+        },
+        {
+          "type": "color",
+          "id": "detail_fill_2",
+          "label": "Detail second color",
+          "default": "#00e5ff",
+          "info": "Second color for Custom gradient."
         },
         {
           "type": "range",
@@ -598,6 +848,12 @@
           "step": 2,
           "unit": "px",
           "default": 8
+        },
+        {
+          "type": "color",
+          "id": "detail_depth_color",
+          "label": "Detail depth color",
+          "default": "#00e5ff"
         }
       ]
     }

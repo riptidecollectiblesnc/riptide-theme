@@ -1,11 +1,14 @@
+{% render 'section-bg', section: section %}
 {% if section.settings.enabled and section.settings.text != blank %}
-  {% capture announce_style %}{% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, fill: section.settings.text_fill, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount %}{% endcapture %}
+  {% capture announce_style %}{% render 'field-style', font: section.settings.text_font, bold: section.settings.text_bold, italic: section.settings.text_italic, align: section.settings.text_align, valign: section.settings.text_valign, fill: section.settings.text_fill, fill_2: section.settings.text_fill_2, color: section.settings.text_color, size: section.settings.text_size, depth: section.settings.text_depth, amount: section.settings.text_depth_amount, shadow: section.settings.text_depth_color %}{% endcapture %}
+  <div class="ticker-slot" style="padding-top: {{ section.settings.pad_top | default: 0 }}px; padding-bottom: {{ section.settings.pad_bottom | default: 0 }}px;">
   <div class="bar-fill fill-{{ section.settings.fill }}" style="--bar-h: {{ section.settings.bar_height }}px; --fill: {{ section.settings.fill_color }}; --fill-2: {{ section.settings.fill_color_2 }}; --fill-angle: {{ section.settings.fill_angle }}deg;">
     {% if section.settings.link != blank %}
       <a class="announce" href="{{ section.settings.link }}" style="{{ announce_style }}">{{ section.settings.text }}</a>
     {% else %}
       <p class="announce" style="{{ announce_style }}">{{ section.settings.text }}</p>
     {% endif %}
+  </div>
   </div>
 {% endif %}
 
@@ -14,10 +17,36 @@
   "name": "Announcement",
   "settings": [
     {
+      "type": "select",
+      "id": "edit_group",
+      "label": "Edit",
+      "default": "content",
+      "options": [
+        {
+          "value": "content",
+          "label": "Content"
+        },
+        {
+          "value": "background",
+          "label": "Background"
+        },
+        {
+          "value": "background_2",
+          "label": "Section background"
+        },
+        {
+          "value": "section_space",
+          "label": "Section space"
+        }
+      ],
+      "info": "Opens that group. Pick another title to switch."
+    },
+    {
       "type": "checkbox",
       "id": "enabled",
       "label": "Show announcement",
-      "default": true
+      "default": true,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -27,13 +56,15 @@
       "max": 180,
       "step": 2,
       "unit": "px",
-      "default": 44
+      "default": 44,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "text",
       "id": "text",
       "label": "Text",
-      "default": "Thursday through Saturday, 9:30 PM ET on Whatnot. In-house live is paused."
+      "default": "Thursday through Saturday, 9:30 PM ET on Whatnot. In-house live is paused.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -77,19 +108,22 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "text_bold",
       "label": "Text bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "text_italic",
       "label": "Text italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -113,7 +147,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -137,7 +172,15 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#d5e6ee",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -178,7 +221,16 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
+      "info": "Gradient is painted on the letters. Solid uses the color above.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_fill_2",
+      "label": "Text second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -188,7 +240,8 @@
       "max": 96,
       "step": 2,
       "unit": "px",
-      "default": 18
+      "default": 18,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -244,7 +297,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -254,18 +308,28 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "text_depth_color",
+      "label": "Text depth color",
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "text",
       "id": "link",
       "label": "Link",
       "default": "#shopify-section-whatnot",
-      "info": "A full URL or a homepage anchor such as #shopify-section-live."
+      "info": "A full URL or a homepage anchor such as #shopify-section-live.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "header",
-      "content": "Background"
+      "content": "Background",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {
       "type": "select",
@@ -313,21 +377,24 @@
           "value": "custom",
           "label": "Custom gradient"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {
       "type": "color",
       "id": "fill_color",
       "label": "Fill color",
       "default": "#00e5ff",
-      "info": "Solid, glass, mesh, and custom gradient."
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {
       "type": "color",
       "id": "fill_color_2",
       "label": "Second color",
       "default": "#6d1ecc",
-      "info": "Custom gradient, glass edge, and mesh."
+      "info": "Custom gradient, glass edge, and mesh.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {
       "type": "range",
@@ -338,7 +405,181 @@
       "step": 15,
       "unit": "deg",
       "default": 90,
-      "info": "Used by Custom gradient."
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section background",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_fill",
+      "label": "Fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "None leaves the section as it is. Foil, Aurora, and Neon pulse animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color",
+      "label": "Fill color",
+      "default": "#0E1C28",
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color_2",
+      "label": "Second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "range",
+      "id": "sec_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_preset",
+      "label": "Image preset",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "deep-tide",
+          "label": "Deep tide"
+        },
+        {
+          "value": "horizon",
+          "label": "Neon horizon"
+        },
+        {
+          "value": "foil-sweep",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "nebula",
+          "label": "Violet nebula"
+        },
+        {
+          "value": "grid",
+          "label": "Night grid"
+        },
+        {
+          "value": "bubbles",
+          "label": "Bubble field"
+        },
+        {
+          "value": "aurora-sheet",
+          "label": "Aurora sheet"
+        },
+        {
+          "value": "slab",
+          "label": "Slab glow"
+        },
+        {
+          "value": "storm",
+          "label": "Storm glass"
+        }
+      ],
+      "info": "Painted art behind the section. Foil sweep and Aurora sheet animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "sec_image",
+      "label": "Background image",
+      "info": "Optional photo. Sits on top of the fill and preset.",
+      "visible_if": "{{ section.settings.edit_group == 'background_2' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section space",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "label": "Top space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "info": "Added space. Zero keeps the bar tight.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "label": "Bottom space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 0,
+      "info": "Added space. Zero keeps the bar tight.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     }
   ]
 }

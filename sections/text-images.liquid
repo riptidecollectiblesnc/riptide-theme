@@ -1,0 +1,1099 @@
+{% render 'section-bg', section: section %}
+<section class="section text-images" style="padding-top: {{ section.settings.pad_top }}px; padding-bottom: {{ section.settings.pad_bottom }}px;">
+  <div class="wrap">
+    <div class="canvas" style="--canvas-h: {{ section.settings.height }}px;">
+      {% for block in section.blocks %}
+        {% if block.type == 'image' %}
+          {% liquid
+            assign alt = block.settings.alt
+            if alt == blank and block.settings.image != blank
+              assign alt = block.settings.image.alt
+            endif
+            if alt == blank
+              assign alt = shop.name
+            endif
+            assign ratio = block.settings.ratio
+          %}
+          <div class="canvas-item place-{{ block.settings.place }}{% if ratio != 'natural' %} has-ratio{% endif %}" style="--ix: {{ block.settings.x }}px; --iy: {{ block.settings.y }}px; --iw: {{ block.settings.size }}%; --iz: {{ block.settings.z }}; --img-ratio: {{ ratio }}; --img-fit: {{ block.settings.fit }}; --img-pos: {{ block.settings.crop_x }} {{ block.settings.crop_y }};" {{ block.shopify_attributes }}>
+            <div class="image-cell {% if block.settings.show_cell == false %}is-clear{% else %}fill-{{ block.settings.cell_fill }}{% endif %} depth-{{ block.settings.cell_depth }}" style="--cell-border: {{ block.settings.border_width }}px; --cell-border-color: {{ block.settings.border_color }}; --fill: {{ block.settings.cell_color }}; --fill-2: {{ block.settings.cell_color_2 }}; --fill-angle: {{ block.settings.cell_angle }}deg; --depth: {{ block.settings.cell_depth_amount }}px; --depth-color: {{ block.settings.cell_depth_color }};">
+              {% if block.settings.image != blank %}
+                {% if block.settings.link != blank %}
+                  <a href="{{ block.settings.link }}">{{ block.settings.image | image_url: width: 1600 | image_tag: alt: alt, loading: 'lazy' }}</a>
+                {% else %}
+                  {{ block.settings.image | image_url: width: 1600 | image_tag: alt: alt, loading: 'lazy' }}
+                {% endif %}
+              {% else %}
+                <div class="image-empty">Add an image</div>
+              {% endif %}
+            </div>
+          </div>
+        {% elsif block.type == 'text' %}
+          <div class="canvas-text" style="--ix: {{ block.settings.x }}px; --iy: {{ block.settings.y }}px; --iw: {{ block.settings.width }}%; --iz: {{ block.settings.z }}; --th: {% if block.settings.box_h > 0 %}{{ block.settings.box_h }}px{% else %}auto{% endif %};" {{ block.shopify_attributes }}>
+            <div class="rte keep-lead" style="{% render 'field-style', font: block.settings.font, bold: block.settings.bold, italic: block.settings.italic, align: block.settings.align, valign: block.settings.valign, fill: block.settings.fill, fill_2: block.settings.fill_2, color: block.settings.color, size: block.settings.size, depth: block.settings.depth, amount: block.settings.depth_amount, shadow: block.settings.depth_color %}">{{ block.settings.text }}</div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Text & Images",
+  "enabled_on": {
+    "templates": [
+      "*"
+    ]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "edit_group",
+      "label": "Edit",
+      "default": "canvas",
+      "options": [
+        {
+          "value": "canvas",
+          "label": "Canvas"
+        },
+        {
+          "value": "background",
+          "label": "Background"
+        }
+      ],
+      "info": "Opens that group. Pick another title to switch."
+    },
+    {
+      "type": "header",
+      "content": "Canvas",
+      "visible_if": "{{ section.settings.edit_group == 'canvas' }}"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "label": "Section height",
+      "min": 100,
+      "max": 2500,
+      "step": 25,
+      "default": 500,
+      "unit": "px",
+      "info": "Height of the area you can move images and text around in. Max 2500.",
+      "visible_if": "{{ section.settings.edit_group == 'canvas' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "label": "Top space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 24,
+      "unit": "px",
+      "visible_if": "{{ section.settings.edit_group == 'canvas' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "label": "Bottom space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "default": 24,
+      "unit": "px",
+      "visible_if": "{{ section.settings.edit_group == 'canvas' }}"
+    },
+    {
+      "type": "header",
+      "content": "Background",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_fill",
+      "label": "Fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "None leaves the section as it is. Foil, Aurora, and Neon pulse animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color",
+      "label": "Fill color",
+      "default": "#0E1C28",
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color_2",
+      "label": "Second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "range",
+      "id": "sec_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_preset",
+      "label": "Image preset",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "deep-tide",
+          "label": "Deep tide"
+        },
+        {
+          "value": "horizon",
+          "label": "Neon horizon"
+        },
+        {
+          "value": "foil-sweep",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "nebula",
+          "label": "Violet nebula"
+        },
+        {
+          "value": "grid",
+          "label": "Night grid"
+        },
+        {
+          "value": "bubbles",
+          "label": "Bubble field"
+        },
+        {
+          "value": "aurora-sheet",
+          "label": "Aurora sheet"
+        },
+        {
+          "value": "slab",
+          "label": "Slab glow"
+        },
+        {
+          "value": "storm",
+          "label": "Storm glass"
+        }
+      ],
+      "info": "Painted art behind the section. Foil sweep and Aurora sheet animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "sec_image",
+      "label": "Background image",
+      "info": "Optional photo. Sits on top of the fill and preset.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "select",
+          "id": "edit_group",
+          "label": "Edit",
+          "default": "content",
+          "options": [
+            {
+              "value": "content",
+              "label": "Content"
+            },
+            {
+              "value": "ratio",
+              "label": "Ratio"
+            },
+            {
+              "value": "size",
+              "label": "Size"
+            },
+            {
+              "value": "position",
+              "label": "Position"
+            },
+            {
+              "value": "cell",
+              "label": "Cell"
+            },
+            {
+              "value": "depth",
+              "label": "Depth"
+            }
+          ],
+          "info": "Opens that group. Pick another title to switch."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "visible_if": "{{ block.settings.edit_group == 'content' }}"
+        },
+        {
+          "type": "text",
+          "id": "alt",
+          "label": "Alt text",
+          "visible_if": "{{ block.settings.edit_group == 'content' }}"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "visible_if": "{{ block.settings.edit_group == 'content' }}"
+        },
+        {
+          "type": "header",
+          "content": "Ratio",
+          "visible_if": "{{ block.settings.edit_group == 'ratio' }}"
+        },
+        {
+          "type": "select",
+          "id": "ratio",
+          "label": "Ratio",
+          "default": "natural",
+          "options": [
+            {
+              "value": "natural",
+              "label": "Natural"
+            },
+            {
+              "value": "1 / 1",
+              "label": "Square"
+            },
+            {
+              "value": "4 / 5",
+              "label": "Portrait"
+            },
+            {
+              "value": "3 / 4",
+              "label": "Tall"
+            },
+            {
+              "value": "2 / 3",
+              "label": "Card"
+            },
+            {
+              "value": "16 / 9",
+              "label": "Wide"
+            },
+            {
+              "value": "21 / 9",
+              "label": "Banner"
+            }
+          ],
+          "visible_if": "{{ block.settings.edit_group == 'ratio' }}"
+        },
+        {
+          "type": "select",
+          "id": "fit",
+          "label": "Fit",
+          "default": "cover",
+          "options": [
+            {
+              "value": "cover",
+              "label": "Fill and crop"
+            },
+            {
+              "value": "contain",
+              "label": "Fit inside"
+            }
+          ],
+          "visible_if": "{{ block.settings.edit_group == 'ratio' }}"
+        },
+        {
+          "type": "header",
+          "content": "Size",
+          "visible_if": "{{ block.settings.edit_group == 'size' }}"
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "label": "Size",
+          "min": 10,
+          "max": 100,
+          "step": 2,
+          "default": 36,
+          "unit": "%",
+          "info": "Width inside this section.",
+          "visible_if": "{{ block.settings.edit_group == 'size' }}"
+        },
+        {
+          "type": "header",
+          "content": "Position",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "select",
+          "id": "place",
+          "label": "Place",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "info": "Starting side. X and Y move it from there.",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "range",
+          "id": "x",
+          "label": "X axis",
+          "min": -1000,
+          "max": 1000,
+          "step": 20,
+          "default": 40,
+          "unit": "px",
+          "info": "Positive moves right. Range is -1000 to 1000.",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "range",
+          "id": "y",
+          "label": "Y axis",
+          "min": -1000,
+          "max": 1000,
+          "step": 20,
+          "default": 40,
+          "unit": "px",
+          "info": "Positive moves down. Range is -1000 to 1000.",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "select",
+          "id": "crop_x",
+          "label": "Crop horizontal",
+          "default": "center",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "select",
+          "id": "crop_y",
+          "label": "Crop vertical",
+          "default": "center",
+          "options": [
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            }
+          ],
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "range",
+          "id": "z",
+          "label": "Stack order",
+          "min": 1,
+          "max": 20,
+          "step": 1,
+          "default": 1,
+          "unit": "px",
+          "info": "Higher sits on top of the other pieces.",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "header",
+          "content": "Cell",
+          "visible_if": "{{ block.settings.edit_group == 'cell' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_cell",
+          "label": "Use cell",
+          "default": true,
+          "info": "Off removes the box, border, and fill. Depth still glows a transparent image.",
+          "visible_if": "{{ block.settings.edit_group == 'cell' }}"
+        },
+        {
+          "type": "range",
+          "id": "border_width",
+          "label": "Border width",
+          "min": 0,
+          "max": 20,
+          "step": 1,
+          "default": 1,
+          "unit": "px",
+          "visible_if": "{{ block.settings.edit_group == 'cell' and block.settings.show_cell }}"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border color",
+          "default": "#00EAFF",
+          "visible_if": "{{ block.settings.edit_group == 'cell' and block.settings.show_cell }}"
+        },
+        {
+          "type": "select",
+          "id": "cell_fill",
+          "label": "Cell fill",
+          "default": "none",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "tide",
+              "label": "Tide"
+            },
+            {
+              "value": "violet",
+              "label": "Violet night"
+            },
+            {
+              "value": "foil",
+              "label": "Foil sweep"
+            },
+            {
+              "value": "sunset",
+              "label": "Sunset"
+            },
+            {
+              "value": "aurora",
+              "label": "Aurora"
+            },
+            {
+              "value": "pulse",
+              "label": "Neon pulse"
+            },
+            {
+              "value": "glass",
+              "label": "Glass"
+            },
+            {
+              "value": "mesh",
+              "label": "Mesh glow"
+            },
+            {
+              "value": "custom",
+              "label": "Custom gradient"
+            }
+          ],
+          "visible_if": "{{ block.settings.edit_group == 'cell' and block.settings.show_cell }}"
+        },
+        {
+          "type": "color",
+          "id": "cell_color",
+          "label": "Cell color",
+          "default": "#0E1C28",
+          "visible_if": "{{ block.settings.edit_group == 'cell' and block.settings.show_cell }}"
+        },
+        {
+          "type": "color",
+          "id": "cell_color_2",
+          "label": "Cell second color",
+          "default": "#00E5FF",
+          "info": "Used by Custom gradient.",
+          "visible_if": "{{ block.settings.edit_group == 'cell' and block.settings.show_cell }}"
+        },
+        {
+          "type": "range",
+          "id": "cell_angle",
+          "label": "Gradient angle",
+          "min": 0,
+          "max": 360,
+          "step": 15,
+          "default": 90,
+          "unit": "deg",
+          "info": "Used by Custom gradient.",
+          "visible_if": "{{ block.settings.edit_group == 'cell' and block.settings.show_cell }}"
+        },
+        {
+          "type": "header",
+          "content": "Depth",
+          "visible_if": "{{ block.settings.edit_group == 'depth' }}"
+        },
+        {
+          "type": "select",
+          "id": "cell_depth",
+          "label": "Cell depth",
+          "default": "soft",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "soft",
+              "label": "Soft shadow"
+            },
+            {
+              "value": "hard",
+              "label": "Hard offset"
+            },
+            {
+              "value": "lift",
+              "label": "Lift"
+            },
+            {
+              "value": "long",
+              "label": "Long shadow"
+            },
+            {
+              "value": "echo",
+              "label": "Echo"
+            },
+            {
+              "value": "press",
+              "label": "Letterpress"
+            },
+            {
+              "value": "emboss",
+              "label": "Emboss"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "neon",
+              "label": "Neon glow"
+            },
+            {
+              "value": "double",
+              "label": "Double glow"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
+            }
+          ],
+          "visible_if": "{{ block.settings.edit_group == 'depth' }}"
+        },
+        {
+          "type": "range",
+          "id": "cell_depth_amount",
+          "label": "Cell depth amount",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "default": 6,
+          "unit": "px",
+          "visible_if": "{{ block.settings.edit_group == 'depth' }}"
+        },
+        {
+          "type": "color",
+          "id": "cell_depth_color",
+          "label": "Cell depth color",
+          "default": "#00E5FF",
+          "visible_if": "{{ block.settings.edit_group == 'depth' }}"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        {
+          "type": "select",
+          "id": "edit_group",
+          "label": "Edit",
+          "default": "content",
+          "options": [
+            {
+              "value": "content",
+              "label": "Content"
+            },
+            {
+              "value": "position",
+              "label": "Position"
+            },
+            {
+              "value": "text",
+              "label": "Text"
+            }
+          ],
+          "info": "Opens that group. Pick another title to switch."
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p>Your line goes here.</p>",
+          "visible_if": "{{ block.settings.edit_group == 'content' }}"
+        },
+        {
+          "type": "header",
+          "content": "Position",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "range",
+          "id": "width",
+          "label": "Width",
+          "min": 10,
+          "max": 100,
+          "step": 2,
+          "default": 46,
+          "unit": "%",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "range",
+          "id": "x",
+          "label": "X axis",
+          "min": -1000,
+          "max": 1000,
+          "step": 20,
+          "default": 40,
+          "unit": "px",
+          "info": "Range is -1000 to 1000.",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "range",
+          "id": "y",
+          "label": "Y axis",
+          "min": -1000,
+          "max": 1000,
+          "step": 20,
+          "default": 360,
+          "unit": "px",
+          "info": "Range is -1000 to 1000.",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "range",
+          "id": "z",
+          "label": "Stack order",
+          "min": 1,
+          "max": 20,
+          "step": 1,
+          "default": 2,
+          "unit": "px",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "range",
+          "id": "box_h",
+          "label": "Box height",
+          "min": 0,
+          "max": 800,
+          "step": 8,
+          "default": 0,
+          "unit": "px",
+          "info": "Zero hugs the text. A taller box lets vertical alignment move the words.",
+          "visible_if": "{{ block.settings.edit_group == 'position' }}"
+        },
+        {
+          "type": "header",
+          "content": "Text",
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "select",
+          "id": "font",
+          "label": "Font",
+          "default": "inherit",
+          "options": [
+            {
+              "value": "inherit",
+              "label": "Theme default"
+            },
+            {
+              "value": "Unbounded, sans-serif",
+              "label": "Unbounded"
+            },
+            {
+              "value": "Outfit, sans-serif",
+              "label": "Outfit"
+            },
+            {
+              "value": "\"Barlow Condensed\", sans-serif",
+              "label": "Barlow Condensed"
+            },
+            {
+              "value": "\"Bebas Neue\", sans-serif",
+              "label": "Bebas Neue"
+            },
+            {
+              "value": "Oswald, sans-serif",
+              "label": "Oswald"
+            },
+            {
+              "value": "Anton, sans-serif",
+              "label": "Anton"
+            },
+            {
+              "value": "Archivo, sans-serif",
+              "label": "Archivo"
+            },
+            {
+              "value": "Inter, sans-serif",
+              "label": "Inter"
+            }
+          ],
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "bold",
+          "label": "Bold",
+          "default": false,
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "checkbox",
+          "id": "italic",
+          "label": "Italic",
+          "default": false,
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Horizontal",
+          "default": "left",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ],
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "select",
+          "id": "valign",
+          "label": "Vertical",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Theme default"
+            },
+            {
+              "value": "top",
+              "label": "Top"
+            },
+            {
+              "value": "middle",
+              "label": "Middle"
+            },
+            {
+              "value": "bottom",
+              "label": "Bottom"
+            }
+          ],
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "color",
+          "id": "color",
+          "label": "Color",
+          "default": "#f4fbff",
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "select",
+          "id": "fill",
+          "label": "Fill",
+          "default": "solid",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "tide",
+              "label": "Tide"
+            },
+            {
+              "value": "violet",
+              "label": "Violet"
+            },
+            {
+              "value": "foil",
+              "label": "Foil sweep"
+            },
+            {
+              "value": "sunset",
+              "label": "Sunset"
+            },
+            {
+              "value": "aurora",
+              "label": "Aurora"
+            },
+            {
+              "value": "pulse",
+              "label": "Neon pulse"
+            },
+            {
+              "value": "lava",
+              "label": "Lava"
+            },
+            {
+              "value": "chrome",
+              "label": "Chrome"
+            },
+            {
+              "value": "prism",
+              "label": "Prism"
+            },
+            {
+              "value": "electric",
+              "label": "Electric"
+            },
+            {
+              "value": "holo",
+              "label": "Hologram"
+            },
+            {
+              "value": "wave",
+              "label": "Wave"
+            },
+            {
+              "value": "goldrush",
+              "label": "Gold rush"
+            },
+            {
+              "value": "custom",
+              "label": "Custom gradient"
+            }
+          ],
+          "info": "Animated fills sweep across the letters.",
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "color",
+          "id": "fill_2",
+          "label": "Second color",
+          "default": "#00E5FF",
+          "info": "Used by Custom gradient.",
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "range",
+          "id": "size",
+          "label": "Size",
+          "min": 10,
+          "max": 120,
+          "step": 2,
+          "default": 28,
+          "unit": "px",
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "select",
+          "id": "depth",
+          "label": "Depth",
+          "default": "none",
+          "options": [
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "soft",
+              "label": "Soft shadow"
+            },
+            {
+              "value": "hard",
+              "label": "Hard offset"
+            },
+            {
+              "value": "lift",
+              "label": "Lift"
+            },
+            {
+              "value": "long",
+              "label": "Long shadow"
+            },
+            {
+              "value": "echo",
+              "label": "Echo"
+            },
+            {
+              "value": "press",
+              "label": "Letterpress"
+            },
+            {
+              "value": "emboss",
+              "label": "Emboss"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "neon",
+              "label": "Neon glow"
+            },
+            {
+              "value": "double",
+              "label": "Double glow"
+            },
+            {
+              "value": "foil",
+              "label": "Foil"
+            }
+          ],
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "range",
+          "id": "depth_amount",
+          "label": "Depth amount",
+          "min": 0,
+          "max": 40,
+          "step": 2,
+          "default": 8,
+          "unit": "px",
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        },
+        {
+          "type": "color",
+          "id": "depth_color",
+          "label": "Depth color",
+          "default": "#00E5FF",
+          "visible_if": "{{ block.settings.edit_group == 'text' }}"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Text & Images",
+      "blocks": [
+        {
+          "type": "image",
+          "settings": {
+            "x": 40,
+            "y": 40,
+            "size": 36,
+            "z": 1
+          }
+        },
+        {
+          "type": "image",
+          "settings": {
+            "x": 520,
+            "y": 40,
+            "size": 36,
+            "z": 1
+          }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "x": 40,
+            "y": 360,
+            "width": 46,
+            "z": 2
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

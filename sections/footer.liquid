@@ -1,9 +1,10 @@
-<footer class="site-footer">
+{% render 'section-bg', section: section %}
+<footer class="site-footer" style="padding-top: {{ section.settings.pad_top }}px; padding-bottom: {{ section.settings.pad_bottom }}px;">
   <div class="wrap">
     <div class="foot-grid">
       <div>
         <p class="display foot-name">{{ shop.name }}</p>
-        <p class="muted" style="margin-top:0.55rem;max-width:28rem;{% render 'field-style', font: section.settings.blurb_font, bold: section.settings.blurb_bold, italic: section.settings.blurb_italic, align: section.settings.blurb_align, valign: section.settings.blurb_valign, fill: section.settings.blurb_fill, size: section.settings.blurb_size, depth: section.settings.blurb_depth, amount: section.settings.blurb_depth_amount %}">{{ section.settings.blurb }}</p>
+        <p class="muted" style="margin-top:0.55rem;max-width:28rem;{% render 'field-style', font: section.settings.blurb_font, bold: section.settings.blurb_bold, italic: section.settings.blurb_italic, align: section.settings.blurb_align, valign: section.settings.blurb_valign, fill: section.settings.blurb_fill, fill_2: section.settings.blurb_fill_2, color: section.settings.blurb_color, size: section.settings.blurb_size, depth: section.settings.blurb_depth, amount: section.settings.blurb_depth_amount, shadow: section.settings.blurb_depth_color %}">{{ section.settings.blurb }}</p>
       </div>
       <div>
         <p class="kicker">Shop</p>
@@ -35,10 +36,32 @@
   "name": "Footer",
   "settings": [
     {
+      "type": "select",
+      "id": "edit_group",
+      "label": "Edit",
+      "default": "content",
+      "options": [
+        {
+          "value": "content",
+          "label": "Content"
+        },
+        {
+          "value": "background",
+          "label": "Background"
+        },
+        {
+          "value": "section_space",
+          "label": "Section space"
+        }
+      ],
+      "info": "Opens that group. Pick another title to switch."
+    },
+    {
       "type": "textarea",
       "id": "blurb",
       "label": "Blurb",
-      "default": "Online-only from the Crystal Coast. Sealed wax, breaks, and live shows."
+      "default": "Online-only from the Crystal Coast. Sealed wax, breaks, and live shows.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -82,19 +105,22 @@
           "value": "Inter, sans-serif",
           "label": "Inter"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "blurb_bold",
       "label": "Blurb bold",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "checkbox",
       "id": "blurb_italic",
       "label": "Blurb italic",
-      "default": false
+      "default": false,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -118,7 +144,8 @@
           "value": "right",
           "label": "Right"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -142,7 +169,15 @@
           "value": "bottom",
           "label": "Bottom"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "blurb_color",
+      "label": "Blurb color",
+      "default": "#8eafbf",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -183,7 +218,16 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
+      "info": "Gradient is painted on the letters. Solid uses the color above.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "blurb_fill_2",
+      "label": "Blurb second color",
+      "default": "#00e5ff",
+      "info": "Second color for Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -193,7 +237,8 @@
       "max": 96,
       "step": 2,
       "unit": "px",
-      "default": 16
+      "default": 16,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "select",
@@ -249,7 +294,8 @@
           "value": "foil",
           "label": "Foil"
         }
-      ]
+      ],
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "range",
@@ -259,12 +305,194 @@
       "max": 40,
       "step": 2,
       "unit": "px",
-      "default": 8
+      "default": 8,
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "color",
+      "id": "blurb_depth_color",
+      "label": "Blurb depth color",
+      "default": "#00e5ff",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
       "type": "link_list",
       "id": "menu",
-      "label": "Menu"
+      "label": "Menu",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "header",
+      "content": "Background",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_fill",
+      "label": "Fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "None leaves the section as it is. Foil, Aurora, and Neon pulse animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color",
+      "label": "Fill color",
+      "default": "#0E1C28",
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color_2",
+      "label": "Second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "range",
+      "id": "sec_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_preset",
+      "label": "Image preset",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "deep-tide",
+          "label": "Deep tide"
+        },
+        {
+          "value": "horizon",
+          "label": "Neon horizon"
+        },
+        {
+          "value": "foil-sweep",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "nebula",
+          "label": "Violet nebula"
+        },
+        {
+          "value": "grid",
+          "label": "Night grid"
+        },
+        {
+          "value": "bubbles",
+          "label": "Bubble field"
+        },
+        {
+          "value": "aurora-sheet",
+          "label": "Aurora sheet"
+        },
+        {
+          "value": "slab",
+          "label": "Slab glow"
+        },
+        {
+          "value": "storm",
+          "label": "Storm glass"
+        }
+      ],
+      "info": "Painted art behind the section. Foil sweep and Aurora sheet animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "sec_image",
+      "label": "Background image",
+      "info": "Optional photo. Sits on top of the fill and preset.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section space",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "label": "Top space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 40,
+      "info": "Space inside the footer.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "label": "Bottom space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 22,
+      "info": "Space inside the footer.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     }
   ]
 }

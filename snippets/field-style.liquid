@@ -1,13 +1,12 @@
 {%- comment -%} color, size, depth, amount, shadow {%- endcomment -%}
 {%- liquid
-  assign paint = color | default: settings.color_fg
+  assign paint = color
   assign px = size | default: 0
   assign d = depth | default: 'none'
   assign n = amount | default: 0
-  assign glow = shadow | default: settings.color_neon | default: paint
-  assign fill_2 = fill_2 | default: settings.color_neon
+  assign glow = shadow | default: paint
 -%}
-{%- if font != blank and font != 'inherit' -%}{%- assign safe_font = font | replace: '"', "'" -%}font-family: {{ safe_font }};{%- if font contains 'Bebas' or font contains 'Anton' -%}font-weight: 400;{%- endif -%}{%- endif -%}
+{%- if font != blank and font != 'inherit' -%}font-family: {{ font }};{%- if font contains 'Bebas' or font contains 'Anton' -%}font-weight: 400;{%- endif -%}{%- endif -%}
 {%- if bold -%}font-weight: 700;{%- endif -%}
 {%- if italic -%}font-style: italic;{%- endif -%}
 {%- if align == 'left' or align == 'center' or align == 'right' -%}text-align: {{ align }};{%- endif -%}
@@ -19,6 +18,13 @@
   {%- elsif fill == 'sunset' -%}background-image: linear-gradient(90deg, #ff8fa3, #ffe08a 55%, #fff);
   {%- elsif fill == 'aurora' -%}background-image: linear-gradient(100deg, #7af6ff, #d7c4ff 50%, #00e5ff); background-size: 220% 100%; animation: fill-pan 12s linear infinite;
   {%- elsif fill == 'pulse' -%}background-image: linear-gradient(90deg, #00e5ff, #ffffff, #b388ff); background-size: 220% 100%; animation: fill-pan 6s linear infinite;
+  {%- elsif fill == 'lava' -%}background-image: linear-gradient(100deg, #ff5a7a, #e4c06a, #ff8fa3, #00e5ff); background-size: 240% 100%; animation: fill-pan 7s linear infinite;
+  {%- elsif fill == 'chrome' -%}background-image: linear-gradient(100deg, #9fb4c0, #ffffff, #7af6ff, #ffffff, #c5d4de); background-size: 220% 100%; animation: fill-pan 5s linear infinite;
+  {%- elsif fill == 'prism' -%}background-image: linear-gradient(90deg, #7af6ff, #b388ff, #ffe08a, #ff8fa3, #7af6ff); background-size: 300% 100%; animation: fill-pan 8s linear infinite;
+  {%- elsif fill == 'electric' -%}background-image: linear-gradient(90deg, #00e5ff, #ffffff, #00e5ff, #b388ff); background-size: 200% 100%; animation: fill-pan 2.4s linear infinite;
+  {%- elsif fill == 'holo' -%}background-image: linear-gradient(115deg, #7af6ff, #e4d4ff 30%, #fff6d0 50%, #00e5ff 70%, #ff8fa3); background-size: 240% 100%; animation: fill-pan 6s linear infinite;
+  {%- elsif fill == 'wave' -%}background-image: linear-gradient(90deg, #042028, #00e5ff, #ffffff, #00e5ff, #042028); background-size: 220% 100%; animation: fill-pan 10s linear infinite;
+  {%- elsif fill == 'goldrush' -%}background-image: linear-gradient(100deg, #6b5424, #fff6d0, #e4c06a, #ffffff, #8a6a2f); background-size: 260% 100%; animation: fill-pan 4s linear infinite;
   {%- else -%}background-image: linear-gradient(90deg, {{ paint | default: '#f4fbff' }}, {{ fill_2 | default: '#00e5ff' }});
   {%- endif -%}
   -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;

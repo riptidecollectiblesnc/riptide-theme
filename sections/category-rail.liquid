@@ -1,5 +1,6 @@
-<section class="section" style="padding-top:0">
-  <div class="wrap" style="--rail-w: {{ section.settings.card_width }}px">
+{% render 'section-bg', section: section %}
+<section class="section" style="padding-top: {{ section.settings.pad_top }}px; padding-bottom: {{ section.settings.pad_bottom }}px;">
+  <div class="wrap">
     <div class="rail">
       {% for block in section.blocks %}
         {% liquid
@@ -11,8 +12,7 @@
           endif
         %}
         <a class="panel rail-card" href="{{ href }}" {{ block.shopify_attributes }}>
-          {% capture label_style %}{% render 'field-style', font: block.settings.title_font, bold: block.settings.title_bold, italic: block.settings.title_italic, align: block.settings.title_align, valign: block.settings.title_valign, fill: block.settings.title_fill, size: block.settings.title_size, depth: block.settings.title_depth, amount: block.settings.title_depth_amount %}{% endcapture %}
-          {% render 'wax', style: block.settings.style, label: block.settings.title, label_style: label_style %}
+          {% render 'wax', style: block.settings.style, label: block.settings.title %}
         </a>
       {% endfor %}
     </div>
@@ -24,14 +24,194 @@
   "name": "Category rail",
   "settings": [
     {
+      "type": "select",
+      "id": "edit_group",
+      "label": "Edit",
+      "default": "background",
+      "options": [
+        {
+          "value": "background",
+          "label": "Background"
+        },
+        {
+          "value": "section_space",
+          "label": "Section space"
+        }
+      ],
+      "info": "Opens that group. Pick another title to switch."
+    },
+    {
+      "type": "header",
+      "content": "Background",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_fill",
+      "label": "Fill",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "solid",
+          "label": "Solid"
+        },
+        {
+          "value": "tide",
+          "label": "Tide"
+        },
+        {
+          "value": "violet",
+          "label": "Violet night"
+        },
+        {
+          "value": "foil",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "sunset",
+          "label": "Sunset"
+        },
+        {
+          "value": "aurora",
+          "label": "Aurora"
+        },
+        {
+          "value": "pulse",
+          "label": "Neon pulse"
+        },
+        {
+          "value": "glass",
+          "label": "Glass"
+        },
+        {
+          "value": "mesh",
+          "label": "Mesh glow"
+        },
+        {
+          "value": "custom",
+          "label": "Custom gradient"
+        }
+      ],
+      "info": "None leaves the section as it is. Foil, Aurora, and Neon pulse animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color",
+      "label": "Fill color",
+      "default": "#0E1C28",
+      "info": "Solid, glass, mesh, and custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "color",
+      "id": "sec_fill_color_2",
+      "label": "Second color",
+      "default": "#00E5FF",
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
       "type": "range",
-      "id": "card_width",
-      "label": "Card width",
-      "min": 96,
-      "max": 220,
-      "step": 4,
+      "id": "sec_angle",
+      "label": "Gradient angle",
+      "min": 0,
+      "max": 360,
+      "step": 15,
+      "unit": "deg",
+      "default": 90,
+      "info": "Used by Custom gradient.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "select",
+      "id": "sec_preset",
+      "label": "Image preset",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "deep-tide",
+          "label": "Deep tide"
+        },
+        {
+          "value": "horizon",
+          "label": "Neon horizon"
+        },
+        {
+          "value": "foil-sweep",
+          "label": "Foil sweep"
+        },
+        {
+          "value": "nebula",
+          "label": "Violet nebula"
+        },
+        {
+          "value": "grid",
+          "label": "Night grid"
+        },
+        {
+          "value": "bubbles",
+          "label": "Bubble field"
+        },
+        {
+          "value": "aurora-sheet",
+          "label": "Aurora sheet"
+        },
+        {
+          "value": "slab",
+          "label": "Slab glow"
+        },
+        {
+          "value": "storm",
+          "label": "Storm glass"
+        }
+      ],
+      "info": "Painted art behind the section. Foil sweep and Aurora sheet animate.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "sec_image",
+      "label": "Background image",
+      "info": "Optional photo. Sits on top of the fill and preset.",
+      "visible_if": "{{ section.settings.edit_group == 'background' }}"
+    },
+    {
+      "type": "header",
+      "content": "Section space",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_top",
+      "label": "Top space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
       "unit": "px",
-      "default": 134
+      "default": 0,
+      "info": "Space above this row. Zero keeps it tight under the header.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
+    },
+    {
+      "type": "range",
+      "id": "pad_bottom",
+      "label": "Bottom space",
+      "min": 0,
+      "max": 200,
+      "step": 2,
+      "unit": "px",
+      "default": 52,
+      "info": "Space below this row.",
+      "visible_if": "{{ section.settings.edit_group == 'section_space' }}"
     }
   ],
   "blocks": [
@@ -44,227 +224,6 @@
           "id": "title",
           "label": "Label",
           "default": "Hockey"
-        },
-        {
-          "type": "select",
-          "id": "title_font",
-          "label": "Label font",
-          "default": "inherit",
-          "options": [
-            {
-              "value": "inherit",
-              "label": "Theme default"
-            },
-            {
-              "value": "Unbounded, sans-serif",
-              "label": "Unbounded"
-            },
-            {
-              "value": "Outfit, sans-serif",
-              "label": "Outfit"
-            },
-            {
-              "value": "\"Barlow Condensed\", sans-serif",
-              "label": "Barlow Condensed"
-            },
-            {
-              "value": "\"Bebas Neue\", sans-serif",
-              "label": "Bebas Neue"
-            },
-            {
-              "value": "Oswald, sans-serif",
-              "label": "Oswald"
-            },
-            {
-              "value": "Anton, sans-serif",
-              "label": "Anton"
-            },
-            {
-              "value": "Archivo, sans-serif",
-              "label": "Archivo"
-            },
-            {
-              "value": "Inter, sans-serif",
-              "label": "Inter"
-            }
-          ]
-        },
-        {
-          "type": "checkbox",
-          "id": "title_bold",
-          "label": "Label bold",
-          "default": false
-        },
-        {
-          "type": "checkbox",
-          "id": "title_italic",
-          "label": "Label italic",
-          "default": false
-        },
-        {
-          "type": "select",
-          "id": "title_align",
-          "label": "Label horizontal",
-          "default": "default",
-          "options": [
-            {
-              "value": "default",
-              "label": "Theme default"
-            },
-            {
-              "value": "left",
-              "label": "Left"
-            },
-            {
-              "value": "center",
-              "label": "Center"
-            },
-            {
-              "value": "right",
-              "label": "Right"
-            }
-          ]
-        },
-        {
-          "type": "select",
-          "id": "title_valign",
-          "label": "Label vertical",
-          "default": "default",
-          "options": [
-            {
-              "value": "default",
-              "label": "Theme default"
-            },
-            {
-              "value": "top",
-              "label": "Top"
-            },
-            {
-              "value": "middle",
-              "label": "Middle"
-            },
-            {
-              "value": "bottom",
-              "label": "Bottom"
-            }
-          ]
-        },
-        {
-          "type": "select",
-          "id": "title_fill",
-          "label": "Label fill",
-          "default": "solid",
-          "options": [
-            {
-              "value": "solid",
-              "label": "Solid"
-            },
-            {
-              "value": "tide",
-              "label": "Tide"
-            },
-            {
-              "value": "violet",
-              "label": "Violet"
-            },
-            {
-              "value": "foil",
-              "label": "Foil"
-            },
-            {
-              "value": "sunset",
-              "label": "Sunset"
-            },
-            {
-              "value": "aurora",
-              "label": "Aurora"
-            },
-            {
-              "value": "pulse",
-              "label": "Neon pulse"
-            },
-            {
-              "value": "custom",
-              "label": "Custom gradient"
-            }
-          ],
-          "info": "Gradient is painted on the letters. Solid uses the color above."
-        },
-        {
-          "type": "range",
-          "id": "title_size",
-          "label": "Label size",
-          "min": 10,
-          "max": 96,
-          "step": 2,
-          "unit": "px",
-          "default": 16
-        },
-        {
-          "type": "select",
-          "id": "title_depth",
-          "label": "Label depth",
-          "default": "none",
-          "options": [
-            {
-              "value": "none",
-              "label": "None"
-            },
-            {
-              "value": "soft",
-              "label": "Soft shadow"
-            },
-            {
-              "value": "hard",
-              "label": "Hard offset"
-            },
-            {
-              "value": "lift",
-              "label": "Lift"
-            },
-            {
-              "value": "long",
-              "label": "Long shadow"
-            },
-            {
-              "value": "echo",
-              "label": "Echo"
-            },
-            {
-              "value": "press",
-              "label": "Letterpress"
-            },
-            {
-              "value": "emboss",
-              "label": "Emboss"
-            },
-            {
-              "value": "outline",
-              "label": "Outline"
-            },
-            {
-              "value": "neon",
-              "label": "Neon glow"
-            },
-            {
-              "value": "double",
-              "label": "Double glow"
-            },
-            {
-              "value": "foil",
-              "label": "Foil"
-            }
-          ]
-        },
-        {
-          "type": "range",
-          "id": "title_depth_amount",
-          "label": "Label depth amount",
-          "min": 0,
-          "max": 40,
-          "step": 2,
-          "unit": "px",
-          "default": 8
         },
         {
           "type": "collection",
@@ -329,7 +288,7 @@
         {
           "type": "cat",
           "settings": {
-            "title": "Pok\u00e9mon",
+            "title": "Pokémon",
             "style": "crystal"
           }
         },

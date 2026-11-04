@@ -1,22 +1,49 @@
 .brand .shop-name { white-space: pre; }
-.ticker.bar-fill,
-.ticker-set {
-  align-items: stretch;
+
+/* Ticker stays one long row. Vertical align is on the words, not the track. */
+.ticker.bar-fill {
+  display: block;
+  height: var(--bar-h, 40px);
+  min-height: var(--bar-h, 40px);
+  overflow: hidden;
 }
-.ticker-track,
-.ticker-set {
+.ticker .ticker-track {
+  display: flex;
+  flex-flow: row nowrap;
+  width: max-content;
+  max-width: none;
   height: 100%;
+  align-items: stretch;
+  animation: ticker var(--ticker-ms, 40s) linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
 }
-.ticker-item {
-  display: inline-flex;
+.ticker .ticker-set {
+  display: flex;
+  flex: 0 0 auto;
+  flex-flow: row nowrap;
+  align-items: stretch;
+  width: max-content;
+  height: 100%;
+  gap: 2.5rem;
+  padding-right: 2.5rem;
+}
+.ticker .ticker-item {
+  display: flex;
+  flex: 0 0 auto;
   align-items: center;
   align-self: stretch;
   height: 100%;
-  white-space: pre;
+  white-space: nowrap;
 }
-.ticker-item b,
-.ticker-item > span {
+.ticker .ticker-item b,
+.ticker .ticker-item > span {
   line-height: 1;
+  white-space: nowrap;
+}
+@keyframes ticker {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(calc(-1 * var(--ticker-shift, 50%)), 0, 0); }
 }
 
 .kicker,
@@ -66,12 +93,104 @@
 .image-hold.place-left { justify-content: flex-start; }
 .image-hold.place-center { justify-content: center; }
 .image-hold.place-right { justify-content: flex-end; }
+.image-hold > .image-cell,
 .image-hold > img,
 .image-hold > a,
 .image-hold > .image-empty {
   width: var(--img-w, 100%);
   max-width: 100%;
   transform: translate(var(--img-x, 0px), var(--img-y, 0px));
+}
+.image-cell {
+  border-style: solid;
+  border-width: var(--cell-border, 1px);
+  border-color: var(--cell-border-color, #00eaff);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-sizing: border-box;
+  background: transparent;
+  line-height: 0;
+}
+.image-cell.fill-solid { background: var(--fill, #0e1c28); }
+.image-cell.fill-tide { background-image: linear-gradient(90deg, #042028, #00e5ff 42%, #7af6ff 50%, #00e5ff 58%, #042028); }
+.image-cell.fill-violet { background-image: linear-gradient(100deg, #12061f, #6d1ecc 46%, #00e5ff); }
+.image-cell.fill-foil {
+  background-image: linear-gradient(105deg, #6b5424, #e4c06a 28%, #fff6d0 48%, #e4c06a 62%, #8a6a2f);
+  background-size: 220% 100%;
+  animation: fill-pan 9s linear infinite;
+}
+.image-cell.fill-sunset { background-image: linear-gradient(90deg, #3a1020, #ff5a7a 35%, #e4c06a 68%, #6d1ecc); }
+.image-cell.fill-aurora {
+  background-image: linear-gradient(100deg, #041018, #00e5ff 28%, #6d1ecc 58%, #041820);
+  background-size: 220% 100%;
+  animation: fill-pan 12s linear infinite;
+}
+.image-cell.fill-pulse {
+  background-image: linear-gradient(90deg, #00e5ff, #6d1ecc, #00e5ff);
+  background-size: 220% 100%;
+  animation: fill-pan 6s linear infinite;
+}
+.image-cell.fill-glass {
+  background: color-mix(in srgb, var(--fill, #00e5ff) 22%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--fill-2, #fff) 35%, transparent);
+}
+.image-cell.fill-mesh {
+  background-color: var(--fill, #0e1c28);
+  background-image:
+    radial-gradient(circle at 15% 50%, color-mix(in srgb, var(--fill, #00e5ff) 70%, transparent), transparent 42%),
+    radial-gradient(circle at 80% 40%, color-mix(in srgb, var(--fill-2, #6d1ecc) 75%, transparent), transparent 46%);
+}
+.image-cell.fill-custom { background-image: linear-gradient(var(--fill-angle, 90deg), var(--fill, #0e1c28), var(--fill-2, #00e5ff)); }
+.image-cell.depth-soft { box-shadow: 0 calc(var(--depth, 6px) * 0.55) calc(var(--depth, 6px) * 1.7) var(--depth-color, #00e5ff); }
+.image-cell.depth-hard { box-shadow: calc(var(--depth, 6px) * 0.35) calc(var(--depth, 6px) * 0.35) 0 var(--depth-color, #00e5ff); }
+.image-cell.depth-lift { box-shadow: 0 var(--depth, 6px) calc(var(--depth, 6px) * 1.8) var(--depth-color, #00e5ff); }
+.image-cell.depth-long { box-shadow: var(--depth, 6px) var(--depth, 6px) 0 var(--depth-color, #00e5ff), calc(var(--depth, 6px) * 2) calc(var(--depth, 6px) * 2) 0 color-mix(in srgb, var(--depth-color, #00e5ff) 65%, transparent); }
+.image-cell.depth-echo { box-shadow: var(--depth, 6px) var(--depth, 6px) 0 var(--depth-color, #00e5ff), calc(var(--depth, 6px) * 2) calc(var(--depth, 6px) * 2) 0 color-mix(in srgb, var(--depth-color, #00e5ff) 50%, transparent); }
+.image-cell.depth-press { box-shadow: inset 0 var(--depth, 6px) calc(var(--depth, 6px) * 0.7) var(--depth-color, #00e5ff); }
+.image-cell.depth-emboss { box-shadow: inset 0 calc(var(--depth, 6px) * 0.35) 0 color-mix(in srgb, white 60%, transparent), inset 0 calc(var(--depth, 6px) * -0.35) 0 color-mix(in srgb, black 45%, transparent); }
+.image-cell.depth-outline { box-shadow: 0 0 0 var(--depth, 6px) var(--depth-color, #00e5ff); }
+.image-cell.depth-neon { box-shadow: 0 0 calc(var(--depth, 6px) * 0.55) var(--depth-color, #00e5ff), 0 0 calc(var(--depth, 6px) * 1.7) var(--depth-color, #00e5ff); }
+.image-cell.depth-double { box-shadow: 0 0 calc(var(--depth, 6px) * 0.35) var(--depth-color, #00e5ff), 0 0 var(--depth, 6px) var(--depth-color, #00e5ff), 0 0 calc(var(--depth, 6px) * 2) var(--depth-color, #00e5ff); }
+.image-cell.depth-foil { box-shadow: 0 1px 0 #fff6d0, 0 var(--depth, 6px) 0 #e4c06a, 0 calc(var(--depth, 6px) * 2) var(--depth, 6px) #8a6a2f; }
+.image-cell.is-clear {
+  border: 0 !important;
+  background: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+.image-cell.is-clear img,
+.image-cell.is-clear a {
+  filter: drop-shadow(0 calc(var(--depth, 6px) * 0.45) calc(var(--depth, 6px) * 1.5) var(--depth-color, #00e5ff));
+}
+.image-cell.is-clear.depth-none img,
+.image-cell.is-clear.depth-none a { filter: none; }
+.image-cell.is-clear.depth-hard img,
+.image-cell.is-clear.depth-hard a,
+.image-cell.is-clear.depth-long img,
+.image-cell.is-clear.depth-long a,
+.image-cell.is-clear.depth-echo img,
+.image-cell.is-clear.depth-echo a {
+  filter: drop-shadow(calc(var(--depth, 6px) * 0.5) calc(var(--depth, 6px) * 0.5) 0 var(--depth-color, #00e5ff));
+}
+.image-cell.is-clear.depth-outline img,
+.image-cell.is-clear.depth-outline a {
+  filter:
+    drop-shadow(var(--depth, 6px) 0 0 var(--depth-color, #00e5ff))
+    drop-shadow(calc(var(--depth, 6px) * -1) 0 0 var(--depth-color, #00e5ff))
+    drop-shadow(0 var(--depth, 6px) 0 var(--depth-color, #00e5ff))
+    drop-shadow(0 calc(var(--depth, 6px) * -1) 0 var(--depth-color, #00e5ff));
+}
+.image-cell.is-clear.depth-neon img,
+.image-cell.is-clear.depth-neon a,
+.image-cell.is-clear.depth-double img,
+.image-cell.is-clear.depth-double a {
+  filter:
+    drop-shadow(0 0 calc(var(--depth, 6px) * 0.45) var(--depth-color, #00e5ff))
+    drop-shadow(0 0 calc(var(--depth, 6px) * 1.6) var(--depth-color, #00e5ff));
+}
+.image-cell.is-clear.depth-foil img,
+.image-cell.is-clear.depth-foil a {
+  filter: drop-shadow(0 calc(var(--depth, 6px) * 0.4) calc(var(--depth, 6px) * 0.8) #e4c06a);
 }
 .image-hold img {
   display: block;
@@ -80,10 +199,13 @@
   object-fit: var(--img-fit, cover);
   object-position: var(--img-pos, center center);
 }
+.image-hold.has-ratio > .image-cell > img,
+.image-hold.has-ratio > .image-cell > a > img,
 .image-hold.has-ratio > img,
 .image-hold.has-ratio > a > img {
   aspect-ratio: var(--img-ratio, 16 / 9);
 }
+.image-cell > a { display: block; }
 .image-empty {
   display: grid;
   place-items: center;
@@ -93,4 +215,71 @@
   border-radius: var(--radius-card);
   color: var(--color-muted);
   text-align: center;
+  line-height: 1.4;
 }
+
+.tagline-hold {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 6;
+  width: var(--tag-w, 220px);
+  height: var(--tag-h, 48px);
+  transform: translate(calc(-50% + var(--tag-x, 0px)), calc(-50% + var(--tag-y, 0px)));
+  pointer-events: auto;
+}
+.tagline-hold img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+@media (max-width: 480px) {
+  .tagline-hold {
+    width: var(--tag-w-m, var(--tag-w, 160px));
+    height: var(--tag-h-m, var(--tag-h, 36px));
+    transform: translate(calc(-50% + var(--tag-x-m, var(--tag-x, 0px))), calc(-50% + var(--tag-y-m, var(--tag-y, 0px))));
+  }
+}
+
+.text-images .canvas {
+  position: relative;
+  width: 100%;
+  height: var(--canvas-h, 520px);
+}
+.canvas-item,
+.canvas-text {
+  position: absolute;
+  left: var(--ix, 0px);
+  top: var(--iy, 0px);
+  width: var(--iw, 40%);
+  z-index: var(--iz, 1);
+  max-width: none;
+}
+.canvas-item.place-center {
+  left: calc(50% + var(--ix, 0px));
+  transform: translateX(-50%);
+}
+.canvas-item.place-right {
+  left: auto;
+  right: var(--ix, 0px);
+}
+.canvas-item .image-cell { width: 100%; }
+.canvas-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: var(--img-fit, cover);
+  object-position: var(--img-pos, center center);
+}
+.canvas-item.has-ratio img,
+.canvas-item.has-ratio a img { aspect-ratio: var(--img-ratio, 16 / 9); }
+.canvas-text {
+  display: flex;
+  flex-direction: column;
+  min-height: var(--th, auto);
+}
+.canvas-text .rte { width: 100%; }
+.canvas-text .rte > *:first-child { margin-top: 0; }
+.canvas-text .rte > *:last-child { margin-bottom: 0; }
+
