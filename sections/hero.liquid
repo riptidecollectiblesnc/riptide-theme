@@ -33,7 +33,7 @@
       {% if section.settings.kicker != blank %}
         <p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, fill: section.settings.kicker_fill, fill_2: section.settings.kicker_fill_2, color: section.settings.kicker_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}"><span class="live-dot"></span> {{ section.settings.kicker }}</p>
       {% endif %}
-      <h1 class="display hero-title" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, fill_2: section.settings.heading_fill_2, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h1>
+      <h1 class="display hero-title" style="width: min(100%, {{ section.settings.heading_width | default: 560 }}px); max-width: {{ section.settings.heading_width | default: 560 }}px; {% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, fill_2: section.settings.heading_fill_2, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h1>
       {% liquid
         assign hero_copy = section.settings.text
         if section.settings.text_page != blank and section.settings.text_page.content != blank
@@ -457,6 +457,17 @@
       "id": "heading",
       "label": "Heading",
       "default": "The coast breaks different.",
+      "visible_if": "{{ section.settings.edit_group == 'content' }}"
+    },
+    {
+      "type": "range",
+      "id": "heading_width",
+      "label": "Heading width",
+      "min": 200,
+      "max": 1000,
+      "step": 10,
+      "unit": "px",
+      "default": 560,
       "visible_if": "{{ section.settings.edit_group == 'content' }}"
     },
     {
