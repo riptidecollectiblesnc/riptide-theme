@@ -1,5 +1,23 @@
 .brand .shop-name { white-space: pre; }
-.ticker-item { white-space: pre; }
+.ticker.bar-fill,
+.ticker-set {
+  align-items: stretch;
+}
+.ticker-track,
+.ticker-set {
+  height: 100%;
+}
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  align-self: stretch;
+  height: 100%;
+  white-space: pre;
+}
+.ticker-item b,
+.ticker-item > span {
+  line-height: 1;
+}
 
 .kicker,
 .display,
