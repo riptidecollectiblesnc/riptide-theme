@@ -3,6 +3,10 @@
   assign logo_h = section.settings.logo_height | default: 56
   assign logo_w_m = section.settings.logo_width_mobile | default: 120
   assign logo_h_m = section.settings.logo_height_mobile | default: 44
+  assign logo_x = section.settings.logo_x | default: 0
+  assign logo_y = section.settings.logo_y | default: 0
+  assign logo_x_m = section.settings.logo_x_mobile | default: 0
+  assign logo_y_m = section.settings.logo_y_mobile | default: 0
   case section.settings.menu_align_h
     when 'left'
       assign menu_h = 'flex-start'
@@ -201,8 +205,31 @@
     font-size: 0.92em;
   }
   #shopify-section-{{ section.id }} .sheet .nav-link.is-child { padding-left: 1.4rem; }
+  #shopify-section-{{ section.id }} .logo-frame {
+    transform: translate({{ logo_x }}px, {{ logo_y }}px);
+  }
+  @media (max-width: 480px) {
+    #shopify-section-{{ section.id }} .logo-frame {
+      transform: translate({{ logo_x_m }}px, {{ logo_y_m }}px);
+    }
+  }
+  #shopify-section-{{ section.id }} .search {
+    width: {{ section.settings.search_width | default: 176 }}px;
+    min-width: {{ section.settings.search_width | default: 176 }}px;
+    flex: 0 0 auto;
+    transform: translate({{ section.settings.search_x | default: 0 }}px, {{ section.settings.search_y | default: 0 }}px);
+  }
+  #shopify-section-{{ section.id }} .search .field {
+    width: 100%;
+  }
+  #shopify-section-{{ section.id }} .account-link {
+    transform: translate({{ section.settings.account_x | default: 0 }}px, {{ section.settings.account_y | default: 0 }}px);
+  }
+  #shopify-section-{{ section.id }} .cart-link {
+    transform: translate({{ section.settings.cart_x | default: 0 }}px, {{ section.settings.cart_y | default: 0 }}px);
+  }
 {% endstyle %}
-<header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px;">
+<header class="site-header{% if section.settings.sticky %} is-sticky{% endif %}" style="--bar-h: {{ section.settings.bar_height }}px; --logo-w: {{ logo_w }}px; --logo-h: {{ logo_h }}px; --logo-w-m: {{ logo_w_m }}px; --logo-h-m: {{ logo_h_m }}px; --logo-x: {{ logo_x }}px; --logo-y: {{ logo_y }}px; --logo-x-m: {{ logo_x_m }}px; --logo-y-m: {{ logo_y_m }}px;">
   {% if section.settings.menu_top != blank %}
     <nav class="wrap desk-nav top-menu" aria-label="Top">
       {% for link in section.settings.menu_top.links %}
@@ -261,11 +288,11 @@
       {% endif %}
     </nav>
     <form class="search" action="{{ routes.search_url }}" method="get" role="search">
-      <input class="field" type="search" name="q" placeholder="Search wax" aria-label="Search">
+      <input class="field" type="search" name="q" placeholder="Search Website" aria-label="Search">
       <input type="hidden" name="type" value="product">
     </form>
     {% if shop.customer_accounts_enabled %}
-      <a class="icon-btn" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" aria-label="Account">
+      <a class="icon-btn account-link" href="{% if customer %}{{ routes.account_url }}{% else %}{{ routes.account_login_url }}{% endif %}" aria-label="Account">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="8" r="3.2"/><path d="M5 19c1.4-3 3.8-4.5 7-4.5S17.6 16 19 19"/></svg>
       </a>
     {% endif %}
@@ -285,7 +312,7 @@
       </button>
     </div>
     <form action="{{ routes.search_url }}" method="get" role="search">
-      <input class="field" type="search" name="q" placeholder="Search wax and breaks" aria-label="Search">
+      <input class="field" type="search" name="q" placeholder="Search Website" aria-label="Search">
       <input type="hidden" name="type" value="product">
     </form>
     {% if section.settings.menu_top != blank %}
@@ -883,6 +910,28 @@
     },
     {
       "type": "range",
+      "id": "logo_x",
+      "label": "X axis",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Slides the logo left or right. 0 leaves it where it is. A higher number moves it right."
+    },
+    {
+      "type": "range",
+      "id": "logo_y",
+      "label": "Y axis",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Slides the logo up or down. 0 leaves it where it is. A higher number moves it down."
+    },
+    {
+      "type": "range",
       "id": "logo_width_mobile",
       "label": "Phone logo width",
       "min": 40,
@@ -901,6 +950,28 @@
       "step": 2,
       "unit": "px",
       "default": 44
+    },
+    {
+      "type": "range",
+      "id": "logo_x_mobile",
+      "label": "Phone X axis",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Only applies on screens under 480px. Does not add to the desktop X axis."
+    },
+    {
+      "type": "range",
+      "id": "logo_y_mobile",
+      "label": "Phone Y axis",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Only applies on screens under 480px. A higher number moves the logo down."
     },
     {
       "type": "select",
@@ -923,6 +994,90 @@
       "id": "show_name",
       "label": "Show shop name next to the logo",
       "default": true
+    },
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "range",
+      "id": "search_width",
+      "label": "Field width",
+      "min": 100,
+      "max": 500,
+      "step": 4,
+      "unit": "px",
+      "default": 176
+    },
+    {
+      "type": "range",
+      "id": "search_x",
+      "label": "X axis",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Slides the search left or right. A higher number moves it right."
+    },
+    {
+      "type": "range",
+      "id": "search_y",
+      "label": "Y axis",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Slides the search up or down. A higher number moves it down."
+    },
+    {
+      "type": "header",
+      "content": "Account and cart"
+    },
+    {
+      "type": "range",
+      "id": "account_x",
+      "label": "Account X axis",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Slides the account button left or right. A higher number moves it right."
+    },
+    {
+      "type": "range",
+      "id": "account_y",
+      "label": "Account Y axis",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Slides the account button up or down. A higher number moves it down."
+    },
+    {
+      "type": "range",
+      "id": "cart_x",
+      "label": "Cart X axis",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Slides the cart button left or right. A higher number moves it right."
+    },
+    {
+      "type": "range",
+      "id": "cart_y",
+      "label": "Cart Y axis",
+      "min": -200,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0,
+      "info": "Slides the cart button up or down. A higher number moves it down."
     },
     {
       "type": "header",
