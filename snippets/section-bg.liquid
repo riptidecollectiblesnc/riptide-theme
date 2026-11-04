@@ -37,6 +37,16 @@
           {% when 'sunset' %}{% capture grad %}linear-gradient(90deg, #3a1020, #ff5a7a 35%, #e4c06a 68%, #6d1ecc){% endcapture %}
           {% when 'aurora' %}{% capture grad %}linear-gradient(100deg, #041018, #00e5ff 28%, #6d1ecc 58%, #041820){% endcapture %}
           {% when 'pulse' %}{% capture grad %}linear-gradient(90deg, #00e5ff, #6d1ecc, #00e5ff){% endcapture %}
+          {% when 'lava' %}{% capture grad %}linear-gradient(100deg, #3a1020, #ff5a7a 30%, #e4c06a 55%, #00e5ff 78%, #12061f){% endcapture %}
+          {% when 'chrome' %}{% capture grad %}linear-gradient(100deg, #1a2830, #9fb4c0 25%, #ffffff 42%, #7af6ff 58%, #c5d4de 75%, #1a2830){% endcapture %}
+          {% when 'prism' %}{% capture grad %}linear-gradient(90deg, #041018, #7af6ff 20%, #b388ff 40%, #ffe08a 60%, #ff8fa3 80%, #041018){% endcapture %}
+          {% when 'electric' %}{% capture grad %}linear-gradient(90deg, #041018, #00e5ff 35%, #ffffff 50%, #b388ff 65%, #041018){% endcapture %}
+          {% when 'holo' %}{% capture grad %}linear-gradient(115deg, #041018, #7af6ff 22%, #e4d4ff 40%, #fff6d0 55%, #00e5ff 72%, #ff8fa3 88%, #041018){% endcapture %}
+          {% when 'wave' %}{% capture grad %}linear-gradient(90deg, #042028, #00e5ff 30%, #7af6ff 48%, #ffffff 50%, #00e5ff 52%, #042028){% endcapture %}
+          {% when 'goldrush' %}{% capture grad %}linear-gradient(100deg, #1a1408, #6b5424 20%, #fff6d0 42%, #e4c06a 58%, #ffffff 70%, #8a6a2f){% endcapture %}
+          {% when 'current' %}{% capture grad %}linear-gradient(90deg, #041018, #0e3a44 20%, #00e5ff 40%, #042028 55%, #6d1ecc 75%, #041018){% endcapture %}
+          {% when 'ember' %}{% capture grad %}linear-gradient(100deg, #14060c, #ff5a7a 28%, #3a1020 48%, #e4c06a 68%, #14060c){% endcapture %}
+          {% when 'sheen' %}{% capture grad %}linear-gradient(110deg, #041018 0%, #041018 40%, #7af6ff 48%, #ffffff 50%, #7af6ff 52%, #041018 60%, #041018 100%){% endcapture %}
           {% when 'mesh' %}{% capture grad %}radial-gradient(circle at 15% 50%, color-mix(in srgb, {{ paint }} 70%, transparent), transparent 42%), radial-gradient(circle at 80% 40%, color-mix(in srgb, {{ paint2 }} 75%, transparent), transparent 46%){% endcapture %}
           {% when 'custom' %}{% capture grad %}linear-gradient({{ angle }}deg, {{ paint }}, {{ paint2 }}){% endcapture %}
         {% endcase %}
@@ -54,18 +64,41 @@
         background-repeat: no-repeat;
       {% elsif grad != blank %}
         background-image: {{ grad }};
+        {% assign motion = 'foil,aurora,pulse,lava,chrome,prism,electric,holo,wave,goldrush,current,ember,sheen' | split: ',' %}
+        {% assign sweep = false %}
+        {% if preset == 'foil-sweep' or preset == 'aurora-sheet' %}{% assign sweep = true %}{% endif %}
+        {% if preset == 'none' and motion contains fill %}{% assign sweep = true %}{% endif %}
         {% if preset == 'grid' %}
           background-size: 28px 28px, 28px 28px, cover;
-        {% elsif preset == 'foil-sweep' or preset == 'aurora-sheet' or preset == 'none' and fill == 'foil' or preset == 'none' and fill == 'aurora' or preset == 'none' and fill == 'pulse' %}
-          background-size: 220% 100%;
+        {% elsif sweep %}
+          background-size: 240% 100%;
         {% else %}
           background-size: cover;
         {% endif %}
         background-position: center;
       {% endif %}
       {% if photo == blank %}
-        {% if preset == 'foil-sweep' or preset == 'aurora-sheet' or preset == 'none' and fill == 'foil' or preset == 'none' and fill == 'aurora' or preset == 'none' and fill == 'pulse' %}
-          animation: fill-pan {% if fill == 'pulse' %}6s{% elsif preset == 'aurora-sheet' or fill == 'aurora' %}12s{% else %}9s{% endif %} linear infinite;
+        {% assign motion = 'foil,aurora,pulse,lava,chrome,prism,electric,holo,wave,goldrush,current,ember,sheen' | split: ',' %}
+        {% assign sweep = false %}
+        {% if preset == 'foil-sweep' or preset == 'aurora-sheet' %}{% assign sweep = true %}{% endif %}
+        {% if preset == 'none' and motion contains fill %}{% assign sweep = true %}{% endif %}
+        {% if sweep %}
+          {% case fill %}
+            {% when 'pulse' %}{% assign dur = '6s' %}
+            {% when 'electric' %}{% assign dur = '2.4s' %}
+            {% when 'chrome' %}{% assign dur = '5s' %}
+            {% when 'goldrush' %}{% assign dur = '4s' %}
+            {% when 'sheen' %}{% assign dur = '3.5s' %}
+            {% when 'lava' %}{% assign dur = '7s' %}
+            {% when 'prism' %}{% assign dur = '8s' %}
+            {% when 'ember' %}{% assign dur = '8s' %}
+            {% when 'wave' %}{% assign dur = '10s' %}
+            {% when 'aurora' %}{% assign dur = '12s' %}
+            {% when 'current' %}{% assign dur = '14s' %}
+            {% else %}{% assign dur = '9s' %}
+          {% endcase %}
+          {% if preset == 'aurora-sheet' %}{% assign dur = '12s' %}{% endif %}
+          animation: fill-pan {{ dur }} linear infinite;
         {% endif %}
       {% endif %}
       {% if preset == 'slab' %}

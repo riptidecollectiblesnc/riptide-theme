@@ -94,10 +94,20 @@
       {% when 'solid' %}background: {{ section.settings.menu_cell_color }};
       {% when 'tide' %}background-image: linear-gradient(90deg, #042028, #00e5ff 42%, #7af6ff 50%, #00e5ff 58%, #042028);
       {% when 'violet' %}background-image: linear-gradient(100deg, #12061f, #6d1ecc 46%, #00e5ff);
-      {% when 'foil' %}background-image: linear-gradient(110deg, #3a2a10, #e4c06a 40%, #fff6d0 50%, #e4c06a 60%, #3a2a10); background-size: 220% 100%;
+      {% when 'foil' %}background-image: linear-gradient(110deg, #3a2a10, #e4c06a 40%, #fff6d0 50%, #e4c06a 60%, #3a2a10); background-size: 220% 100%; animation: fill-pan 9s linear infinite;
       {% when 'sunset' %}background-image: linear-gradient(90deg, #3a1020, #ff5a7a 35%, #e4c06a 68%, #6d1ecc);
-      {% when 'aurora' %}background-image: linear-gradient(100deg, #042028, #00e5ff, #6d1ecc, #00e5ff); background-size: 220% 100%;
-      {% when 'pulse' %}background-image: linear-gradient(90deg, #042028, #00e5ff 50%, #042028); background-size: 220% 100%;
+      {% when 'aurora' %}background-image: linear-gradient(100deg, #042028, #00e5ff, #6d1ecc, #00e5ff); background-size: 220% 100%; animation: fill-pan 12s linear infinite;
+      {% when 'pulse' %}background-image: linear-gradient(90deg, #042028, #00e5ff 50%, #042028); background-size: 220% 100%; animation: fill-pan 6s linear infinite;
+      {% when 'lava' %}background-image: linear-gradient(100deg, #3a1020, #ff5a7a 30%, #e4c06a 55%, #00e5ff 78%, #12061f); background-size: 240% 100%; animation: fill-pan 7s linear infinite;
+      {% when 'chrome' %}background-image: linear-gradient(100deg, #1a2830, #9fb4c0 25%, #ffffff 42%, #7af6ff 58%, #c5d4de 75%, #1a2830); background-size: 220% 100%; animation: fill-pan 5s linear infinite;
+      {% when 'prism' %}background-image: linear-gradient(90deg, #041018, #7af6ff 20%, #b388ff 40%, #ffe08a 60%, #ff8fa3 80%, #041018); background-size: 300% 100%; animation: fill-pan 8s linear infinite;
+      {% when 'electric' %}background-image: linear-gradient(90deg, #041018, #00e5ff 35%, #ffffff 50%, #b388ff 65%, #041018); background-size: 200% 100%; animation: fill-pan 2.4s linear infinite;
+      {% when 'holo' %}background-image: linear-gradient(115deg, #041018, #7af6ff 22%, #e4d4ff 40%, #fff6d0 55%, #00e5ff 72%, #ff8fa3 88%, #041018); background-size: 240% 100%; animation: fill-pan 6s linear infinite;
+      {% when 'wave' %}background-image: linear-gradient(90deg, #042028, #00e5ff 30%, #7af6ff 48%, #ffffff 50%, #00e5ff 52%, #042028); background-size: 220% 100%; animation: fill-pan 10s linear infinite;
+      {% when 'goldrush' %}background-image: linear-gradient(100deg, #1a1408, #6b5424 20%, #fff6d0 42%, #e4c06a 58%, #ffffff 70%, #8a6a2f); background-size: 260% 100%; animation: fill-pan 4s linear infinite;
+      {% when 'current' %}background-image: linear-gradient(90deg, #041018, #0e3a44 20%, #00e5ff 40%, #042028 55%, #6d1ecc 75%, #041018); background-size: 240% 100%; animation: fill-pan 14s linear infinite;
+      {% when 'ember' %}background-image: linear-gradient(100deg, #14060c, #ff5a7a 28%, #3a1020 48%, #e4c06a 68%, #14060c); background-size: 240% 100%; animation: fill-pan 8s linear infinite;
+      {% when 'sheen' %}background-image: linear-gradient(110deg, #041018 0%, #041018 40%, #7af6ff 48%, #ffffff 50%, #7af6ff 52%, #041018 60%, #041018 100%); background-size: 220% 100%; animation: fill-pan 3.5s linear infinite;
       {% when 'glass' %}background: color-mix(in srgb, {{ section.settings.menu_cell_color }} 28%, transparent);
       {% when 'custom' %}background-image: linear-gradient(90deg, {{ section.settings.menu_cell_color }}, {{ section.settings.menu_cell_color_2 }});
     {% endcase %}
@@ -127,10 +137,20 @@
       {% when 'solid' %}background: {{ section.settings.menu_hover_color }};
       {% when 'tide' %}background-image: linear-gradient(90deg, #042028, #00e5ff 42%, #7af6ff 50%, #00e5ff 58%, #042028);
       {% when 'violet' %}background-image: linear-gradient(100deg, #12061f, #6d1ecc 46%, #00e5ff);
-      {% when 'foil' %}background-image: linear-gradient(110deg, #3a2a10, #e4c06a 40%, #fff6d0 50%, #e4c06a 60%, #3a2a10); background-size: 220% 100%;
+      {% when 'foil' %}background-image: linear-gradient(110deg, #3a2a10, #e4c06a 40%, #fff6d0 50%, #e4c06a 60%, #3a2a10); background-size: 220% 100%; animation: fill-pan 9s linear infinite;
       {% when 'sunset' %}background-image: linear-gradient(90deg, #3a1020, #ff5a7a 35%, #e4c06a 68%, #6d1ecc);
-      {% when 'aurora' %}background-image: linear-gradient(100deg, #042028, #00e5ff, #6d1ecc, #00e5ff); background-size: 220% 100%;
-      {% when 'pulse' %}background-image: linear-gradient(90deg, #042028, #00e5ff 50%, #042028); background-size: 220% 100%;
+      {% when 'aurora' %}background-image: linear-gradient(100deg, #042028, #00e5ff, #6d1ecc, #00e5ff); background-size: 220% 100%; animation: fill-pan 12s linear infinite;
+      {% when 'pulse' %}background-image: linear-gradient(90deg, #042028, #00e5ff 50%, #042028); background-size: 220% 100%; animation: fill-pan 6s linear infinite;
+      {% when 'lava' %}background-image: linear-gradient(100deg, #3a1020, #ff5a7a 30%, #e4c06a 55%, #00e5ff 78%, #12061f); background-size: 240% 100%; animation: fill-pan 7s linear infinite;
+      {% when 'chrome' %}background-image: linear-gradient(100deg, #1a2830, #9fb4c0 25%, #ffffff 42%, #7af6ff 58%, #c5d4de 75%, #1a2830); background-size: 220% 100%; animation: fill-pan 5s linear infinite;
+      {% when 'prism' %}background-image: linear-gradient(90deg, #041018, #7af6ff 20%, #b388ff 40%, #ffe08a 60%, #ff8fa3 80%, #041018); background-size: 300% 100%; animation: fill-pan 8s linear infinite;
+      {% when 'electric' %}background-image: linear-gradient(90deg, #041018, #00e5ff 35%, #ffffff 50%, #b388ff 65%, #041018); background-size: 200% 100%; animation: fill-pan 2.4s linear infinite;
+      {% when 'holo' %}background-image: linear-gradient(115deg, #041018, #7af6ff 22%, #e4d4ff 40%, #fff6d0 55%, #00e5ff 72%, #ff8fa3 88%, #041018); background-size: 240% 100%; animation: fill-pan 6s linear infinite;
+      {% when 'wave' %}background-image: linear-gradient(90deg, #042028, #00e5ff 30%, #7af6ff 48%, #ffffff 50%, #00e5ff 52%, #042028); background-size: 220% 100%; animation: fill-pan 10s linear infinite;
+      {% when 'goldrush' %}background-image: linear-gradient(100deg, #1a1408, #6b5424 20%, #fff6d0 42%, #e4c06a 58%, #ffffff 70%, #8a6a2f); background-size: 260% 100%; animation: fill-pan 4s linear infinite;
+      {% when 'current' %}background-image: linear-gradient(90deg, #041018, #0e3a44 20%, #00e5ff 40%, #042028 55%, #6d1ecc 75%, #041018); background-size: 240% 100%; animation: fill-pan 14s linear infinite;
+      {% when 'ember' %}background-image: linear-gradient(100deg, #14060c, #ff5a7a 28%, #3a1020 48%, #e4c06a 68%, #14060c); background-size: 240% 100%; animation: fill-pan 8s linear infinite;
+      {% when 'sheen' %}background-image: linear-gradient(110deg, #041018 0%, #041018 40%, #7af6ff 48%, #ffffff 50%, #7af6ff 52%, #041018 60%, #041018 100%); background-size: 220% 100%; animation: fill-pan 3.5s linear infinite;
       {% when 'glass' %}background: color-mix(in srgb, {{ section.settings.menu_hover_color }} 28%, transparent);
       {% when 'custom' %}background-image: linear-gradient(90deg, {{ section.settings.menu_hover_color }}, {{ section.settings.menu_hover_color_2 }});
       {% else %}background: color-mix(in srgb, {{ section.settings.menu_hover_color }} 28%, transparent);
@@ -192,10 +212,20 @@
         {% when 'solid' %}background: {{ section.settings.top_cell_color }};
         {% when 'tide' %}background-image: linear-gradient(90deg, #042028, #00e5ff 42%, #7af6ff 50%, #00e5ff 58%, #042028);
         {% when 'violet' %}background-image: linear-gradient(100deg, #12061f, #6d1ecc 46%, #00e5ff);
-        {% when 'foil' %}background-image: linear-gradient(110deg, #3a2a10, #e4c06a 40%, #fff6d0 50%, #e4c06a 60%, #3a2a10); background-size: 220% 100%;
+        {% when 'foil' %}background-image: linear-gradient(110deg, #3a2a10, #e4c06a 40%, #fff6d0 50%, #e4c06a 60%, #3a2a10); background-size: 220% 100%; animation: fill-pan 9s linear infinite;
         {% when 'sunset' %}background-image: linear-gradient(90deg, #3a1020, #ff5a7a 35%, #e4c06a 68%, #6d1ecc);
-        {% when 'aurora' %}background-image: linear-gradient(100deg, #042028, #00e5ff, #6d1ecc, #00e5ff); background-size: 220% 100%;
-        {% when 'pulse' %}background-image: linear-gradient(90deg, #042028, #00e5ff 50%, #042028); background-size: 220% 100%;
+        {% when 'aurora' %}background-image: linear-gradient(100deg, #042028, #00e5ff, #6d1ecc, #00e5ff); background-size: 220% 100%; animation: fill-pan 12s linear infinite;
+        {% when 'pulse' %}background-image: linear-gradient(90deg, #042028, #00e5ff 50%, #042028); background-size: 220% 100%; animation: fill-pan 6s linear infinite;
+        {% when 'lava' %}background-image: linear-gradient(100deg, #3a1020, #ff5a7a 30%, #e4c06a 55%, #00e5ff 78%, #12061f); background-size: 240% 100%; animation: fill-pan 7s linear infinite;
+        {% when 'chrome' %}background-image: linear-gradient(100deg, #1a2830, #9fb4c0 25%, #ffffff 42%, #7af6ff 58%, #c5d4de 75%, #1a2830); background-size: 220% 100%; animation: fill-pan 5s linear infinite;
+        {% when 'prism' %}background-image: linear-gradient(90deg, #041018, #7af6ff 20%, #b388ff 40%, #ffe08a 60%, #ff8fa3 80%, #041018); background-size: 300% 100%; animation: fill-pan 8s linear infinite;
+        {% when 'electric' %}background-image: linear-gradient(90deg, #041018, #00e5ff 35%, #ffffff 50%, #b388ff 65%, #041018); background-size: 200% 100%; animation: fill-pan 2.4s linear infinite;
+        {% when 'holo' %}background-image: linear-gradient(115deg, #041018, #7af6ff 22%, #e4d4ff 40%, #fff6d0 55%, #00e5ff 72%, #ff8fa3 88%, #041018); background-size: 240% 100%; animation: fill-pan 6s linear infinite;
+        {% when 'wave' %}background-image: linear-gradient(90deg, #042028, #00e5ff 30%, #7af6ff 48%, #ffffff 50%, #00e5ff 52%, #042028); background-size: 220% 100%; animation: fill-pan 10s linear infinite;
+        {% when 'goldrush' %}background-image: linear-gradient(100deg, #1a1408, #6b5424 20%, #fff6d0 42%, #e4c06a 58%, #ffffff 70%, #8a6a2f); background-size: 260% 100%; animation: fill-pan 4s linear infinite;
+        {% when 'current' %}background-image: linear-gradient(90deg, #041018, #0e3a44 20%, #00e5ff 40%, #042028 55%, #6d1ecc 75%, #041018); background-size: 240% 100%; animation: fill-pan 14s linear infinite;
+        {% when 'ember' %}background-image: linear-gradient(100deg, #14060c, #ff5a7a 28%, #3a1020 48%, #e4c06a 68%, #14060c); background-size: 240% 100%; animation: fill-pan 8s linear infinite;
+        {% when 'sheen' %}background-image: linear-gradient(110deg, #041018 0%, #041018 40%, #7af6ff 48%, #ffffff 50%, #7af6ff 52%, #041018 60%, #041018 100%); background-size: 220% 100%; animation: fill-pan 3.5s linear infinite;
         {% when 'glass' %}background: color-mix(in srgb, {{ section.settings.top_cell_color }} 28%, transparent);
         {% when 'custom' %}background-image: linear-gradient(90deg, {{ section.settings.top_cell_color }}, {{ section.settings.top_cell_color_2 }});
         {% else %}background: none;
@@ -701,6 +731,46 @@
           "label": "Neon pulse"
         },
         {
+          "value": "lava",
+          "label": "Lava"
+        },
+        {
+          "value": "chrome",
+          "label": "Chrome"
+        },
+        {
+          "value": "prism",
+          "label": "Prism"
+        },
+        {
+          "value": "electric",
+          "label": "Electric"
+        },
+        {
+          "value": "holo",
+          "label": "Hologram"
+        },
+        {
+          "value": "wave",
+          "label": "Wave"
+        },
+        {
+          "value": "goldrush",
+          "label": "Gold rush"
+        },
+        {
+          "value": "current",
+          "label": "Current"
+        },
+        {
+          "value": "ember",
+          "label": "Ember"
+        },
+        {
+          "value": "sheen",
+          "label": "Sheen"
+        },
+        {
           "value": "custom",
           "label": "Custom gradient"
         }
@@ -979,6 +1049,46 @@
           "label": "Neon pulse"
         },
         {
+          "value": "lava",
+          "label": "Lava"
+        },
+        {
+          "value": "chrome",
+          "label": "Chrome"
+        },
+        {
+          "value": "prism",
+          "label": "Prism"
+        },
+        {
+          "value": "electric",
+          "label": "Electric"
+        },
+        {
+          "value": "holo",
+          "label": "Hologram"
+        },
+        {
+          "value": "wave",
+          "label": "Wave"
+        },
+        {
+          "value": "goldrush",
+          "label": "Gold rush"
+        },
+        {
+          "value": "current",
+          "label": "Current"
+        },
+        {
+          "value": "ember",
+          "label": "Ember"
+        },
+        {
+          "value": "sheen",
+          "label": "Sheen"
+        },
+        {
           "value": "glass",
           "label": "Glass"
         },
@@ -1097,6 +1207,46 @@
         {
           "value": "pulse",
           "label": "Neon pulse"
+        },
+        {
+          "value": "lava",
+          "label": "Lava"
+        },
+        {
+          "value": "chrome",
+          "label": "Chrome"
+        },
+        {
+          "value": "prism",
+          "label": "Prism"
+        },
+        {
+          "value": "electric",
+          "label": "Electric"
+        },
+        {
+          "value": "holo",
+          "label": "Hologram"
+        },
+        {
+          "value": "wave",
+          "label": "Wave"
+        },
+        {
+          "value": "goldrush",
+          "label": "Gold rush"
+        },
+        {
+          "value": "current",
+          "label": "Current"
+        },
+        {
+          "value": "ember",
+          "label": "Ember"
+        },
+        {
+          "value": "sheen",
+          "label": "Sheen"
         },
         {
           "value": "glass",
@@ -1570,6 +1720,46 @@
           "label": "Neon pulse"
         },
         {
+          "value": "lava",
+          "label": "Lava"
+        },
+        {
+          "value": "chrome",
+          "label": "Chrome"
+        },
+        {
+          "value": "prism",
+          "label": "Prism"
+        },
+        {
+          "value": "electric",
+          "label": "Electric"
+        },
+        {
+          "value": "holo",
+          "label": "Hologram"
+        },
+        {
+          "value": "wave",
+          "label": "Wave"
+        },
+        {
+          "value": "goldrush",
+          "label": "Gold rush"
+        },
+        {
+          "value": "current",
+          "label": "Current"
+        },
+        {
+          "value": "ember",
+          "label": "Ember"
+        },
+        {
+          "value": "sheen",
+          "label": "Sheen"
+        },
+        {
           "value": "custom",
           "label": "Custom gradient"
         }
@@ -1825,6 +2015,46 @@
         {
           "value": "pulse",
           "label": "Neon pulse"
+        },
+        {
+          "value": "lava",
+          "label": "Lava"
+        },
+        {
+          "value": "chrome",
+          "label": "Chrome"
+        },
+        {
+          "value": "prism",
+          "label": "Prism"
+        },
+        {
+          "value": "electric",
+          "label": "Electric"
+        },
+        {
+          "value": "holo",
+          "label": "Hologram"
+        },
+        {
+          "value": "wave",
+          "label": "Wave"
+        },
+        {
+          "value": "goldrush",
+          "label": "Gold rush"
+        },
+        {
+          "value": "current",
+          "label": "Current"
+        },
+        {
+          "value": "ember",
+          "label": "Ember"
+        },
+        {
+          "value": "sheen",
+          "label": "Sheen"
         },
         {
           "value": "custom",
@@ -2100,6 +2330,46 @@
         {
           "value": "pulse",
           "label": "Neon pulse"
+        },
+        {
+          "value": "lava",
+          "label": "Lava"
+        },
+        {
+          "value": "chrome",
+          "label": "Chrome"
+        },
+        {
+          "value": "prism",
+          "label": "Prism"
+        },
+        {
+          "value": "electric",
+          "label": "Electric"
+        },
+        {
+          "value": "holo",
+          "label": "Hologram"
+        },
+        {
+          "value": "wave",
+          "label": "Wave"
+        },
+        {
+          "value": "goldrush",
+          "label": "Gold rush"
+        },
+        {
+          "value": "current",
+          "label": "Current"
+        },
+        {
+          "value": "ember",
+          "label": "Ember"
+        },
+        {
+          "value": "sheen",
+          "label": "Sheen"
         },
         {
           "value": "custom",
@@ -2386,6 +2656,46 @@
           "label": "Neon pulse"
         },
         {
+          "value": "lava",
+          "label": "Lava"
+        },
+        {
+          "value": "chrome",
+          "label": "Chrome"
+        },
+        {
+          "value": "prism",
+          "label": "Prism"
+        },
+        {
+          "value": "electric",
+          "label": "Electric"
+        },
+        {
+          "value": "holo",
+          "label": "Hologram"
+        },
+        {
+          "value": "wave",
+          "label": "Wave"
+        },
+        {
+          "value": "goldrush",
+          "label": "Gold rush"
+        },
+        {
+          "value": "current",
+          "label": "Current"
+        },
+        {
+          "value": "ember",
+          "label": "Ember"
+        },
+        {
+          "value": "sheen",
+          "label": "Sheen"
+        },
+        {
           "value": "glass",
           "label": "Glass"
         },
@@ -2644,6 +2954,46 @@
           "label": "Neon pulse"
         },
         {
+          "value": "lava",
+          "label": "Lava"
+        },
+        {
+          "value": "chrome",
+          "label": "Chrome"
+        },
+        {
+          "value": "prism",
+          "label": "Prism"
+        },
+        {
+          "value": "electric",
+          "label": "Electric"
+        },
+        {
+          "value": "holo",
+          "label": "Hologram"
+        },
+        {
+          "value": "wave",
+          "label": "Wave"
+        },
+        {
+          "value": "goldrush",
+          "label": "Gold rush"
+        },
+        {
+          "value": "current",
+          "label": "Current"
+        },
+        {
+          "value": "ember",
+          "label": "Ember"
+        },
+        {
+          "value": "sheen",
+          "label": "Sheen"
+        },
+        {
           "value": "glass",
           "label": "Glass"
         },
@@ -2809,6 +3159,46 @@
           "label": "Neon pulse"
         },
         {
+          "value": "lava",
+          "label": "Lava"
+        },
+        {
+          "value": "chrome",
+          "label": "Chrome"
+        },
+        {
+          "value": "prism",
+          "label": "Prism"
+        },
+        {
+          "value": "electric",
+          "label": "Electric"
+        },
+        {
+          "value": "holo",
+          "label": "Hologram"
+        },
+        {
+          "value": "wave",
+          "label": "Wave"
+        },
+        {
+          "value": "goldrush",
+          "label": "Gold rush"
+        },
+        {
+          "value": "current",
+          "label": "Current"
+        },
+        {
+          "value": "ember",
+          "label": "Ember"
+        },
+        {
+          "value": "sheen",
+          "label": "Sheen"
+        },
+        {
           "value": "glass",
           "label": "Glass"
         },
@@ -2821,7 +3211,7 @@
           "label": "Custom gradient"
         }
       ],
-      "info": "None leaves the section as it is. Foil, Aurora, and Neon pulse animate.",
+      "info": "Foil, Aurora, Neon pulse, and the fills after Neon pulse animate.",
       "visible_if": "{{ section.settings.edit_group == 'background' }}"
     },
     {

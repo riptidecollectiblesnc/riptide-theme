@@ -710,7 +710,7 @@ body { padding-bottom: 64px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .live-dot, .ticker-track, .wax-slab::after, .bar-fill { animation: none; }
+  .live-dot, .ticker-track, .wax-slab::after, .bar-fill, .image-cell { animation: none; }
   .lift:hover { transform: none; }
 }
 
@@ -733,6 +733,66 @@ body { padding-bottom: 64px; }
   background-image: linear-gradient(90deg, #00e5ff, #6d1ecc, #00e5ff);
   background-size: 220% 100%;
   animation: fill-pan 6s linear infinite;
+}
+.bar-fill.fill-lava,
+.image-cell.fill-lava {
+  background-image: linear-gradient(100deg, #3a1020, #ff5a7a 30%, #e4c06a 55%, #00e5ff 78%, #12061f);
+  background-size: 240% 100%;
+  animation: fill-pan 7s linear infinite;
+}
+.bar-fill.fill-chrome,
+.image-cell.fill-chrome {
+  background-image: linear-gradient(100deg, #1a2830, #9fb4c0 25%, #ffffff 42%, #7af6ff 58%, #c5d4de 75%, #1a2830);
+  background-size: 220% 100%;
+  animation: fill-pan 5s linear infinite;
+}
+.bar-fill.fill-prism,
+.image-cell.fill-prism {
+  background-image: linear-gradient(90deg, #041018, #7af6ff 20%, #b388ff 40%, #ffe08a 60%, #ff8fa3 80%, #041018);
+  background-size: 300% 100%;
+  animation: fill-pan 8s linear infinite;
+}
+.bar-fill.fill-electric,
+.image-cell.fill-electric {
+  background-image: linear-gradient(90deg, #041018, #00e5ff 35%, #ffffff 50%, #b388ff 65%, #041018);
+  background-size: 200% 100%;
+  animation: fill-pan 2.4s linear infinite;
+}
+.bar-fill.fill-holo,
+.image-cell.fill-holo {
+  background-image: linear-gradient(115deg, #041018, #7af6ff 22%, #e4d4ff 40%, #fff6d0 55%, #00e5ff 72%, #ff8fa3 88%, #041018);
+  background-size: 240% 100%;
+  animation: fill-pan 6s linear infinite;
+}
+.bar-fill.fill-wave,
+.image-cell.fill-wave {
+  background-image: linear-gradient(90deg, #042028, #00e5ff 30%, #7af6ff 48%, #ffffff 50%, #00e5ff 52%, #042028);
+  background-size: 220% 100%;
+  animation: fill-pan 10s linear infinite;
+}
+.bar-fill.fill-goldrush,
+.image-cell.fill-goldrush {
+  background-image: linear-gradient(100deg, #1a1408, #6b5424 20%, #fff6d0 42%, #e4c06a 58%, #ffffff 70%, #8a6a2f);
+  background-size: 260% 100%;
+  animation: fill-pan 4s linear infinite;
+}
+.bar-fill.fill-current,
+.image-cell.fill-current {
+  background-image: linear-gradient(90deg, #041018, #0e3a44 20%, #00e5ff 40%, #042028 55%, #6d1ecc 75%, #041018);
+  background-size: 240% 100%;
+  animation: fill-pan 14s linear infinite;
+}
+.bar-fill.fill-ember,
+.image-cell.fill-ember {
+  background-image: linear-gradient(100deg, #14060c, #ff5a7a 28%, #3a1020 48%, #e4c06a 68%, #14060c);
+  background-size: 240% 100%;
+  animation: fill-pan 8s linear infinite;
+}
+.bar-fill.fill-sheen,
+.image-cell.fill-sheen {
+  background-image: linear-gradient(110deg, #041018 0%, #041018 40%, #7af6ff 48%, #ffffff 50%, #7af6ff 52%, #041018 60%, #041018 100%);
+  background-size: 220% 100%;
+  animation: fill-pan 3.5s linear infinite;
 }
 .bar-fill.fill-glass {
   background: color-mix(in srgb, var(--fill, #00e5ff) 22%, transparent);
