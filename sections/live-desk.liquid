@@ -1,1036 +1,435 @@
+{% render 'section-bg', section: section %}
 {% liquid
-  assign raw = section.settings.youtube_url
-  assign yid = ''
-  if raw contains 'watch?v='
-    assign yid = raw | split: 'watch?v=' | last | split: '&' | first
-  elsif raw contains 'youtu.be/'
-    assign yid = raw | split: 'youtu.be/' | last | split: '?' | first
-  elsif raw contains '/live/'
-    assign yid = raw | split: '/live/' | last | split: '?' | first
-  elsif raw contains '/embed/'
-    assign yid = raw | split: '/embed/' | last | split: '?' | first
+  assign feed = section.settings.feed_url
+  if feed == blank
+    assign feed = 'https://www.youtube.com/embed/live_stream?channel=UC6uAyMzSKThKV7Xhk7s4qzA'
   endif
-  assign channel = section.settings.twitch_channel | replace: 'https://www.twitch.tv/', '' | replace: 'http://www.twitch.tv/', '' | replace: '@', '' | split: '/' | first | split: '?' | first
-  assign whatnot = section.settings.whatnot_url | default: settings.whatnot_url
-  assign provider = section.settings.provider
+  assign yid = ''
+  assign ysrc = ''
+  if feed contains 'channel='
+    assign chan = feed | split: 'channel=' | last | split: '&' | first | split: '/' | first
+    assign ysrc = 'https://www.youtube.com/embed/live_stream?channel=' | append: chan | append: '&autoplay=1&mute=1&controls=0&rel=0&enablejsapi=1&origin=' | append: request.origin
+  elsif feed contains 'watch?v='
+    assign yid = feed | split: 'watch?v=' | last | split: '&' | first
+  elsif feed contains 'youtu.be/'
+    assign yid = feed | split: 'youtu.be/' | last | split: '?' | first
+  elsif feed contains '/live/'
+    assign yid = feed | split: '/live/' | last | split: '?' | first
+  elsif feed contains '/embed/'
+    assign yid = feed | split: '/embed/' | last | split: '?' | first
+  endif
+  if ysrc == blank and yid != blank
+    assign ysrc = 'https://www.youtube.com/embed/' | append: yid | append: '?autoplay=1&mute=1&controls=0&rel=0&enablejsapi=1&origin=' | append: request.origin
+  endif
+  assign place = section.settings.place | default: 'left'
+  assign dx = section.settings.x | default: 0
+  assign dy = section.settings.y | default: 0
+  assign dw = section.settings.feed_width | default: 760
+  assign chat_w = section.settings.chat_width | default: 280
+  assign wheel_w = section.settings.wheel_width | default: 280
+  assign watcher = section.settings.watcher_url | default: 'https://ripwatch-production.up.railway.app/api/tick?clock=1&chat=1'
 %}
-<section class="section">
+{% style %}
+  #shopify-section-{{ section.id }} .desk-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.35rem;
+  }
+  #shopify-section-{{ section.id }} > .section { position: relative; }
+  #shopify-section-{{ section.id }} .desk-note {
+    position: absolute;
+    z-index: 4;
+    margin: 0;
+    overflow: auto;
+  }
+  #shopify-section-{{ section.id }} .desk-note p { display: block; margin: 0; }
+  #shopify-section-{{ section.id }} .desk-note p + p { margin-top: 0.7rem; }
+  #shopify-section-{{ section.id }} .desk-note p:empty { min-height: 1em; }
+  #shopify-section-{{ section.id }} .desk-note,
+  #shopify-section-{{ section.id }} .desk-note p,
+  #shopify-section-{{ section.id }} .desk-note li,
+  #shopify-section-{{ section.id }} .desk-note a {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+    -webkit-text-fill-color: inherit;
+    background-image: inherit;
+    background-clip: inherit;
+    -webkit-background-clip: inherit;
+    text-shadow: inherit;
+  }
+  #shopify-section-{{ section.id }} .desk-note strong,
+  #shopify-section-{{ section.id }} .desk-note b {
+    color: {{ section.settings.note_bold_color | default: '#00e5ff' }};
+    -webkit-text-fill-color: {{ section.settings.note_bold_color | default: '#00e5ff' }};
+    background-image: none;
+  }
+  #shopify-section-{{ section.id }} .desk-note::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: #000;
+    opacity: {{ section.settings.note_dark | default: 0 | times: 0.01 }};
+    border-radius: inherit;
+  }
+  #shopify-section-{{ section.id }} .desk-note > * {
+    position: relative;
+    z-index: 1;
+  }
+  #shopify-section-{{ section.id }} .desk-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  #shopify-section-{{ section.id }} .desk-status .live-dot {
+    width: 0.72em;
+    height: 0.72em;
+    background: var(--dot, #00e5ff);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--dot, #00e5ff) 70%, transparent);
+  }
+  #shopify-section-{{ section.id }} .desk-status-text { display: inline-block; }
+  #shopify-section-{{ section.id }} .desk-status .live-dot.is-steady {
+    animation: none;
+    box-shadow: none;
+  }
+  #shopify-section-{{ section.id }} .desk-board {
+    display: grid;
+    grid-template-columns: auto minmax(0, {{ chat_w }}px) minmax(0, {{ wheel_w }}px);
+    justify-content: start;
+    gap: 0.85rem;
+    align-items: stretch;
+  }
+  #shopify-section-{{ section.id }} .desk-player {
+    justify-self: start;
+    align-self: start;
+    width: min(100%, {{ dw }}px);
+    margin-left: {{ dx }}px;
+    margin-top: {{ dy }}px;
+  }
+  #shopify-section-{{ section.id }} .desk-player.is-center { justify-self: center; }
+  #shopify-section-{{ section.id }} .desk-player.is-right { justify-self: end; }
+  #shopify-section-{{ section.id }} .desk-player .stage {
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    min-height: 0;
+    border: 0;
+    box-shadow: none;
+    border-radius: 0;
+  }
+  #shopify-section-{{ section.id }} .desk-crop {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 348%;
+    height: 110%;
+    transform: translateX(-50%);
+    overflow: hidden;
+  }
+  #shopify-section-{{ section.id }} .desk-board .desk-player .stage iframe {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 2000% !important;
+    height: 2000% !important;
+    max-width: none !important;
+    transform: scale(0.05) !important;
+    transform-origin: top left !important;
+    border: 0 !important;
+  }
+  #shopify-section-{{ section.id }} .desk-shield {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: transparent;
+  }
+  #shopify-section-{{ section.id }} .desk-live-jump {
+    position: absolute;
+    z-index: 4;
+    top: 10px;
+    right: 10px;
+    margin: 0;
+    padding: 0.2rem 0.55rem;
+    border: 1px solid #00ff3c;
+    border-radius: 999px;
+    background: rgba(4, 16, 24, 0.72);
+    color: #00ff3c;
+    font: 700 12px/1 "Barlow Condensed", sans-serif;
+    letter-spacing: 0.14em;
+    cursor: pointer;
+  }
+  #shopify-section-{{ section.id }} .desk-pause {
+    position: absolute;
+    z-index: 4;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    margin: 0;
+    padding: 0.2rem 0.7rem;
+    border: 1px solid #ffe14a;
+    border-radius: 999px;
+    background: rgba(4, 16, 24, 0.72);
+    color: #ffe14a;
+    font: 700 12px/1 "Barlow Condensed", sans-serif;
+    letter-spacing: 0.14em;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+  #shopify-section-{{ section.id }} .desk-line {
+    position: absolute;
+    z-index: 5;
+    margin: 0;
+    white-space: pre-wrap;
+  }
+  #shopify-section-{{ section.id }} .desk-btn {
+    position: absolute;
+    z-index: 6;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    line-height: 1.15;
+    text-decoration: none;
+    padding: 0.35rem 0.8rem;
+  }
+  #shopify-section-{{ section.id }} .desk-btn span {
+    white-space: pre-wrap;
+  }
+  #shopify-section-{{ section.id }} .desk-offair {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #shopify-section-{{ section.id }} .desk-panel {
+    position: relative;
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: transparent;
+    box-shadow: none;
+  }
+  #shopify-section-{{ section.id }} .desk-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: #000;
+    opacity: var(--panel-dark, 0);
+    border-radius: inherit;
+  }
+  #shopify-section-{{ section.id }} .desk-panel > * {
+    position: relative;
+    z-index: 1;
+  }
+  #shopify-section-{{ section.id }} .desk-head {
+    flex: none;
+  }
+  #shopify-section-{{ section.id }} .desk-log {
+    list-style: none;
+    margin: 0.45rem 0 0;
+    padding: 0;
+    overflow: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  #shopify-section-{{ section.id }} .desk-log li {
+    font-size: 0.82rem;
+    line-height: 1.35;
+    color: #d5e6ee;
+  }
+  #shopify-section-{{ section.id }} .desk-log .who {
+    color: #00e5ff;
+    font-weight: 700;
+    margin-right: 0.3rem;
+  }
+  #shopify-section-{{ section.id }} .desk-empty {
+    margin: 0.45rem 0 0;
+    color: #8eafbf;
+    font-size: 0.85rem;
+  }
+  #shopify-section-{{ section.id }} .desk-wheel li { color: #e7ff0e; }
+  @media (max-width: 799px) {
+    #shopify-section-{{ section.id }} .desk-board { grid-template-columns: 1fr; }
+    #shopify-section-{{ section.id }} .desk-player { width: min(100%, {{ dw }}px); }
+    #shopify-section-{{ section.id }} .desk-chat-panel,
+    #shopify-section-{{ section.id }} .desk-wheel-panel { width: 100% !important; }
+    #shopify-section-{{ section.id }} .desk-panel { min-height: 320px; height: 320px; }
+  }
+{% endstyle %}
+<section class="section" style="padding-top: {{ section.settings.pad_top }}px; padding-bottom: {{ section.settings.pad_bottom }}px;{% if section.settings.sec_height > 0 %}height: {{ section.settings.sec_height }}px !important; min-height: {{ section.settings.sec_height }}px !important; max-height: {{ section.settings.sec_height }}px !important; overflow: hidden !important;{% endif %}">
   <div class="wrap">
     <header class="section-head">
-      <div>
-        {% if section.settings.kicker != blank %}<p class="kicker" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, fill: section.settings.kicker_fill, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount %}">{{ section.settings.kicker }}</p>{% endif %}
-        <h2 class="display" style="{% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount %}">{{ section.settings.heading }}</h2>
+      {% liquid
+        if section.settings.stream_live
+          assign status_color = section.settings.status_on_color | default: '#00ff3c'
+        else
+          assign status_color = section.settings.status_off_color | default: '#9aa8b2'
+        endif
+      %}
+      <div class="desk-title">
+        <p class="kicker desk-status" style="{% render 'field-style', font: section.settings.kicker_font, bold: section.settings.kicker_bold, italic: section.settings.kicker_italic, align: section.settings.kicker_align, valign: section.settings.kicker_valign, fill: section.settings.kicker_fill, fill_2: section.settings.kicker_fill_2, color: status_color, size: section.settings.kicker_size, depth: section.settings.kicker_depth, amount: section.settings.kicker_depth_amount, shadow: section.settings.kicker_depth_color %}">
+          <span class="live-dot{% unless section.settings.stream_live %} is-steady{% endunless %}" style="--dot: {{ status_color }}; transform: translate({{ section.settings.dot_x | default: 0 }}px, {{ section.settings.dot_y | default: 0 }}px);"></span>
+          <span class="desk-status-text" style="transform: translate({{ section.settings.status_x | default: 0 }}px, {{ section.settings.status_y | default: 0 }}px);">{% if section.settings.stream_live %}{{ section.settings.status_on | default: 'Stream is LIVE' }}{% else %}{{ section.settings.status_off | default: 'Stream offline' }}{% endif %}</span>
+        </p>
+        <h2 class="display" style="transform: translate({{ section.settings.heading_x | default: 0 }}px, {{ section.settings.heading_y | default: 0 }}px); {% render 'field-style', font: section.settings.heading_font, bold: section.settings.heading_bold, italic: section.settings.heading_italic, align: section.settings.heading_align, valign: section.settings.heading_valign, fill: section.settings.heading_fill, fill_2: section.settings.heading_fill_2, color: section.settings.heading_color, size: section.settings.heading_size, depth: section.settings.heading_depth, amount: section.settings.heading_depth_amount, shadow: section.settings.heading_depth_color %}">{{ section.settings.heading }}</h2>
       </div>
     </header>
-    <div class="live-grid">
-      <div>
+    <div class="desk-board"{% if section.settings.show_room %} data-desk-side data-watcher="{{ watcher | escape }}"{% endif %}>
+      <div class="desk-player is-{{ place }}" data-desk-player style="{% render 'box-edge', width: section.settings.feed_border, style: section.settings.feed_border_style, color: section.settings.feed_border_color, radius: section.settings.feed_radius, pad_top: section.settings.feed_pad_top, pad_right: section.settings.feed_pad_right, pad_bottom: section.settings.feed_pad_bottom, pad_left: section.settings.feed_pad_left %}">
         <div class="stage">
-          {% if provider == 'youtube' and yid != blank %}
-            <iframe src="https://www.youtube.com/embed/{{ yid | escape }}?rel=0" title="Live show" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
-          {% elsif provider == 'twitch' and channel != blank %}
-            <iframe src="https://player.twitch.tv/?channel={{ channel | url_encode }}&parent={{ request.host }}" title="Live show" allowfullscreen></iframe>
-          {% else %}
-            {% render 'wax', style: 'ice', label: 'Live' %}
-            <div class="stage-lower">
-              <span class="live-dot"></span>
-              <span style="{% render 'field-style', font: section.settings.lower_font, bold: section.settings.lower_bold, italic: section.settings.lower_italic, align: section.settings.lower_align, valign: section.settings.lower_valign, fill: section.settings.lower_fill, size: section.settings.lower_size, depth: section.settings.lower_depth, amount: section.settings.lower_depth_amount %}">{{ section.settings.lower }}</span>
+          {% if section.settings.stream_live and ysrc != blank %}
+            <div class="desk-crop">
+              <iframe id="desk-yt-{{ section.id }}" src="{{ ysrc }}" title="Live show" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
             </div>
+            <div class="desk-shield"></div>
+            <button type="button" class="desk-live-jump" data-desk-live>GO TO LIVE</button>
+            <span class="desk-pause">PAUSE BUTTON WILL GO AWAY</span>
+          {% elsif section.settings.stream_live %}
+            <div class="feed-card">
+              <span class="live-dot is-off"></span>
+              <p class="kicker">Offline</p>
+              <p>Paste a YouTube link under Live desk, Edit, Feed.</p>
+            </div>
+          {% elsif section.settings.offair_image != blank %}
+            {{ section.settings.offair_image | image_url: width: 1400 | image_tag: class: 'desk-offair', alt: 'Off air', widths: '400, 800, 1200, 1400' }}
+          {% else %}
+            <img class="desk-offair" src="{{ 'off-air.jpg' | asset_url }}" alt="Off air" width="1008" height="1792">
           {% endif %}
         </div>
-        {% if provider == 'youtube' and yid == blank %}
-          <p class="fine" style="margin-top:0.6rem">Paste a YouTube link in this section. Until then the stage stays on the slab.</p>
-        {% endif %}
-        {% if provider == 'whatnot' or provider == 'off' %}
-          <p class="muted" style="margin-top:0.7rem;{% render 'field-style', font: section.settings.note_font, bold: section.settings.note_bold, italic: section.settings.note_italic, align: section.settings.note_align, valign: section.settings.note_valign, fill: section.settings.note_fill, size: section.settings.note_size, depth: section.settings.note_depth, amount: section.settings.note_depth_amount %}">{{ section.settings.note }}</p>
-          {% if whatnot != blank %}
-            <a class="btn btn-primary" style="margin-top:0.6rem" href="{{ whatnot }}" target="_blank" rel="noreferrer">Open the Whatnot room</a>
-          {% endif %}
-        {% endif %}
       </div>
-      <div>
-        {% if section.settings.show_chat and provider == 'youtube' and yid != blank %}
-          <div class="chat-frame">
-            <iframe src="https://www.youtube.com/live_chat?v={{ yid | escape }}&embed_domain={{ request.host }}" title="Live chat"></iframe>
-          </div>
-        {% elsif section.settings.show_chat and provider == 'twitch' and channel != blank %}
-          <div class="chat-frame">
-            <iframe src="https://www.twitch.tv/embed/{{ channel | url_encode }}/chat?parent={{ request.host }}" title="Live chat"></iframe>
-          </div>
-        {% else %}
-          <div class="panel" style="padding:1rem">
-            <p class="kicker">Chat</p>
-            <p class="muted" style="margin-top:0.35rem">YouTube and Twitch chat sit here when that provider is selected. Whatnot chat stays in the Whatnot app.</p>
-          </div>
-        {% endif %}
-      </div>
+      {% if section.settings.show_room %}
+        <div class="panel desk-panel desk-chat-panel" style="--panel-dark: {{ section.settings.chat_dark | default: 0 | times: 0.01 }}; width: min(100%, {{ chat_w }}px); transform: translate({{ section.settings.chat_x | default: 0 }}px, {{ section.settings.chat_y | default: 0 }}px);{% if section.settings.chat_height > 0 %} align-self: start; height: {{ section.settings.chat_height }}px; min-height: {{ section.settings.chat_height }}px; max-height: {{ section.settings.chat_height }}px;{% endif %} {% render 'box-edge', width: section.settings.chat_border, style: section.settings.chat_border_style, color: section.settings.chat_border_color, radius: section.settings.chat_radius, pad_top: section.settings.chat_pad_top, pad_right: section.settings.chat_pad_right, pad_bottom: section.settings.chat_pad_bottom, pad_left: section.settings.chat_pad_left %}">
+          <p class="kicker desk-head" style="{% render 'field-style', font: section.settings.chat_font, bold: section.settings.chat_bold, italic: section.settings.chat_italic, align: section.settings.chat_align, valign: section.settings.chat_valign, fill: section.settings.chat_fill, fill_2: section.settings.chat_fill_2, color: section.settings.chat_color, size: section.settings.chat_size, depth: section.settings.chat_depth, amount: section.settings.chat_depth_amount, shadow: section.settings.chat_depth_color %}">{{ section.settings.chat_heading | default: 'Whatnot chat' }}</p>
+          <p class="desk-empty" data-desk-chat-empty>Waiting for the watcher.</p>
+          <ul class="desk-log" data-desk-chat hidden></ul>
+        </div>
+        <div class="panel desk-panel desk-wheel-panel" style="--panel-dark: {{ section.settings.wheel_dark | default: 0 | times: 0.01 }}; width: min(100%, {{ wheel_w }}px); transform: translate({{ section.settings.wheel_x | default: 0 }}px, {{ section.settings.wheel_y | default: 0 }}px);{% if section.settings.wheel_height > 0 %} align-self: start; height: {{ section.settings.wheel_height }}px; min-height: {{ section.settings.wheel_height }}px; max-height: {{ section.settings.wheel_height }}px;{% endif %} {% render 'box-edge', width: section.settings.wheel_border, style: section.settings.wheel_border_style, color: section.settings.wheel_border_color, radius: section.settings.wheel_radius, pad_top: section.settings.wheel_pad_top, pad_right: section.settings.wheel_pad_right, pad_bottom: section.settings.wheel_pad_bottom, pad_left: section.settings.wheel_pad_left %}">
+          <p class="kicker desk-head" style="{% render 'field-style', font: section.settings.wheel_font, bold: section.settings.wheel_bold, italic: section.settings.wheel_italic, align: section.settings.wheel_align, valign: section.settings.wheel_valign, fill: section.settings.wheel_fill, fill_2: section.settings.wheel_fill_2, color: section.settings.wheel_color, size: section.settings.wheel_size, depth: section.settings.wheel_depth, amount: section.settings.wheel_depth_amount, shadow: section.settings.wheel_depth_color %}">{{ section.settings.wheel_heading | default: 'Wheel hits' }}</p>
+          <p class="desk-empty" data-desk-wheel-empty>No spins yet.</p>
+          <ul class="desk-log desk-wheel" data-desk-wheel hidden></ul>
+        </div>
+      {% endif %}
     </div>
   </div>
+  {% liquid
+    assign desk_note = section.settings.note | strip_html | strip
+  %}
+  {% if desk_note != blank %}
+    <div class="desk-note rte" style="left: {{ section.settings.note_x | default: 0 }}px; top: {{ section.settings.note_y | default: 0 }}px; width: {{ section.settings.note_w | default: 320 }}px;{% if section.settings.note_h > 0 %} height: {{ section.settings.note_h }}px;{% endif %} box-sizing: border-box; border: {{ section.settings.note_border | default: 0 }}px {{ section.settings.note_border_style | default: 'solid' }} {{ section.settings.note_border_color | default: '#00e5ff' }}; border-radius: {{ section.settings.note_radius | default: 0 }}px; padding: {{ section.settings.note_pad_top | default: 0 }}px {{ section.settings.note_pad_right | default: 0 }}px {{ section.settings.note_pad_bottom | default: 0 }}px {{ section.settings.note_pad_left | default: 0 }}px; {% render 'field-style', font: section.settings.note_font, fill: section.settings.note_fill, fill_2: section.settings.note_fill_2, color: section.settings.note_color, size: section.settings.note_size, depth: section.settings.note_depth, amount: section.settings.note_depth_amount, shadow: section.settings.note_depth_color %}">{% render 'rte-paras', html: section.settings.note %}</div>
+  {% endif %}
+  {% if section.settings.line != blank %}
+    <p class="desk-line" style="left: {{ section.settings.line_x | default: 0 }}px; top: {{ section.settings.line_y | default: 0 }}px; {% render 'field-style', font: section.settings.line_font, bold: section.settings.line_bold, italic: section.settings.line_italic, align: section.settings.line_align, valign: section.settings.line_valign, fill: section.settings.line_fill, fill_2: section.settings.line_fill_2, color: section.settings.line_color, size: section.settings.line_size, depth: section.settings.line_depth, amount: section.settings.line_depth_amount, shadow: section.settings.line_depth_color %}">{{ section.settings.line }}</p>
+  {% endif %}
+  {% if section.settings.btn_label != blank %}
+    {% capture btn_box %}left: {{ section.settings.btn_x | default: 0 }}px; top: {{ section.settings.btn_y | default: 0 }}px;{% if section.settings.btn_w > 0 %} width: {{ section.settings.btn_w }}px;{% endif %}{% if section.settings.btn_h > 0 %} height: {{ section.settings.btn_h }}px;{% endif %} border-radius: {{ section.settings.btn_radius | default: 12 }}px; --cell-border: {{ section.settings.btn_border | default: 1 }}px; --cell-border-color: {{ section.settings.btn_border_color | default: '#00EAFF' }}; --fill: {{ section.settings.btn_color | default: '#0E1C28' }}; --fill-2: {{ section.settings.btn_color_2 | default: '#00E5FF' }}; --fill-angle: {{ section.settings.btn_angle | default: 90 }}deg; --depth: {{ section.settings.btn_depth_amount | default: 6 }}px; --depth-color: {{ section.settings.btn_depth_color | default: '#00E5FF' }};{% endcapture %}
+    {% capture btn_face %}{% render 'field-style', font: section.settings.btn_font, bold: section.settings.btn_bold, italic: section.settings.btn_italic, align: section.settings.btn_align, valign: section.settings.btn_valign, fill: section.settings.btn_text_fill, fill_2: section.settings.btn_text_fill_2, color: section.settings.btn_text_color, size: section.settings.btn_size, depth: section.settings.btn_text_depth, amount: section.settings.btn_text_depth_amount, shadow: section.settings.btn_text_depth_color %}{% endcapture %}
+    {% if section.settings.btn_link != blank %}
+      <a class="desk-btn image-cell {% if section.settings.btn_show_cell == false %}is-clear{% else %}fill-{{ section.settings.btn_fill | default: 'solid' }}{% endif %} depth-{{ section.settings.btn_depth | default: 'neon' }}" href="{{ section.settings.btn_link }}" style="{{ btn_box }}"><span style="{{ btn_face }}">{{ section.settings.btn_label }}</span></a>
+    {% else %}
+      <span class="desk-btn image-cell {% if section.settings.btn_show_cell == false %}is-clear{% else %}fill-{{ section.settings.btn_fill | default: 'solid' }}{% endif %} depth-{{ section.settings.btn_depth | default: 'neon' }}" style="{{ btn_box }}"><span style="{{ btn_face }}">{{ section.settings.btn_label }}</span></span>
+    {% endif %}
+  {% endif %}
 </section>
+{% if section.settings.stream_live and ysrc != blank %}
+<script>
+  (function () {
+    var frame = document.getElementById('desk-yt-{{ section.id }}');
+    var btn = document.querySelector('#shopify-section-{{ section.id }} [data-desk-live]');
+    if (!frame || !btn) return;
+    btn.addEventListener('click', function () {
+      if (!frame.contentWindow) return;
+      frame.contentWindow.postMessage(JSON.stringify({
+        event: 'command',
+        func: 'seekTo',
+        args: [1000000000, true],
+        id: frame.id,
+        channel: 'widget'
+      }), '*');
+    });
+  })();
+</script>
+{% endif %}
+{% if section.settings.show_room %}
+<script>
+  (function () {
+    var side = document.querySelector('#shopify-section-{{ section.id }} [data-desk-side]');
+    if (!side) return;
+    var url = side.getAttribute('data-watcher');
+    var chatList = side.querySelector('[data-desk-chat]');
+    var chatEmpty = side.querySelector('[data-desk-chat-empty]');
+    var wheelList = side.querySelector('[data-desk-wheel]');
+    var wheelEmpty = side.querySelector('[data-desk-wheel-empty]');
+    var last = '';
+    function lobby(text) {
+      return /^Live\s*·/.test(text) || /Sponsored Live/.test(text) || /^@[\w.]+$/.test(text);
+    }
+    function wheelLine(text) {
+      return /\bgot\b/i.test(text) || /\bspin\b/i.test(text) || /\bspun\b/i.test(text) || /wheel/i.test(text);
+    }
+    function row(item) {
+      var li = document.createElement('li');
+      if (item.username) {
+        var who = document.createElement('span');
+        who.className = 'who';
+        who.textContent = item.username;
+        li.appendChild(who);
+      }
+      li.appendChild(document.createTextNode(item.text));
+      return li;
+    }
+    function paint(data) {
+      var lines = Array.isArray(data.roomChat) ? data.roomChat : [];
+      var chat = [];
+      var wheels = [];
+      for (var i = 0; i < lines.length; i++) {
+        var item = lines[i] || {};
+        var text = String(item.text || '').replace(/\s+/g, ' ').trim();
+        if (!text || lobby(text)) continue;
+        var clean = { username: String(item.username || '').trim(), text: text };
+        if (wheelLine(text)) wheels.push(clean);
+        else chat.push(clean);
+      }
+      if (data.giveawayWinner) {
+        wheels.push({ username: '', text: 'Giveaway · ' + data.giveawayWinner });
+      }
+      chat = chat.slice(-40);
+      wheels = wheels.slice(-12);
+      var snap = JSON.stringify([chat, wheels]);
+      if (snap === last) return;
+      last = snap;
+      chatList.replaceChildren.apply(chatList, chat.map(row));
+      wheelList.replaceChildren.apply(wheelList, wheels.map(row));
+      chatList.hidden = chat.length === 0;
+      chatEmpty.hidden = chat.length > 0;
+      wheelList.hidden = wheels.length === 0;
+      wheelEmpty.hidden = wheels.length > 0;
+      chatEmpty.textContent = chat.length ? '' : 'Waiting for the room chat.';
+    }
+    function pull() {
+      fetch(url, { cache: 'no-store' })
+        .then(function (res) { return res.ok ? res.json() : Promise.reject(); })
+        .then(paint)
+        .catch(function () {
+          if (!last) chatEmpty.textContent = 'Chat will show when the watcher is connected.';
+        });
+    }
+    pull();
+    setInterval(pull, 4000);
+  })();
+</script>
+{% endif %}
 
 {% schema %}
-{
-  "name": "Live desk",
-  "settings": [
-    {
-      "type": "text",
-      "id": "kicker",
-      "label": "Kicker",
-      "default": "On air"
-    },
-    {
-      "type": "select",
-      "id": "kicker_font",
-      "label": "Kicker font",
-      "default": "inherit",
-      "options": [
-        {
-          "value": "inherit",
-          "label": "Theme default"
-        },
-        {
-          "value": "Unbounded, sans-serif",
-          "label": "Unbounded"
-        },
-        {
-          "value": "Outfit, sans-serif",
-          "label": "Outfit"
-        },
-        {
-          "value": "\"Barlow Condensed\", sans-serif",
-          "label": "Barlow Condensed"
-        },
-        {
-          "value": "\"Bebas Neue\", sans-serif",
-          "label": "Bebas Neue"
-        },
-        {
-          "value": "Oswald, sans-serif",
-          "label": "Oswald"
-        },
-        {
-          "value": "Anton, sans-serif",
-          "label": "Anton"
-        },
-        {
-          "value": "Archivo, sans-serif",
-          "label": "Archivo"
-        },
-        {
-          "value": "Inter, sans-serif",
-          "label": "Inter"
-        }
-      ]
-    },
-    {
-      "type": "checkbox",
-      "id": "kicker_bold",
-      "label": "Kicker bold",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "kicker_italic",
-      "label": "Kicker italic",
-      "default": false
-    },
-    {
-      "type": "select",
-      "id": "kicker_align",
-      "label": "Kicker horizontal",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "Theme default"
-        },
-        {
-          "value": "left",
-          "label": "Left"
-        },
-        {
-          "value": "center",
-          "label": "Center"
-        },
-        {
-          "value": "right",
-          "label": "Right"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "kicker_valign",
-      "label": "Kicker vertical",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "Theme default"
-        },
-        {
-          "value": "top",
-          "label": "Top"
-        },
-        {
-          "value": "middle",
-          "label": "Middle"
-        },
-        {
-          "value": "bottom",
-          "label": "Bottom"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "kicker_fill",
-      "label": "Kicker fill",
-      "default": "solid",
-      "options": [
-        {
-          "value": "solid",
-          "label": "Solid"
-        },
-        {
-          "value": "tide",
-          "label": "Tide"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
-        },
-        {
-          "value": "foil",
-          "label": "Foil"
-        },
-        {
-          "value": "sunset",
-          "label": "Sunset"
-        },
-        {
-          "value": "aurora",
-          "label": "Aurora"
-        },
-        {
-          "value": "pulse",
-          "label": "Neon pulse"
-        },
-        {
-          "value": "custom",
-          "label": "Custom gradient"
-        }
-      ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
-    },
-    {
-      "type": "range",
-      "id": "kicker_size",
-      "label": "Kicker size",
-      "min": 10,
-      "max": 96,
-      "step": 2,
-      "unit": "px",
-      "default": 14
-    },
-    {
-      "type": "select",
-      "id": "kicker_depth",
-      "label": "Kicker depth",
-      "default": "none",
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "soft",
-          "label": "Soft shadow"
-        },
-        {
-          "value": "hard",
-          "label": "Hard offset"
-        },
-        {
-          "value": "lift",
-          "label": "Lift"
-        },
-        {
-          "value": "long",
-          "label": "Long shadow"
-        },
-        {
-          "value": "echo",
-          "label": "Echo"
-        },
-        {
-          "value": "press",
-          "label": "Letterpress"
-        },
-        {
-          "value": "emboss",
-          "label": "Emboss"
-        },
-        {
-          "value": "outline",
-          "label": "Outline"
-        },
-        {
-          "value": "neon",
-          "label": "Neon glow"
-        },
-        {
-          "value": "double",
-          "label": "Double glow"
-        },
-        {
-          "value": "foil",
-          "label": "Foil"
-        }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "kicker_depth_amount",
-      "label": "Kicker depth amount",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 8
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading",
-      "default": "Live"
-    },
-    {
-      "type": "select",
-      "id": "heading_font",
-      "label": "Heading font",
-      "default": "inherit",
-      "options": [
-        {
-          "value": "inherit",
-          "label": "Theme default"
-        },
-        {
-          "value": "Unbounded, sans-serif",
-          "label": "Unbounded"
-        },
-        {
-          "value": "Outfit, sans-serif",
-          "label": "Outfit"
-        },
-        {
-          "value": "\"Barlow Condensed\", sans-serif",
-          "label": "Barlow Condensed"
-        },
-        {
-          "value": "\"Bebas Neue\", sans-serif",
-          "label": "Bebas Neue"
-        },
-        {
-          "value": "Oswald, sans-serif",
-          "label": "Oswald"
-        },
-        {
-          "value": "Anton, sans-serif",
-          "label": "Anton"
-        },
-        {
-          "value": "Archivo, sans-serif",
-          "label": "Archivo"
-        },
-        {
-          "value": "Inter, sans-serif",
-          "label": "Inter"
-        }
-      ]
-    },
-    {
-      "type": "checkbox",
-      "id": "heading_bold",
-      "label": "Heading bold",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "heading_italic",
-      "label": "Heading italic",
-      "default": false
-    },
-    {
-      "type": "select",
-      "id": "heading_align",
-      "label": "Heading horizontal",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "Theme default"
-        },
-        {
-          "value": "left",
-          "label": "Left"
-        },
-        {
-          "value": "center",
-          "label": "Center"
-        },
-        {
-          "value": "right",
-          "label": "Right"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "heading_valign",
-      "label": "Heading vertical",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "Theme default"
-        },
-        {
-          "value": "top",
-          "label": "Top"
-        },
-        {
-          "value": "middle",
-          "label": "Middle"
-        },
-        {
-          "value": "bottom",
-          "label": "Bottom"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "heading_fill",
-      "label": "Heading fill",
-      "default": "solid",
-      "options": [
-        {
-          "value": "solid",
-          "label": "Solid"
-        },
-        {
-          "value": "tide",
-          "label": "Tide"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
-        },
-        {
-          "value": "foil",
-          "label": "Foil"
-        },
-        {
-          "value": "sunset",
-          "label": "Sunset"
-        },
-        {
-          "value": "aurora",
-          "label": "Aurora"
-        },
-        {
-          "value": "pulse",
-          "label": "Neon pulse"
-        },
-        {
-          "value": "custom",
-          "label": "Custom gradient"
-        }
-      ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
-    },
-    {
-      "type": "range",
-      "id": "heading_size",
-      "label": "Heading size",
-      "min": 10,
-      "max": 96,
-      "step": 2,
-      "unit": "px",
-      "default": 48
-    },
-    {
-      "type": "select",
-      "id": "heading_depth",
-      "label": "Heading depth",
-      "default": "none",
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "soft",
-          "label": "Soft shadow"
-        },
-        {
-          "value": "hard",
-          "label": "Hard offset"
-        },
-        {
-          "value": "lift",
-          "label": "Lift"
-        },
-        {
-          "value": "long",
-          "label": "Long shadow"
-        },
-        {
-          "value": "echo",
-          "label": "Echo"
-        },
-        {
-          "value": "press",
-          "label": "Letterpress"
-        },
-        {
-          "value": "emboss",
-          "label": "Emboss"
-        },
-        {
-          "value": "outline",
-          "label": "Outline"
-        },
-        {
-          "value": "neon",
-          "label": "Neon glow"
-        },
-        {
-          "value": "double",
-          "label": "Double glow"
-        },
-        {
-          "value": "foil",
-          "label": "Foil"
-        }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "heading_depth_amount",
-      "label": "Heading depth amount",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 8
-    },
-    {
-      "type": "select",
-      "id": "provider",
-      "label": "Stream",
-      "default": "whatnot",
-      "options": [
-        {
-          "value": "whatnot",
-          "label": "Whatnot"
-        },
-        {
-          "value": "youtube",
-          "label": "YouTube"
-        },
-        {
-          "value": "twitch",
-          "label": "Twitch"
-        },
-        {
-          "value": "off",
-          "label": "Stage only"
-        }
-      ]
-    },
-    {
-      "type": "text",
-      "id": "youtube_url",
-      "label": "YouTube URL",
-      "info": "Watch, youtu.be, or live link."
-    },
-    {
-      "type": "text",
-      "id": "twitch_channel",
-      "label": "Twitch channel"
-    },
-    {
-      "type": "url",
-      "id": "whatnot_url",
-      "label": "Whatnot URL",
-      "info": "Falls back to the theme Whatnot link. Whatnot does not allow the show to be embedded."
-    },
-    {
-      "type": "text",
-      "id": "lower",
-      "label": "Stage line",
-      "default": "Whatnot \u00b7 Thu\u2013Sat 9:30 PM ET"
-    },
-    {
-      "type": "select",
-      "id": "lower_font",
-      "label": "Stage line font",
-      "default": "inherit",
-      "options": [
-        {
-          "value": "inherit",
-          "label": "Theme default"
-        },
-        {
-          "value": "Unbounded, sans-serif",
-          "label": "Unbounded"
-        },
-        {
-          "value": "Outfit, sans-serif",
-          "label": "Outfit"
-        },
-        {
-          "value": "\"Barlow Condensed\", sans-serif",
-          "label": "Barlow Condensed"
-        },
-        {
-          "value": "\"Bebas Neue\", sans-serif",
-          "label": "Bebas Neue"
-        },
-        {
-          "value": "Oswald, sans-serif",
-          "label": "Oswald"
-        },
-        {
-          "value": "Anton, sans-serif",
-          "label": "Anton"
-        },
-        {
-          "value": "Archivo, sans-serif",
-          "label": "Archivo"
-        },
-        {
-          "value": "Inter, sans-serif",
-          "label": "Inter"
-        }
-      ]
-    },
-    {
-      "type": "checkbox",
-      "id": "lower_bold",
-      "label": "Stage line bold",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "lower_italic",
-      "label": "Stage line italic",
-      "default": false
-    },
-    {
-      "type": "select",
-      "id": "lower_align",
-      "label": "Stage line horizontal",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "Theme default"
-        },
-        {
-          "value": "left",
-          "label": "Left"
-        },
-        {
-          "value": "center",
-          "label": "Center"
-        },
-        {
-          "value": "right",
-          "label": "Right"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "lower_valign",
-      "label": "Stage line vertical",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "Theme default"
-        },
-        {
-          "value": "top",
-          "label": "Top"
-        },
-        {
-          "value": "middle",
-          "label": "Middle"
-        },
-        {
-          "value": "bottom",
-          "label": "Bottom"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "lower_fill",
-      "label": "Stage line fill",
-      "default": "solid",
-      "options": [
-        {
-          "value": "solid",
-          "label": "Solid"
-        },
-        {
-          "value": "tide",
-          "label": "Tide"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
-        },
-        {
-          "value": "foil",
-          "label": "Foil"
-        },
-        {
-          "value": "sunset",
-          "label": "Sunset"
-        },
-        {
-          "value": "aurora",
-          "label": "Aurora"
-        },
-        {
-          "value": "pulse",
-          "label": "Neon pulse"
-        },
-        {
-          "value": "custom",
-          "label": "Custom gradient"
-        }
-      ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
-    },
-    {
-      "type": "range",
-      "id": "lower_size",
-      "label": "Stage line size",
-      "min": 10,
-      "max": 96,
-      "step": 2,
-      "unit": "px",
-      "default": 14
-    },
-    {
-      "type": "select",
-      "id": "lower_depth",
-      "label": "Stage line depth",
-      "default": "none",
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "soft",
-          "label": "Soft shadow"
-        },
-        {
-          "value": "hard",
-          "label": "Hard offset"
-        },
-        {
-          "value": "lift",
-          "label": "Lift"
-        },
-        {
-          "value": "long",
-          "label": "Long shadow"
-        },
-        {
-          "value": "echo",
-          "label": "Echo"
-        },
-        {
-          "value": "press",
-          "label": "Letterpress"
-        },
-        {
-          "value": "emboss",
-          "label": "Emboss"
-        },
-        {
-          "value": "outline",
-          "label": "Outline"
-        },
-        {
-          "value": "neon",
-          "label": "Neon glow"
-        },
-        {
-          "value": "double",
-          "label": "Double glow"
-        },
-        {
-          "value": "foil",
-          "label": "Foil"
-        }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "lower_depth_amount",
-      "label": "Stage line depth amount",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 8
-    },
-    {
-      "type": "textarea",
-      "id": "note",
-      "label": "Note",
-      "default": "Whatnot does not allow the show to play inside another site. The button opens the room."
-    },
-    {
-      "type": "select",
-      "id": "note_font",
-      "label": "Note font",
-      "default": "inherit",
-      "options": [
-        {
-          "value": "inherit",
-          "label": "Theme default"
-        },
-        {
-          "value": "Unbounded, sans-serif",
-          "label": "Unbounded"
-        },
-        {
-          "value": "Outfit, sans-serif",
-          "label": "Outfit"
-        },
-        {
-          "value": "\"Barlow Condensed\", sans-serif",
-          "label": "Barlow Condensed"
-        },
-        {
-          "value": "\"Bebas Neue\", sans-serif",
-          "label": "Bebas Neue"
-        },
-        {
-          "value": "Oswald, sans-serif",
-          "label": "Oswald"
-        },
-        {
-          "value": "Anton, sans-serif",
-          "label": "Anton"
-        },
-        {
-          "value": "Archivo, sans-serif",
-          "label": "Archivo"
-        },
-        {
-          "value": "Inter, sans-serif",
-          "label": "Inter"
-        }
-      ]
-    },
-    {
-      "type": "checkbox",
-      "id": "note_bold",
-      "label": "Note bold",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "note_italic",
-      "label": "Note italic",
-      "default": false
-    },
-    {
-      "type": "select",
-      "id": "note_align",
-      "label": "Note horizontal",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "Theme default"
-        },
-        {
-          "value": "left",
-          "label": "Left"
-        },
-        {
-          "value": "center",
-          "label": "Center"
-        },
-        {
-          "value": "right",
-          "label": "Right"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "note_valign",
-      "label": "Note vertical",
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "label": "Theme default"
-        },
-        {
-          "value": "top",
-          "label": "Top"
-        },
-        {
-          "value": "middle",
-          "label": "Middle"
-        },
-        {
-          "value": "bottom",
-          "label": "Bottom"
-        }
-      ]
-    },
-    {
-      "type": "select",
-      "id": "note_fill",
-      "label": "Note fill",
-      "default": "solid",
-      "options": [
-        {
-          "value": "solid",
-          "label": "Solid"
-        },
-        {
-          "value": "tide",
-          "label": "Tide"
-        },
-        {
-          "value": "violet",
-          "label": "Violet"
-        },
-        {
-          "value": "foil",
-          "label": "Foil"
-        },
-        {
-          "value": "sunset",
-          "label": "Sunset"
-        },
-        {
-          "value": "aurora",
-          "label": "Aurora"
-        },
-        {
-          "value": "pulse",
-          "label": "Neon pulse"
-        },
-        {
-          "value": "custom",
-          "label": "Custom gradient"
-        }
-      ],
-      "info": "Gradient is painted on the letters. Solid uses the color above."
-    },
-    {
-      "type": "range",
-      "id": "note_size",
-      "label": "Note size",
-      "min": 10,
-      "max": 96,
-      "step": 2,
-      "unit": "px",
-      "default": 16
-    },
-    {
-      "type": "select",
-      "id": "note_depth",
-      "label": "Note depth",
-      "default": "none",
-      "options": [
-        {
-          "value": "none",
-          "label": "None"
-        },
-        {
-          "value": "soft",
-          "label": "Soft shadow"
-        },
-        {
-          "value": "hard",
-          "label": "Hard offset"
-        },
-        {
-          "value": "lift",
-          "label": "Lift"
-        },
-        {
-          "value": "long",
-          "label": "Long shadow"
-        },
-        {
-          "value": "echo",
-          "label": "Echo"
-        },
-        {
-          "value": "press",
-          "label": "Letterpress"
-        },
-        {
-          "value": "emboss",
-          "label": "Emboss"
-        },
-        {
-          "value": "outline",
-          "label": "Outline"
-        },
-        {
-          "value": "neon",
-          "label": "Neon glow"
-        },
-        {
-          "value": "double",
-          "label": "Double glow"
-        },
-        {
-          "value": "foil",
-          "label": "Foil"
-        }
-      ]
-    },
-    {
-      "type": "range",
-      "id": "note_depth_amount",
-      "label": "Note depth amount",
-      "min": 0,
-      "max": 40,
-      "step": 2,
-      "unit": "px",
-      "default": 8
-    },
-    {
-      "type": "checkbox",
-      "id": "show_chat",
-      "label": "Show YouTube or Twitch chat",
-      "default": true
-    }
-  ],
-  "presets": [
-    {
-      "name": "Live desk"
-    }
-  ]
-}
+{"name":"Live desk","settings":[{"type":"select","id":"edit_group","label":"Edit","default":"content","options":[{"value":"content","label":"Content"},{"value":"line","label":"Text"},{"value":"button","label":"Button"},{"value":"panels","label":"Chat & wheel"},{"value":"feed","label":"Feed"},{"value":"background","label":"Background"},{"value":"section_space","label":"Section space"}],"info":"Opens that group. Pick another title to switch."},{"type":"textarea","id":"line","label":"Text","info":"Leave it empty to hide it. Press Enter where you want the next line.","visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"number","id":"line_x","label":"Text L/R","default":0,"info":"Negative moves left. Positive moves right.","visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"number","id":"line_y","label":"Text Up/Down","default":0,"info":"Negative moves up. Positive moves down.","visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"select","id":"line_font","label":"Font","default":"inherit","options":[{"value":"inherit","label":"Theme default"},{"value":"Unbounded, sans-serif","label":"Unbounded"},{"value":"Outfit, sans-serif","label":"Outfit"},{"value":"\"Barlow Condensed\", sans-serif","label":"Barlow Condensed"},{"value":"\"Bebas Neue\", sans-serif","label":"Bebas Neue"},{"value":"Oswald, sans-serif","label":"Oswald"},{"value":"Anton, sans-serif","label":"Anton"},{"value":"Archivo, sans-serif","label":"Archivo"},{"value":"Inter, sans-serif","label":"Inter"}],"visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"checkbox","id":"line_bold","label":"Bold","default":false,"visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"checkbox","id":"line_italic","label":"Italic","default":false,"visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"select","id":"line_align","label":"Align","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],"visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"select","id":"line_valign","label":"Vertical align","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"top","label":"Top"},{"value":"middle","label":"Middle"},{"value":"bottom","label":"Bottom"}],"visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"color","id":"line_color","label":"Color","default":"#f4fbff","visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"select","id":"line_fill","label":"Fill","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"tide","label":"Tide"},{"value":"violet","label":"Violet"},{"value":"foil","label":"Foil"},{"value":"sunset","label":"Sunset"},{"value":"aurora","label":"Aurora"},{"value":"pulse","label":"Neon pulse"},{"value":"lava","label":"Lava"},{"value":"chrome","label":"Chrome"},{"value":"prism","label":"Prism"},{"value":"electric","label":"Electric"},{"value":"holo","label":"Hologram"},{"value":"wave","label":"Wave"},{"value":"goldrush","label":"Gold rush"},{"value":"current","label":"Current"},{"value":"ember","label":"Ember"},{"value":"sheen","label":"Sheen"},{"value":"custom","label":"Custom gradient"}],"info":"Solid uses Color. Anything else paints a gradient on the letters.","visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"color","id":"line_fill_2","label":"Second color","default":"#00e5ff","info":"Second color for Custom gradient.","visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"range","id":"line_size","label":"Size","min":10,"max":110,"step":1,"unit":"px","default":28,"visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"select","id":"line_depth","label":"Depth","default":"none","options":[{"value":"none","label":"None"},{"value":"soft","label":"Soft shadow"},{"value":"hard","label":"Hard offset"},{"value":"lift","label":"Lift"},{"value":"long","label":"Long shadow"},{"value":"echo","label":"Echo"},{"value":"press","label":"Letterpress"},{"value":"emboss","label":"Emboss"},{"value":"outline","label":"Outline"},{"value":"neon","label":"Neon glow"},{"value":"double","label":"Double glow"},{"value":"foil","label":"Foil"}],"visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"range","id":"line_depth_amount","label":"Depth amount","min":0,"max":40,"step":1,"unit":"px","default":6,"visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"color","id":"line_depth_color","label":"Depth color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'line' }}"},{"type":"textarea","id":"btn_label","label":"Button text","info":"Leave it empty to hide it. Press Enter where you want the next line.","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"url","id":"btn_link","label":"Button link","info":"Leave it empty for a button that does not go anywhere.","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"number","id":"btn_x","label":"Button L/R","default":0,"info":"Negative moves left. Positive moves right.","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"number","id":"btn_y","label":"Button Up/Down","default":0,"info":"Negative moves up. Positive moves down.","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"number","id":"btn_w","label":"Button width","default":180,"info":"Width in pixels. 0 means as wide as the words.","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"number","id":"btn_h","label":"Button height","default":48,"info":"Height in pixels. 0 means as tall as the words.","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"header","content":"Font","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"select","id":"btn_font","label":"Font","default":"inherit","options":[{"value":"inherit","label":"Theme default"},{"value":"Unbounded, sans-serif","label":"Unbounded"},{"value":"Outfit, sans-serif","label":"Outfit"},{"value":"\"Barlow Condensed\", sans-serif","label":"Barlow Condensed"},{"value":"\"Bebas Neue\", sans-serif","label":"Bebas Neue"},{"value":"Oswald, sans-serif","label":"Oswald"},{"value":"Anton, sans-serif","label":"Anton"},{"value":"Archivo, sans-serif","label":"Archivo"},{"value":"Inter, sans-serif","label":"Inter"}],"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"checkbox","id":"btn_bold","label":"Bold","default":true,"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"checkbox","id":"btn_italic","label":"Italic","default":false,"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"select","id":"btn_align","label":"Align","default":"center","options":[{"value":"default","label":"Theme default"},{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"select","id":"btn_valign","label":"Vertical align","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"top","label":"Top"},{"value":"middle","label":"Middle"},{"value":"bottom","label":"Bottom"}],"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"color","id":"btn_text_color","label":"Text color","default":"#041018","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"select","id":"btn_text_fill","label":"Text fill","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"tide","label":"Tide"},{"value":"violet","label":"Violet"},{"value":"foil","label":"Foil"},{"value":"sunset","label":"Sunset"},{"value":"aurora","label":"Aurora"},{"value":"pulse","label":"Neon pulse"},{"value":"lava","label":"Lava"},{"value":"chrome","label":"Chrome"},{"value":"prism","label":"Prism"},{"value":"electric","label":"Electric"},{"value":"holo","label":"Hologram"},{"value":"wave","label":"Wave"},{"value":"goldrush","label":"Gold rush"},{"value":"current","label":"Current"},{"value":"ember","label":"Ember"},{"value":"sheen","label":"Sheen"},{"value":"custom","label":"Custom gradient"}],"info":"Solid uses Text color. Anything else paints a gradient on the letters.","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"color","id":"btn_text_fill_2","label":"Text second color","default":"#00e5ff","info":"Second color for Custom gradient.","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"range","id":"btn_size","label":"Text size","min":10,"max":110,"step":1,"unit":"px","default":18,"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"select","id":"btn_text_depth","label":"Text depth","default":"none","options":[{"value":"none","label":"None"},{"value":"soft","label":"Soft shadow"},{"value":"hard","label":"Hard offset"},{"value":"lift","label":"Lift"},{"value":"long","label":"Long shadow"},{"value":"echo","label":"Echo"},{"value":"press","label":"Letterpress"},{"value":"emboss","label":"Emboss"},{"value":"outline","label":"Outline"},{"value":"neon","label":"Neon glow"},{"value":"double","label":"Double glow"},{"value":"foil","label":"Foil"}],"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"range","id":"btn_text_depth_amount","label":"Text depth amount","min":0,"max":40,"step":1,"unit":"px","default":0,"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"color","id":"btn_text_depth_color","label":"Text depth color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"header","content":"Cell","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"checkbox","id":"btn_show_cell","label":"Show cell","default":true,"info":"Off removes the box, border, and fill.","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"range","id":"btn_border","label":"Border width","min":0,"max":20,"step":1,"unit":"px","default":1,"visible_if":"{{ section.settings.edit_group == 'button' and section.settings.btn_show_cell }}"},{"type":"color","id":"btn_border_color","label":"Border color","default":"#00EAFF","visible_if":"{{ section.settings.edit_group == 'button' and section.settings.btn_show_cell }}"},{"type":"range","id":"btn_radius","label":"Corner radius","min":0,"max":80,"step":1,"unit":"px","default":12,"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"select","id":"btn_fill","label":"Cell fill","default":"solid","options":[{"value":"none","label":"None"},{"value":"solid","label":"Solid"},{"value":"tide","label":"Tide"},{"value":"violet","label":"Violet night"},{"value":"foil","label":"Foil sweep"},{"value":"sunset","label":"Sunset"},{"value":"aurora","label":"Aurora"},{"value":"pulse","label":"Neon pulse"},{"value":"lava","label":"Lava"},{"value":"chrome","label":"Chrome"},{"value":"prism","label":"Prism"},{"value":"electric","label":"Electric"},{"value":"holo","label":"Hologram"},{"value":"wave","label":"Wave"},{"value":"goldrush","label":"Gold rush"},{"value":"current","label":"Current"},{"value":"ember","label":"Ember"},{"value":"sheen","label":"Sheen"},{"value":"glass","label":"Glass"},{"value":"mesh","label":"Mesh glow"},{"value":"custom","label":"Custom gradient"}],"visible_if":"{{ section.settings.edit_group == 'button' and section.settings.btn_show_cell }}"},{"type":"color","id":"btn_color","label":"Cell color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'button' and section.settings.btn_show_cell }}"},{"type":"color","id":"btn_color_2","label":"Cell second color","default":"#7af6ff","info":"Used by Custom gradient, Glass, and Mesh.","visible_if":"{{ section.settings.edit_group == 'button' and section.settings.btn_show_cell }}"},{"type":"range","id":"btn_angle","label":"Gradient angle","min":0,"max":360,"step":4,"unit":"deg","default":90,"info":"Used by Custom gradient.","visible_if":"{{ section.settings.edit_group == 'button' and section.settings.btn_show_cell }}"},{"type":"select","id":"btn_depth","label":"Cell depth","default":"neon","options":[{"value":"none","label":"None"},{"value":"soft","label":"Soft shadow"},{"value":"hard","label":"Hard offset"},{"value":"lift","label":"Lift"},{"value":"long","label":"Long shadow"},{"value":"echo","label":"Echo"},{"value":"press","label":"Letterpress"},{"value":"emboss","label":"Emboss"},{"value":"outline","label":"Outline"},{"value":"neon","label":"Neon glow"},{"value":"double","label":"Double glow"},{"value":"foil","label":"Foil"}],"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"range","id":"btn_depth_amount","label":"Cell depth amount","min":0,"max":40,"step":1,"unit":"px","default":8,"visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"color","id":"btn_depth_color","label":"Cell depth color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'button' }}"},{"type":"header","content":"On / off air","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"checkbox","id":"stream_live","label":"Stream is live","default":false,"info":"Off shows the Off Air graphic and Stream offline. On shows the YouTube feed and Stream is LIVE.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"textarea","id":"status_off","label":"Offline text","default":"Stream offline","visible_if":"{{ section.settings.edit_group == 'feed' }}","info":"Press Enter where you want the next line."},{"type":"textarea","id":"status_on","label":"Live text","default":"Stream is LIVE","visible_if":"{{ section.settings.edit_group == 'feed' }}","info":"Press Enter where you want the next line."},{"type":"color","id":"status_on_color","label":"Live color","default":"#00ff3c","info":"Color of the Stream is LIVE text and its dot.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"color","id":"status_off_color","label":"Offline color","default":"#9aa8b2","info":"Color of the Stream offline text and its dot.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"number","id":"status_x","label":"Status L/R","default":0,"info":"Negative moves the Stream offline / Stream is LIVE text left. Positive moves it right.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"number","id":"status_y","label":"Status Up/Down","default":0,"info":"Negative moves the status text up. Positive moves it down.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"number","id":"dot_x","label":"Dot L/R","default":0,"info":"Negative moves the status dot left. Positive moves it right.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"number","id":"dot_y","label":"Dot Up/Down","default":0,"info":"Negative moves the status dot up. Positive moves it down.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"select","id":"kicker_font","label":"Status font","default":"inherit","options":[{"value":"inherit","label":"Theme default"},{"value":"Unbounded, sans-serif","label":"Unbounded"},{"value":"Outfit, sans-serif","label":"Outfit"},{"value":"\"Barlow Condensed\", sans-serif","label":"Barlow Condensed"},{"value":"\"Bebas Neue\", sans-serif","label":"Bebas Neue"},{"value":"Oswald, sans-serif","label":"Oswald"},{"value":"Anton, sans-serif","label":"Anton"},{"value":"Archivo, sans-serif","label":"Archivo"},{"value":"Inter, sans-serif","label":"Inter"}],"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"checkbox","id":"kicker_bold","label":"Status bold","default":false,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"checkbox","id":"kicker_italic","label":"Status italic","default":false,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"select","id":"kicker_align","label":"Status horizontal","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"select","id":"kicker_valign","label":"Status vertical","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"top","label":"Top"},{"value":"middle","label":"Middle"},{"value":"bottom","label":"Bottom"}],"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"color","id":"kicker_color","label":"Status color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'unused_status_color' }}"},{"type":"select","id":"kicker_fill","label":"Status fill","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"tide","label":"Tide"},{"value":"violet","label":"Violet"},{"value":"foil","label":"Foil"},{"value":"sunset","label":"Sunset"},{"value":"aurora","label":"Aurora"},{"value":"pulse","label":"Neon pulse"},{"value":"lava","label":"Lava"},{"value":"chrome","label":"Chrome"},{"value":"prism","label":"Prism"},{"value":"electric","label":"Electric"},{"value":"holo","label":"Hologram"},{"value":"wave","label":"Wave"},{"value":"goldrush","label":"Gold rush"},{"value":"current","label":"Current"},{"value":"ember","label":"Ember"},{"value":"sheen","label":"Sheen"},{"value":"custom","label":"Custom gradient"}],"info":"Gradient is painted on the letters. Solid uses the color above.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"color","id":"kicker_fill_2","label":"Status second color","default":"#00e5ff","info":"Second color for Custom gradient.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"range","id":"kicker_size","label":"Status size","min":10,"max":96,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"select","id":"kicker_depth","label":"Status depth","default":"none","options":[{"value":"none","label":"None"},{"value":"soft","label":"Soft shadow"},{"value":"hard","label":"Hard offset"},{"value":"lift","label":"Lift"},{"value":"long","label":"Long shadow"},{"value":"echo","label":"Echo"},{"value":"press","label":"Letterpress"},{"value":"emboss","label":"Emboss"},{"value":"outline","label":"Outline"},{"value":"neon","label":"Neon glow"},{"value":"double","label":"Double glow"},{"value":"foil","label":"Foil"}],"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"range","id":"kicker_depth_amount","label":"Status depth amount","min":0,"max":40,"step":2,"unit":"px","default":8,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"color","id":"kicker_depth_color","label":"Status depth color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"textarea","id":"heading","label":"Title","default":"Live","visible_if":"{{ section.settings.edit_group == 'content' }}","info":"Press Enter where you want the next line."},{"type":"number","id":"heading_x","label":"Title L/R","default":0,"info":"Negative moves WHATNOT STREAM left. Positive moves it right.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"number","id":"heading_y","label":"Title Up/Down","default":0,"info":"Negative moves WHATNOT STREAM up. Positive moves it down.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"richtext","id":"note","label":"Rich text","default":"<p></p>","info":"Leave it empty to hide it. Return starts a new paragraph. Bold, lists, and links work in this box.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"number","id":"note_x","label":"Rich text L/R","default":0,"info":"Negative moves left. Positive moves right.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"number","id":"note_y","label":"Rich text Up/Down","default":0,"info":"Negative moves up. Positive moves down.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"number","id":"note_w","label":"Rich text width","default":320,"info":"Width in pixels.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"number","id":"note_h","label":"Rich text height","default":0,"info":"Height in pixels. 0 means as tall as the text.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"select","id":"note_font","label":"Rich text font","default":"inherit","options":[{"value":"inherit","label":"Theme default"},{"value":"Unbounded, sans-serif","label":"Unbounded"},{"value":"Outfit, sans-serif","label":"Outfit"},{"value":"\"Barlow Condensed\", sans-serif","label":"Barlow Condensed"},{"value":"\"Bebas Neue\", sans-serif","label":"Bebas Neue"},{"value":"Oswald, sans-serif","label":"Oswald"},{"value":"Anton, sans-serif","label":"Anton"},{"value":"Archivo, sans-serif","label":"Archivo"},{"value":"Inter, sans-serif","label":"Inter"}],"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"color","id":"note_color","label":"Rich text color","default":"#f4fbff","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"color","id":"note_bold_color","label":"Rich text bold color","default":"#00e5ff","info":"Color of text you mark bold in the rich text box.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"select","id":"note_fill","label":"Rich text fill","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"tide","label":"Tide"},{"value":"violet","label":"Violet"},{"value":"foil","label":"Foil"},{"value":"sunset","label":"Sunset"},{"value":"aurora","label":"Aurora"},{"value":"pulse","label":"Neon pulse"},{"value":"lava","label":"Lava"},{"value":"chrome","label":"Chrome"},{"value":"prism","label":"Prism"},{"value":"electric","label":"Electric"},{"value":"holo","label":"Hologram"},{"value":"wave","label":"Wave"},{"value":"goldrush","label":"Gold rush"},{"value":"current","label":"Current"},{"value":"ember","label":"Ember"},{"value":"sheen","label":"Sheen"},{"value":"custom","label":"Custom gradient"}],"info":"Solid uses Rich text color. Anything else paints a gradient on the letters.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"color","id":"note_fill_2","label":"Rich text second color","default":"#00e5ff","info":"Second color for Custom gradient.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"note_size","label":"Rich text size","min":10,"max":96,"step":1,"unit":"px","default":16,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"select","id":"note_depth","label":"Rich text depth","default":"none","options":[{"value":"none","label":"None"},{"value":"soft","label":"Soft shadow"},{"value":"hard","label":"Hard offset"},{"value":"lift","label":"Lift"},{"value":"long","label":"Long shadow"},{"value":"echo","label":"Echo"},{"value":"press","label":"Letterpress"},{"value":"emboss","label":"Emboss"},{"value":"outline","label":"Outline"},{"value":"neon","label":"Neon glow"},{"value":"double","label":"Double glow"},{"value":"foil","label":"Foil"}],"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"note_depth_amount","label":"Rich text depth amount","min":0,"max":40,"step":2,"unit":"px","default":8,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"color","id":"note_depth_color","label":"Rich text depth color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"header","content":"Rich text border","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"note_border","label":"Border width","min":0,"max":40,"step":1,"unit":"px","default":0,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"color","id":"note_border_color","label":"Border color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"select","id":"note_border_style","label":"Border style","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"dashed","label":"Dashed"},{"value":"dotted","label":"Dotted"},{"value":"double","label":"Double"}],"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"note_radius","label":"Corner radius","min":0,"max":40,"step":1,"unit":"px","default":0,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"note_pad_top","label":"Inside top","min":0,"max":100,"step":1,"unit":"px","default":0,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"note_pad_right","label":"Inside right","min":0,"max":100,"step":1,"unit":"px","default":0,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"note_pad_bottom","label":"Inside bottom","min":0,"max":100,"step":1,"unit":"px","default":0,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"note_pad_left","label":"Inside left","min":0,"max":100,"step":1,"unit":"px","default":0,"info":"Space between the words and that side of the border.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"note_dark","label":"Darkness","min":0,"max":100,"step":1,"default":0,"info":"Black layer behind the words. 0 is clear. 100 is solid black.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"select","id":"heading_font","label":"Heading font","default":"inherit","options":[{"value":"inherit","label":"Theme default"},{"value":"Unbounded, sans-serif","label":"Unbounded"},{"value":"Outfit, sans-serif","label":"Outfit"},{"value":"\"Barlow Condensed\", sans-serif","label":"Barlow Condensed"},{"value":"\"Bebas Neue\", sans-serif","label":"Bebas Neue"},{"value":"Oswald, sans-serif","label":"Oswald"},{"value":"Anton, sans-serif","label":"Anton"},{"value":"Archivo, sans-serif","label":"Archivo"},{"value":"Inter, sans-serif","label":"Inter"}],"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"checkbox","id":"heading_bold","label":"Heading bold","default":false,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"checkbox","id":"heading_italic","label":"Heading italic","default":false,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"select","id":"heading_align","label":"Heading horizontal","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"select","id":"heading_valign","label":"Heading vertical","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"top","label":"Top"},{"value":"middle","label":"Middle"},{"value":"bottom","label":"Bottom"}],"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"color","id":"heading_color","label":"Heading color","default":"#f4fbff","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"select","id":"heading_fill","label":"Heading fill","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"tide","label":"Tide"},{"value":"violet","label":"Violet"},{"value":"foil","label":"Foil"},{"value":"sunset","label":"Sunset"},{"value":"aurora","label":"Aurora"},{"value":"pulse","label":"Neon pulse"},{"value":"lava","label":"Lava"},{"value":"chrome","label":"Chrome"},{"value":"prism","label":"Prism"},{"value":"electric","label":"Electric"},{"value":"holo","label":"Hologram"},{"value":"wave","label":"Wave"},{"value":"goldrush","label":"Gold rush"},{"value":"current","label":"Current"},{"value":"ember","label":"Ember"},{"value":"sheen","label":"Sheen"},{"value":"custom","label":"Custom gradient"}],"info":"Gradient is painted on the letters. Solid uses the color above.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"color","id":"heading_fill_2","label":"Heading second color","default":"#00e5ff","info":"Second color for Custom gradient.","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"heading_size","label":"Heading size","min":10,"max":96,"step":1,"unit":"px","default":48,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"select","id":"heading_depth","label":"Heading depth","default":"none","options":[{"value":"none","label":"None"},{"value":"soft","label":"Soft shadow"},{"value":"hard","label":"Hard offset"},{"value":"lift","label":"Lift"},{"value":"long","label":"Long shadow"},{"value":"echo","label":"Echo"},{"value":"press","label":"Letterpress"},{"value":"emboss","label":"Emboss"},{"value":"outline","label":"Outline"},{"value":"neon","label":"Neon glow"},{"value":"double","label":"Double glow"},{"value":"foil","label":"Foil"}],"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"range","id":"heading_depth_amount","label":"Heading depth amount","min":0,"max":40,"step":1,"unit":"px","default":8,"visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"color","id":"heading_depth_color","label":"Heading depth color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'content' }}"},{"type":"header","content":"Chat","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"chat_width","label":"Chat width","min":180,"max":640,"step":10,"unit":"px","default":280,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"number","id":"chat_height","label":"Chat height","default":0,"info":"Pixels for the whole chat box. 0 matches the video height.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"textarea","id":"chat_heading","label":"Chat header","default":"Whatnot chat","visible_if":"{{ section.settings.edit_group == 'panels' }}","info":"Press Enter where you want the next line."},{"type":"number","id":"chat_x","label":"Chat panel L/R","default":0,"info":"Moves the whole chat box. Negative moves left. Positive moves right.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"number","id":"chat_y","label":"Chat panel Up/Down","default":0,"info":"Moves the whole chat box. Negative moves up. Positive moves down.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"chat_font","label":"Chat header font","default":"inherit","options":[{"value":"inherit","label":"Theme default"},{"value":"Unbounded, sans-serif","label":"Unbounded"},{"value":"Outfit, sans-serif","label":"Outfit"},{"value":"\"Barlow Condensed\", sans-serif","label":"Barlow Condensed"},{"value":"\"Bebas Neue\", sans-serif","label":"Bebas Neue"},{"value":"Oswald, sans-serif","label":"Oswald"},{"value":"Anton, sans-serif","label":"Anton"},{"value":"Archivo, sans-serif","label":"Archivo"},{"value":"Inter, sans-serif","label":"Inter"}],"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"checkbox","id":"chat_bold","label":"Chat header bold","default":false,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"checkbox","id":"chat_italic","label":"Chat header italic","default":false,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"chat_align","label":"Chat header horizontal","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"chat_valign","label":"Chat header vertical","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"top","label":"Top"},{"value":"middle","label":"Middle"},{"value":"bottom","label":"Bottom"}],"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"color","id":"chat_color","label":"Chat header color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"chat_fill","label":"Chat header fill","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"tide","label":"Tide"},{"value":"violet","label":"Violet"},{"value":"foil","label":"Foil"},{"value":"sunset","label":"Sunset"},{"value":"aurora","label":"Aurora"},{"value":"pulse","label":"Neon pulse"},{"value":"lava","label":"Lava"},{"value":"chrome","label":"Chrome"},{"value":"prism","label":"Prism"},{"value":"electric","label":"Electric"},{"value":"holo","label":"Hologram"},{"value":"wave","label":"Wave"},{"value":"goldrush","label":"Gold rush"},{"value":"current","label":"Current"},{"value":"ember","label":"Ember"},{"value":"sheen","label":"Sheen"},{"value":"custom","label":"Custom gradient"}],"info":"Gradient is painted on the letters. Solid uses the color above.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"color","id":"chat_fill_2","label":"Chat header second color","default":"#00e5ff","info":"Second color for Custom gradient.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"chat_size","label":"Chat header size","min":10,"max":96,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"chat_depth","label":"Chat header depth","default":"none","options":[{"value":"none","label":"None"},{"value":"soft","label":"Soft shadow"},{"value":"hard","label":"Hard offset"},{"value":"lift","label":"Lift"},{"value":"long","label":"Long shadow"},{"value":"echo","label":"Echo"},{"value":"press","label":"Letterpress"},{"value":"emboss","label":"Emboss"},{"value":"outline","label":"Outline"},{"value":"neon","label":"Neon glow"},{"value":"double","label":"Double glow"},{"value":"foil","label":"Foil"}],"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"chat_depth_amount","label":"Chat header depth amount","min":0,"max":40,"step":2,"unit":"px","default":8,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"color","id":"chat_depth_color","label":"Chat header depth color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"header","content":"Chat border","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"chat_border","label":"Border width","min":0,"max":40,"step":1,"unit":"px","default":1,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"color","id":"chat_border_color","label":"Border color","default":"#243044","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"chat_border_style","label":"Border style","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"dashed","label":"Dashed"},{"value":"dotted","label":"Dotted"},{"value":"double","label":"Double"}],"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"chat_radius","label":"Corner radius","min":0,"max":100,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"chat_pad_top","label":"Inside top","min":0,"max":100,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"chat_pad_right","label":"Inside right","min":0,"max":100,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"chat_pad_bottom","label":"Inside bottom","min":0,"max":100,"step":1,"unit":"px","default":11,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"chat_pad_left","label":"Inside left","min":0,"max":100,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"chat_dark","label":"Chat darkness","min":0,"max":100,"step":1,"default":0,"info":"Black layer behind the chat. 0 is clear. 100 is solid black.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"header","content":"Wheel","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"wheel_width","label":"Wheel width","min":180,"max":640,"step":10,"unit":"px","default":280,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"number","id":"wheel_height","label":"Wheel height","default":0,"info":"Pixels for the whole wheel box. 0 matches the video height.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"textarea","id":"wheel_heading","label":"Wheel header","default":"Wheel hits","visible_if":"{{ section.settings.edit_group == 'panels' }}","info":"Press Enter where you want the next line."},{"type":"number","id":"wheel_x","label":"Wheel panel L/R","default":0,"info":"Moves the whole wheel box. Negative moves left. Positive moves right.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"number","id":"wheel_y","label":"Wheel panel Up/Down","default":0,"info":"Moves the whole wheel box. Negative moves up. Positive moves down.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"wheel_font","label":"Wheel header font","default":"inherit","options":[{"value":"inherit","label":"Theme default"},{"value":"Unbounded, sans-serif","label":"Unbounded"},{"value":"Outfit, sans-serif","label":"Outfit"},{"value":"\"Barlow Condensed\", sans-serif","label":"Barlow Condensed"},{"value":"\"Bebas Neue\", sans-serif","label":"Bebas Neue"},{"value":"Oswald, sans-serif","label":"Oswald"},{"value":"Anton, sans-serif","label":"Anton"},{"value":"Archivo, sans-serif","label":"Archivo"},{"value":"Inter, sans-serif","label":"Inter"}],"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"checkbox","id":"wheel_bold","label":"Wheel header bold","default":false,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"checkbox","id":"wheel_italic","label":"Wheel header italic","default":false,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"wheel_align","label":"Wheel header horizontal","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"wheel_valign","label":"Wheel header vertical","default":"default","options":[{"value":"default","label":"Theme default"},{"value":"top","label":"Top"},{"value":"middle","label":"Middle"},{"value":"bottom","label":"Bottom"}],"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"color","id":"wheel_color","label":"Wheel header color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"wheel_fill","label":"Wheel header fill","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"tide","label":"Tide"},{"value":"violet","label":"Violet"},{"value":"foil","label":"Foil"},{"value":"sunset","label":"Sunset"},{"value":"aurora","label":"Aurora"},{"value":"pulse","label":"Neon pulse"},{"value":"lava","label":"Lava"},{"value":"chrome","label":"Chrome"},{"value":"prism","label":"Prism"},{"value":"electric","label":"Electric"},{"value":"holo","label":"Hologram"},{"value":"wave","label":"Wave"},{"value":"goldrush","label":"Gold rush"},{"value":"current","label":"Current"},{"value":"ember","label":"Ember"},{"value":"sheen","label":"Sheen"},{"value":"custom","label":"Custom gradient"}],"info":"Gradient is painted on the letters. Solid uses the color above.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"color","id":"wheel_fill_2","label":"Wheel header second color","default":"#00e5ff","info":"Second color for Custom gradient.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"wheel_size","label":"Wheel header size","min":10,"max":96,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"wheel_depth","label":"Wheel header depth","default":"none","options":[{"value":"none","label":"None"},{"value":"soft","label":"Soft shadow"},{"value":"hard","label":"Hard offset"},{"value":"lift","label":"Lift"},{"value":"long","label":"Long shadow"},{"value":"echo","label":"Echo"},{"value":"press","label":"Letterpress"},{"value":"emboss","label":"Emboss"},{"value":"outline","label":"Outline"},{"value":"neon","label":"Neon glow"},{"value":"double","label":"Double glow"},{"value":"foil","label":"Foil"}],"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"wheel_depth_amount","label":"Wheel header depth amount","min":0,"max":40,"step":2,"unit":"px","default":8,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"color","id":"wheel_depth_color","label":"Wheel header depth color","default":"#00e5ff","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"header","content":"Wheel border","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"wheel_border","label":"Border width","min":0,"max":40,"step":1,"unit":"px","default":1,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"color","id":"wheel_border_color","label":"Border color","default":"#243044","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"select","id":"wheel_border_style","label":"Border style","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"dashed","label":"Dashed"},{"value":"dotted","label":"Dotted"},{"value":"double","label":"Double"}],"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"wheel_radius","label":"Corner radius","min":0,"max":100,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"wheel_pad_top","label":"Inside top","min":0,"max":100,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"wheel_pad_right","label":"Inside right","min":0,"max":100,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"wheel_pad_bottom","label":"Inside bottom","min":0,"max":100,"step":1,"unit":"px","default":11,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"wheel_pad_left","label":"Inside left","min":0,"max":100,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"range","id":"wheel_dark","label":"Wheel darkness","min":0,"max":100,"step":1,"default":0,"info":"Black layer behind the wheel. 0 is clear. 100 is solid black.","visible_if":"{{ section.settings.edit_group == 'panels' }}"},{"type":"text","id":"feed_url","label":"YouTube URL","default":"https://www.youtube.com/embed/live_stream?channel=UC6uAyMzSKThKV7Xhk7s4qzA","info":"Channel live link, or a youtube.com/live/ID link. A public live plays here. Unlisted does not.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"select","id":"place","label":"Place","default":"left","options":[{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],"info":"Starting side. X and Y move it from there.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"number","id":"x","label":"L/R","default":0,"info":"Negative moves left. Positive moves right.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"number","id":"y","label":"Up/Down","default":0,"info":"Negative moves up. Positive moves down.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"range","id":"feed_width","label":"Feed width","min":320,"max":1200,"step":20,"unit":"px","default":760,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"header","content":"Feed border","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"range","id":"feed_border","label":"Border width","min":0,"max":40,"step":1,"unit":"px","default":1,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"color","id":"feed_border_color","label":"Border color","default":"#243044","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"select","id":"feed_border_style","label":"Border style","default":"solid","options":[{"value":"solid","label":"Solid"},{"value":"dashed","label":"Dashed"},{"value":"dotted","label":"Dotted"},{"value":"double","label":"Double"}],"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"range","id":"feed_radius","label":"Corner radius","min":0,"max":100,"step":1,"unit":"px","default":14,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"range","id":"feed_pad_top","label":"Inside top","min":0,"max":100,"step":1,"unit":"px","default":0,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"range","id":"feed_pad_right","label":"Inside right","min":0,"max":100,"step":1,"unit":"px","default":0,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"range","id":"feed_pad_bottom","label":"Inside bottom","min":0,"max":100,"step":1,"unit":"px","default":0,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"range","id":"feed_pad_left","label":"Inside left","min":0,"max":100,"step":1,"unit":"px","default":0,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"image_picker","id":"offair_image","label":"Off air graphic","info":"Shown when Stream is live is off. Leave empty to use the built-in Off Air card.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"checkbox","id":"show_room","label":"Show Whatnot chat and wheel","default":true,"visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"text","id":"watcher_url","label":"Watcher feed","default":"https://ripwatch-production.up.railway.app/api/tick?clock=1&chat=1","info":"RipWatch room chat. Wheel lines are the ones that say got, spin, or wheel.","visible_if":"{{ section.settings.edit_group == 'feed' }}"},{"type":"header","content":"Background","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"select","id":"sec_fill","label":"Fill","default":"none","options":[{"value":"none","label":"None"},{"value":"solid","label":"Solid"},{"value":"tide","label":"Tide"},{"value":"violet","label":"Violet night"},{"value":"foil","label":"Foil sweep"},{"value":"sunset","label":"Sunset"},{"value":"aurora","label":"Aurora"},{"value":"pulse","label":"Neon pulse"},{"value":"lava","label":"Lava"},{"value":"chrome","label":"Chrome"},{"value":"prism","label":"Prism"},{"value":"electric","label":"Electric"},{"value":"holo","label":"Hologram"},{"value":"wave","label":"Wave"},{"value":"goldrush","label":"Gold rush"},{"value":"current","label":"Current"},{"value":"ember","label":"Ember"},{"value":"sheen","label":"Sheen"},{"value":"glass","label":"Glass"},{"value":"mesh","label":"Mesh glow"},{"value":"custom","label":"Custom gradient"}],"info":"Foil, Aurora, Neon pulse, and the fills after Neon pulse animate.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"range","id":"sec_fill_speed","label":"Fill speed","min":1,"max":8,"step":1,"default":1,"info":"1 is that fill's normal pace. 8 is eight times faster. Only animated fills use this.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"range","id":"sec_fill_duration","label":"Fill duration","min":0,"max":30,"step":2,"unit":"s","default":0,"info":"0 keeps that fill's own timing. Any other number is how long one sweep takes, before speed.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"range","id":"sec_fill_power","label":"Fill intensity","min":1,"max":10,"step":1,"default":5,"info":"How wide the sweep is. 5 matches the original. Higher is stronger.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"color","id":"sec_fill_color","label":"Fill color","default":"#0E1C28","info":"Solid, glass, mesh, and custom gradient.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"color","id":"sec_fill_color_2","label":"Second color","default":"#00E5FF","info":"Used by Custom gradient.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"range","id":"sec_angle","label":"Gradient angle","min":0,"max":360,"step":15,"unit":"deg","default":90,"info":"Used by Custom gradient.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"select","id":"sec_preset","label":"Image preset","default":"none","options":[{"value":"none","label":"None"},{"value":"deep-tide","label":"Deep tide"},{"value":"horizon","label":"Neon horizon"},{"value":"foil-sweep","label":"Foil sweep"},{"value":"nebula","label":"Violet nebula"},{"value":"grid","label":"Night grid"},{"value":"bubbles","label":"Bubble field"},{"value":"aurora-sheet","label":"Aurora sheet"},{"value":"slab","label":"Slab glow"},{"value":"storm","label":"Storm glass"}],"info":"Painted art behind the section. Foil sweep and Aurora sheet animate.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"image_picker","id":"sec_image","label":"Background image","info":"Optional photo. Sits on top of the fill and preset.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"select","id":"sec_image_motion","label":"Image motion","default":"none","options":[{"value":"none","label":"None"},{"value":"ken","label":"Ken Burns"},{"value":"drift","label":"Drift"},{"value":"rise","label":"Rise"},{"value":"breathe","label":"Breathe"},{"value":"float","label":"Float"},{"value":"sheen","label":"Sheen"},{"value":"tide","label":"Tide glow"},{"value":"spotlight","label":"Spotlight"},{"value":"holo","label":"Holo shift"}],"info":"Moves only the background photo. Ken Burns zooms, Drift pans, Rise slides up, Breathe pulses, Float bobs, Sheen sweeps a light, Tide glow washes cyan, Spotlight travels, Holo shift cycles color.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"select","id":"sec_image_fit","label":"Image fit","default":"cover","options":[{"value":"cover","label":"Fill and crop"},{"value":"contain","label":"Show whole image"},{"value":"100% 100%","label":"Stretch"}],"visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"range","id":"sec_image_zoom","label":"Image zoom","min":50,"max":300,"step":10,"unit":"%","default":100,"info":"100 is the normal size. Higher zooms in. Lower zooms out.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"select","id":"sec_image_x","label":"Image left / right","default":"center","options":[{"value":"left","label":"Left"},{"value":"center","label":"Center"},{"value":"right","label":"Right"}],"visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"select","id":"sec_image_y","label":"Image top / bottom","default":"center","options":[{"value":"top","label":"Top"},{"value":"center","label":"Middle"},{"value":"bottom","label":"Bottom"}],"info":"Which part of the photo stays in view when it is cropped.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"number","id":"sec_image_w","label":"Image width","default":0,"info":"Pixels. 0 fills the section width.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"number","id":"sec_image_h","label":"Image height","default":0,"info":"Pixels. 0 fills the section height.","visible_if":"{{ section.settings.edit_group == 'background' }}"},{"type":"header","content":"Section space","visible_if":"{{ section.settings.edit_group == 'section_space' }}"},{"type":"range","id":"pad_top","label":"Top space","min":-200,"max":200,"step":4,"unit":"px","default":52,"info":"Negative pulls this section into the one next to it.","visible_if":"{{ section.settings.edit_group == 'section_space' }}"},{"type":"range","id":"pad_bottom","label":"Bottom space","min":-200,"max":200,"step":4,"unit":"px","default":52,"info":"Negative pulls this section into the one next to it.","visible_if":"{{ section.settings.edit_group == 'section_space' }}"},{"type":"number","id":"sec_height","label":"Section height","default":0,"info":"Pixels. 0 lets the content set the height. Any other number overrides everything in the section.","visible_if":"{{ section.settings.edit_group == 'section_space' }}"}],"presets":[{"name":"Live desk"}]}
 {% endschema %}
